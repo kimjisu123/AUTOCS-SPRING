@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -42,8 +43,8 @@ public class TokenProvider {
 
     /* 1. 토큰(xxxxx.yyyyy.zzzzz) 생성 메소드 */
     public TokenDTO generateTokenDTO(Member member){
-//        log.info("[TokenProvider] generateTokenDTO Start =============================== ");
-//        List<String> roles = new ArrayList<>(); // 멤버의 권한을 추출
+        log.info("[TokenProvider] generateTokenDTO Start =============================== ");
+        List<String> roles = new ArrayList<>(); // 멤버의 권한을 추출
 //        for(MemberRole memberRole : member.getMemberRole()){
 //            roles.add(memberRole.getAuthority().getAuthorityName());
 //        }
@@ -53,8 +54,8 @@ public class TokenProvider {
         /* 1. 회원 아이디를 "sub"이라는 클레임으로 토큰으로 추가 */
         Claims claims = Jwts.claims().setSubject(member.getId());
 
-//        /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
-//        claims.put(AUTHORITIES_KEY, roles);
+        /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
+        claims.put(AUTHORITIES_KEY, roles);
 
         long now = System.currentTimeMillis();   // 현재시간을 밀리세컨드단위로 가져옴
 
@@ -89,11 +90,11 @@ public class TokenProvider {
         }
 
         /* 클레임에서 권한 정보 가져오기 */
-//        Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(",")) // ex: "ROLE_ADMIN"이랑 "ROLE_MEMBER"같은 문자열이 들어있는 문자열 배열
-//                        .map(role -> new SimpleGrantedAuthority(role))   // 문자열 배열에 들어있는 권한 문자열 마다 SimpleGrantedAuthority 객체로 만듦
-//                        .collect(Collectors.toList());
-//        log.info("[TokenProvider] authorities {} ", authorities);   //   [TokenProvider] authorities [ROLE_ADMIN, ROLE_USER]
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(",")) // ex: "ROLE_ADMIN"이랑 "ROLE_MEMBER"같은 문자열이 들어있는 문자열 배열
+                        .map(role -> new SimpleGrantedAuthority(role))   // 문자열 배열에 들어있는 권한 문자열 마다 SimpleGrantedAuthority 객체로 만듦
+                        .collect(Collectors.toList());
+        log.info("[TokenProvider] authorities {} ", authorities);   //   [TokenProvider] authorities [ROLE_ADMIN, ROLE_USER]
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserId(token));
         log.info("[TokenProvider] ===================== {}",  userDetails.getAuthorities());
