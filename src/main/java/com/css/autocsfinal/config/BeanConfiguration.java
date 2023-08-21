@@ -3,6 +3,7 @@ package com.css.autocsfinal.config;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class BeanConfiguration {
@@ -11,6 +12,12 @@ public class BeanConfiguration {
     public ModelMapper modelMapper(){
 
         return new ModelMapper();
+    }
+
+    /* 1. 암호화 처리를 위한 PasswordEncoder를 빈으로 설정 */
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
