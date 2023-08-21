@@ -42,7 +42,7 @@ public class AuthService {
         log.info("[AuthService] login Start ==================================");
         log.info("[AuthService] {} ================== ", memberDTO);
         /* 1. 아이디 조회 */
-        Member member = memberRepository.findByMemberId(memberDTO.getId());
+        Member member = memberRepository.findById(memberDTO.getId());
 
         log.info("[AuthService] member 조회 {} ================== ", member);
 
