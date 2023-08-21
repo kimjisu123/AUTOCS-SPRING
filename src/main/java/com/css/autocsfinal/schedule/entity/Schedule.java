@@ -3,7 +3,6 @@ package com.css.autocsfinal.schedule.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleEntity {
+public class Schedule {
 
     @Id
     @Column(name = "SCHEDULE_CODE")
@@ -44,7 +43,13 @@ public class ScheduleEntity {
     @Column(name = "END_DATE")
     private Date endDate;
 
-    @OneToMany(mappedBy = "scheduleCode")
-    private List<AttendeeEntity> attendeeEntityList;
+    @OneToMany(mappedBy = "schedule")
+    private List<Attendee> attendeeList;
+
+    @OneToMany(mappedBy = "schedule")
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "schedule")
+    private List<OutsideAttendess> outsideAttendessList;
 
 }

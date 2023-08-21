@@ -1,2 +1,2 @@
-package com.css.autocsfinal.management.dto;public class ManagementDTO {
+package com.css.autocsfinal.workstatus.dto;public class ManagementDTO {
 }

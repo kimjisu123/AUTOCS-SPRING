@@ -1,2 +1,3 @@
-package com.css.autocsfinal.management.repository;public class ManagementRepsitory {
+package com.css.autocsfinal.workstatus.repository;
+public class WorkStatusRepsitory {
 }
