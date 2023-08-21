@@ -6,21 +6,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@NoArgsConstructor
+    @NoArgsConstructor
     @AllArgsConstructor
     @Getter
     @Setter
     @ToString
     public class MemberDTO implements UserDetails {
-        private int memberCode;
+        private int memberNo;
 
-        private String memberId;
+        private String Id;
 
-        private String memberPassword;
+        private String Pwd;
 
-        private String memberName;
+        private Character State;
 
-        private String memberEmail;
+        private String Role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
