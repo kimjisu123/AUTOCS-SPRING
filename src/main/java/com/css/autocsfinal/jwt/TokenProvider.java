@@ -51,7 +51,7 @@ public class TokenProvider {
 //        log.info("[TokenProvider] authorites   {}", roles);
 
         /* 1. 회원 아이디를 "sub"이라는 클레임으로 토큰으로 추가 */
-        Claims claims = Jwts.claims().setSubject(member.getMemberId());
+        Claims claims = Jwts.claims().setSubject(member.getId());
 
 //        /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
 //        claims.put(AUTHORITIES_KEY, roles);
@@ -66,7 +66,7 @@ public class TokenProvider {
                 .compact();
         log.info("[TokenProvider] generateTokenDTO End =============================== ");
 
-        return new TokenDTO(BEARER_TYPE, member.getMemberName(), accessToken, accessTokenExpriesIn.getTime());
+        return new TokenDTO(BEARER_TYPE, member.getId(), accessToken, accessTokenExpriesIn.getTime());
     }
 
     /* 2. 토큰의 등록된 클레임의 subject에서 해당 회원의 아이디를 추출 */

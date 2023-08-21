@@ -9,7 +9,7 @@ import javax.persistence.*;
 @SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR", // 엔티티에서 지정한 시퀀스이름
         sequenceName = "SEQ_MEMBER_NO", // 실제 데이터베이스에 있는 시퀀스 명
-        initialValue = 1, allocationSize = 1
+        initialValue = 0, allocationSize = 1
 )
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,23 +24,23 @@ public class Member {
             strategy = GenerationType.SEQUENCE,
             generator = "MEMBER_SEQ_GENERATOR"
     )
-    private int memberNo;
+    private int no;
 
     @Column(name = "ID")
-    private String Id;
+    private String id;
 
     @Column(name = "PWD")
-    private String Pwd;
+    private String pwd;
 
     @Column(name = "STATE")
-    private String State;
+    private String state;
 
     @Column(name = "ROLE")
-    private String Role;
+    private String role;
 
     @Override
     public String toString() {
-        return "Member [memberNo=" + memberNo + ", Id=" + Id + ", Pwd=" + Pwd
-                + ", State=" + State + ", Role=" + Role + "]";
+        return "Member [memberNo=" + no + ", Id=" + id + ", Pwd=" + pwd
+                + ", State=" + state + ", Role=" + role + "]";
     }
 }

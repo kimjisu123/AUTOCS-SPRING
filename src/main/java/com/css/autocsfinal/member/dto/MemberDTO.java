@@ -12,15 +12,15 @@ import java.util.Collection;
     @Setter
     @ToString
     public class MemberDTO implements UserDetails {
-        private int memberNo;
+        private int no;
 
-        private String Id;
+        private String id;
 
-        private String Pwd;
+        private String pwd;
 
-        private Character State;
+        private Character state;
 
-        private String Role;
+        private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
