@@ -22,7 +22,7 @@ public class MemberController {
 
     //사원 등록
     @Operation(summary = "사원 등록 요청", description = "사원을 등록합니다.", tags = {"MemberController"})
-    @PostMapping("/register")
+    @PostMapping("/insertEmployee")
     public ResponseEntity<ResponseDTO> registerEmployee(@RequestBody EmployeeDTO employeeDTO) {
         String resultMessage = memberService.insertEmployee(employeeDTO);
 
