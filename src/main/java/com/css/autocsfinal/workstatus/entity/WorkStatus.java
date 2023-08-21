@@ -17,7 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class WorkStatusEntity {
+public class WorkStatus {
 
     @Id
     @Column(name = "WORK_STATUS_CODE")
