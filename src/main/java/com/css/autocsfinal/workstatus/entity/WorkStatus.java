@@ -44,7 +44,4 @@ public class WorkStatus {
 
     @Column(name = "WORKING_DATE")
     private Date workingDate;
-
-
-
 }
