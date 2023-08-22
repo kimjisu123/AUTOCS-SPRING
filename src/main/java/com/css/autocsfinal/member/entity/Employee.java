@@ -28,33 +28,30 @@ public class Employee {
             strategy = GenerationType.SEQUENCE,
             generator = "EMPLOYEE_SEQ_GENERATOR"
     )
-    private int no;
+    private int employeeNo;
 
     @Column(name = "NAME")
     private String name;
 
     @Column(name = "JOIN_DATE")
-    private Date join;
+    private Date employeeJoin;
 
     @Column(name = "LEAVE_DATE")
-    private Date out;
+    private Date employeeOut;
 
     @Column(name = "EMAIL")
-    private String email;
+    private String employeeEmail;
 
     @Column(name = "PHOME")
-    private String phone;
+    private String employeePhone;
 
     @Column(name = "MANAGER_NO")
-    private int managerNo;
+    private int employeeManager;
 
     @Column(name = "REF_DEPARTMENT_CODE")
-    private String DepartmentCode;
+    private String departmentCode;
 
     @Column(name = "REF_POSITION_CODE")
-    private String PositionCode;
-
-    @Column(name = "REF_MEMBER_NO")
-    private int MemberNo;
+    private String positionCode;
 
 }

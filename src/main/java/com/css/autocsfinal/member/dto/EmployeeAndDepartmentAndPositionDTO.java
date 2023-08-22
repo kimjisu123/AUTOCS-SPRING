@@ -9,16 +9,13 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class EmployeeDTO {
+public class EmployeeAndDepartmentAndPositionDTO {
 
     private int employeeNo;
     private String name;
     private Date employeeJoin;
-    private Date employeeOut;
-    private String employeeEmail;
-    private String employeePhone;
-    private int employeeManager;
-    private String departmentCode;
-    private String positionCode;
+
+    private String department;
+    private String position;
 
 }
