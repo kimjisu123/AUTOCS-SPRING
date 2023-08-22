@@ -3,17 +3,18 @@ package com.css.autocsfinal.workstatus.dto;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
-
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class WorkStatusDTO {
-
 
     private int workStatusCode;
 
@@ -31,5 +32,4 @@ public class WorkStatusDTO {
 
     public WorkStatusDTO(HttpStatus httpStatus, String 조회_성공, Object o) {
     }
-
 }

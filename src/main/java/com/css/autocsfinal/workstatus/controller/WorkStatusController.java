@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping
 @RequiredArgsConstructor
 @Slf4j
 public class WorkStatusController {
