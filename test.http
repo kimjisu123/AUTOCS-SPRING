@@ -1,3 +1,9 @@
-GET http://localhost:8080/management
+### 메일 조회
+GET http://localhost:8080/mail
+Content-Type: application/json
+Accept: application/json
+
+### 메일 전송
+POST http://localhost:8080/mail1
 Content-Type: application/json
 Accept: application/json

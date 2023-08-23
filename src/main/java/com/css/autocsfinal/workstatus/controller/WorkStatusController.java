@@ -1,5 +1,6 @@
 package com.css.autocsfinal.workstatus.controller;
 
+import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.workstatus.dto.WorkStatusDTO;
 import com.css.autocsfinal.workstatus.service.WorkStatusService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +22,12 @@ public class WorkStatusController {
     private final WorkStatusService workStatusService;
 
     @GetMapping("/management")
-    public ResponseEntity<WorkStatusDTO> findByAll(){
+    public ResponseEntity<ResponseDTO> findByAll(){
 
 
-        return ResponseEntity.ok().body(new WorkStatusDTO(HttpStatus.OK, "조회 성공",  workStatusService.selectReviewDetail()));
+        return ResponseEntity
+                .ok()
+                .body(new ResponseDTO(HttpStatus.OK, "조회 성공",  workStatusService.selectReviewDetail()));
     }
 
-//    @GetMapping("/department")
-//    public ResponseEntity<WorkStatusDTO> findByAll(){
-//
-//
-//    }
 }
