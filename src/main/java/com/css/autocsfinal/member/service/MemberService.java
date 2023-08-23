@@ -1,9 +1,11 @@
 package com.css.autocsfinal.member.service;
 
 import com.css.autocsfinal.jwt.TokenProvider;
+import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
@@ -58,6 +60,8 @@ public class MemberService {
 
         // 랜덤한 비밀번호 생성
         String newPassword = generateRandomPassword();
+
+        log.info("암호화 전 비밀번호 ============================>>>>>>>>>>>>>>>>>>>>>>>>>>> " + newPassword);
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(newPassword);
@@ -124,4 +128,28 @@ public class MemberService {
         return employeeDTOList;
     }
 
+    //사원조회2
+    public List<EmployeeAndDepartmentAndPositionDTO> getEmployee2() {
+        log.info("[MemberService] 사원 조회 Start ===================");
+
+        List<EmployeeAndDepartmentAndPosition> employeeList = employeeAndDepartmentAndPositionRepository.getJoinEmployee();
+        log.info("employeeList : " + employeeList);
+
+        // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
+        List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = employeeList.stream()
+                .map(EmployeeAndDepartmentAndPosition -> {
+                    EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
+
+                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(EmployeeAndDepartmentAndPosition.getEmployeeNo());
+                    employeeAndDepartmentAndPositionDTO.setName(EmployeeAndDepartmentAndPosition.getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(EmployeeAndDepartmentAndPosition.getEmployeeJoin());
+                    employeeAndDepartmentAndPositionDTO.setDepartment(EmployeeAndDepartmentAndPosition.getDepartment().getName());
+                    employeeAndDepartmentAndPositionDTO.setPosition(EmployeeAndDepartmentAndPosition.getPosition().getName());
+
+                    return employeeAndDepartmentAndPositionDTO;
+                })
+                .collect(Collectors.toList());
+
+        return employeeDTOList;
+    }
 }

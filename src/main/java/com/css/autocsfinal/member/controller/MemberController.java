@@ -1,6 +1,7 @@
 package com.css.autocsfinal.member.controller;
 
 import com.css.autocsfinal.common.ResponseDTO;
+import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.member.service.MemberService;
@@ -43,6 +44,21 @@ public class MemberController {
     @GetMapping("/getEmployee")
     public ResponseEntity<ResponseDTO> getEmployee() {
         List<EmployeeDTO> employeeDTOList = memberService.getEmployee();
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사원 조회 성공", employeeDTOList);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+    }
+
+
+
+    //사원 조회 리스트2
+    @Operation(summary = "사원 조회 요청", description = "사원을 조회합니다.", tags = {"MemberController"})
+    @GetMapping("/getEmployee2")
+    public ResponseEntity<ResponseDTO> getEmployee2() {
+        List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = memberService.getEmployee2();
 
         HttpStatus httpStatus = HttpStatus.OK;
 
