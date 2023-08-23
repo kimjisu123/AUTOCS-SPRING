@@ -27,7 +27,7 @@ public class ProductController {
         log.info("[ProductController] selectProductListWithPaging Start ============ ");
         log.info("[ProductController] selectProductListWithPaging offset : {} ", offset);
 
-        int total = productService.selectProejctTotal();
+        int total = productService.selectProductAll();
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 10);
 
