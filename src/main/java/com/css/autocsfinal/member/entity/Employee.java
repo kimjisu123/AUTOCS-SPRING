@@ -54,4 +54,7 @@ public class Employee {
     @Column(name = "REF_POSITION_CODE")
     private String positionCode;
 
+    @Column(name = "REF_MEMBER_NO")
+    private int memberNo;
+
 }

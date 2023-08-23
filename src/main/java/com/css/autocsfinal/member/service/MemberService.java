@@ -86,6 +86,12 @@ public class MemberService {
         log.info("[MemberService] 사원 등록 Start ===================");
         log.info("[MemberService] employeeDTO : " + employeeDTO);
 
+        // 최신 Member 코드 조회
+        Integer maxMemberCode = memberRepository.maxMemberCode();
+
+        // employeeDTO의 memberNo 설정
+        employeeDTO.setMemberNo(maxMemberCode);
+
         Employee registEmployee = modelMapper.map(employeeDTO, Employee.class);
 
         Employee savedEmployee = employeeRepository.save(registEmployee);

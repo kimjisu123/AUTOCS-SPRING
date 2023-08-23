@@ -20,5 +20,6 @@ public class EmployeeDTO {
     private int employeeManager;
     private String departmentCode;
     private String positionCode;
+    private int memberNo;
 
 }
