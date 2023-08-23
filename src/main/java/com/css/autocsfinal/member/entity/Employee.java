@@ -1,8 +1,5 @@
 package com.css.autocsfinal.member.entity;
 
-import com.css.autocsfinal.member.dto.DepartmentDTO;
-import com.css.autocsfinal.member.dto.MemberDTO;
-import com.css.autocsfinal.member.dto.PositionDTO;
 import lombok.*;
 
 import javax.persistence.*;

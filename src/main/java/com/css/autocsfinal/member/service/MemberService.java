@@ -69,7 +69,7 @@ public class MemberService {
         registMember.setId(newUserId);
         registMember.setPwd(encodedPassword);
         registMember.setState("Y");
-        registMember.setRole("본사직원");
+        registMember.setRole("EMPLOYEE");
 
         Member result = memberRepository.save(registMember);
 
@@ -104,47 +104,23 @@ public class MemberService {
         return (savedEmployee != null) ? "사원 등록 성공" : "사원 등록 실패";
     }
 
-    public List<EmployeeDTO> getEmployee() {
+    //사원조회
+    public List<EmployeeAndDepartmentAndPositionDTO> getEmployee() {
         log.info("[MemberService] 사원 조회 Start ===================");
 
-        List<Employee> employeeList = employeeRepository.findAll();
-        log.info("employeeList : " + employeeList);
-
-        // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
-        List<EmployeeDTO> employeeDTOList = employeeList.stream()
-                .map(employee -> {
-                    EmployeeDTO employeeDTO = new EmployeeDTO();
-
-                    employeeDTO.setEmployeeNo(employee.getEmployeeNo());
-                    employeeDTO.setName(employee.getName());
-                    employeeDTO.setEmployeeJoin(employee.getEmployeeJoin());
-                    employeeDTO.setDepartmentCode(employee.getDepartmentCode());
-                    employeeDTO.setPositionCode(employee.getPositionCode());
-
-                    return employeeDTO;
-                })
-                .collect(Collectors.toList());
-
-        return employeeDTOList;
-    }
-
-    //사원조회2
-    public List<EmployeeAndDepartmentAndPositionDTO> getEmployee2() {
-        log.info("[MemberService] 사원 조회 Start ===================");
-
-        List<EmployeeAndDepartmentAndPosition> employeeList = employeeAndDepartmentAndPositionRepository.getJoinEmployee();
+        List<EmployeeAndDepartmentAndPosition> employeeList = employeeAndDepartmentAndPositionRepository.findAll();
         log.info("employeeList : " + employeeList);
 
         // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
         List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = employeeList.stream()
-                .map(EmployeeAndDepartmentAndPosition -> {
+                .map(employeeAndDepartmentAndPosition -> {
                     EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
 
-                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(EmployeeAndDepartmentAndPosition.getEmployeeNo());
-                    employeeAndDepartmentAndPositionDTO.setName(EmployeeAndDepartmentAndPosition.getName());
-                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(EmployeeAndDepartmentAndPosition.getEmployeeJoin());
-                    employeeAndDepartmentAndPositionDTO.setDepartment(EmployeeAndDepartmentAndPosition.getDepartment().getName());
-                    employeeAndDepartmentAndPositionDTO.setPosition(EmployeeAndDepartmentAndPosition.getPosition().getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeAndDepartmentAndPosition.getEmployeeNo());
+                    employeeAndDepartmentAndPositionDTO.setName(employeeAndDepartmentAndPosition.getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeAndDepartmentAndPosition.getEmployeeJoin());
+                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeAndDepartmentAndPosition.getDepartment().getName());
+                    employeeAndDepartmentAndPositionDTO.setPosition(employeeAndDepartmentAndPosition.getPosition().getName());
 
                     return employeeAndDepartmentAndPositionDTO;
                 })
