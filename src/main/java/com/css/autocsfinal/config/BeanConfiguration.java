@@ -1,7 +1,9 @@
 package com.css.autocsfinal.config;
 
 import com.css.autocsfinal.member.dto.EmployeeDTO;
+import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.entity.Member;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Bean;

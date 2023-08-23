@@ -9,7 +9,7 @@ import javax.persistence.*;
 @SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR", // 엔티티에서 지정한 시퀀스이름
         sequenceName = "SEQ_MEMBER_NO", // 실제 데이터베이스에 있는 시퀀스 명
-        initialValue = 0, allocationSize = 1
+        initialValue = 1, allocationSize = 1
 )
 @NoArgsConstructor
 @AllArgsConstructor
