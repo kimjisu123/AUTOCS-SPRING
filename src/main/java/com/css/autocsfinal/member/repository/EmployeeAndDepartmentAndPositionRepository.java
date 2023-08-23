@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface EmployeeAndDepartmentAndPositionRepository extends JpaRepository<EmployeeAndDepartmentAndPosition, Integer> {
-    @Query("SELECT e FROM EmployeeAndDepartmentAndPosition e " +
-            "LEFT JOIN e.department d " +
-            "LEFT JOIN e.position p")
-    List<EmployeeAndDepartmentAndPosition> getJoinEmployee();
+//    @Query("SELECT e FROM EmployeeAndDepartmentAndPosition e " +
+//            "LEFT JOIN e.department d " +
+//            "LEFT JOIN e.position p")
+//    List<EmployeeAndDepartmentAndPosition> getJoinEmployee();
 }

@@ -132,24 +132,24 @@ public class MemberService {
     public List<EmployeeAndDepartmentAndPositionDTO> getEmployee2() {
         log.info("[MemberService] 사원 조회 Start ===================");
 
-        List<EmployeeAndDepartmentAndPosition> employeeList = employeeAndDepartmentAndPositionRepository.getJoinEmployee();
+        List<EmployeeAndDepartmentAndPosition> employeeList = employeeAndDepartmentAndPositionRepository.findAll();
         log.info("employeeList : " + employeeList);
 
         // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
-        List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = employeeList.stream()
-                .map(EmployeeAndDepartmentAndPosition -> {
-                    EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
+//        List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = employeeList.stream()
+//                .map(EmployeeAndDepartmentAndPosition -> {
+//                    EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
+//
+//                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(EmployeeAndDepartmentAndPosition.getEmployeeNo());
+//                    employeeAndDepartmentAndPositionDTO.setName(EmployeeAndDepartmentAndPosition.getName());
+//                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(EmployeeAndDepartmentAndPosition.getEmployeeJoin());
+//                    employeeAndDepartmentAndPositionDTO.setDepartment(EmployeeAndDepartmentAndPosition.getDepartment().getName());
+//                    employeeAndDepartmentAndPositionDTO.setPosition(EmployeeAndDepartmentAndPosition.getPosition().getName());
+//
+//                    return employeeAndDepartmentAndPositionDTO;
+//                })
+//                .collect(Collectors.toList());
 
-                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(EmployeeAndDepartmentAndPosition.getEmployeeNo());
-                    employeeAndDepartmentAndPositionDTO.setName(EmployeeAndDepartmentAndPosition.getName());
-                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(EmployeeAndDepartmentAndPosition.getEmployeeJoin());
-                    employeeAndDepartmentAndPositionDTO.setDepartment(EmployeeAndDepartmentAndPosition.getDepartment().getName());
-                    employeeAndDepartmentAndPositionDTO.setPosition(EmployeeAndDepartmentAndPosition.getPosition().getName());
-
-                    return employeeAndDepartmentAndPositionDTO;
-                })
-                .collect(Collectors.toList());
-
-        return employeeDTOList;
+        return null;
     }
 }

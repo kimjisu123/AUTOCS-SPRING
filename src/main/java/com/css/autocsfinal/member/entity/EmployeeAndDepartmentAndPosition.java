@@ -35,11 +35,11 @@ public class EmployeeAndDepartmentAndPosition {
     @Column(name = "NAME")
     private String name;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "REF_DEPARTMENT_CODE")
     private Department department;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "REF_POSITION_CODE")
     private Position position;
 

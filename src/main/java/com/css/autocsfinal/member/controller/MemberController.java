@@ -58,6 +58,7 @@ public class MemberController {
     @Operation(summary = "사원 조회 요청", description = "사원을 조회합니다.", tags = {"MemberController"})
     @GetMapping("/getEmployee2")
     public ResponseEntity<ResponseDTO> getEmployee2() {
+        System.out.println("check ==========================");
         List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = memberService.getEmployee2();
 
         HttpStatus httpStatus = HttpStatus.OK;
