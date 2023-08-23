@@ -128,4 +128,14 @@ public class MemberService {
 
         return employeeDTOList;
     }
+
+
+    public Object selectEmployee(String form) {
+
+        List<Employee> employeeList = employeeRepository.findByName(form);
+
+        List<EmployeeDTO> employeeDTOList = employeeList.stream().map(employee -> modelMapper.map(employee, EmployeeDTO.class)).collect(Collectors.toList());
+
+        return employeeDTOList;
+    }
 }
