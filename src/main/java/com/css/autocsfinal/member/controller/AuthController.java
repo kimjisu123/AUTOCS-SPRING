@@ -20,9 +20,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-    /* @RequestBody를 통해 RequestBody로 넘어온 Json문자열을 파싱해서 MemberDTO 속성으로
-     *  매핑해 객체로 받아낸다(회원 아이디, 비밀번호)
-     * */
     @Operation(summary = "로그인 요청", description = "로그인 및 인증이 진행됩니다.", tags = {"AuthController"})
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> login(@RequestBody MemberDTO memberDTO){

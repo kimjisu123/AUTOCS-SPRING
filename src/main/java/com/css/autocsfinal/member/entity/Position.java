@@ -16,7 +16,7 @@ public class Position {
 
     @Id
     @Column(name = "POSITION_CODE")
-    private int code;
+    private String code;
 
     @Column(name = "NAME")
     private String name;

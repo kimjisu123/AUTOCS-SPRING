@@ -44,18 +44,17 @@ public class TokenProvider {
     /* 1. 토큰(xxxxx.yyyyy.zzzzz) 생성 메소드 */
     public TokenDTO generateTokenDTO(Member member){
         log.info("[TokenProvider] generateTokenDTO Start =============================== ");
-        List<String> roles = new ArrayList<>(); // 멤버의 권한을 추출
-//        for(MemberRole memberRole : member.getMemberRole()){
-//            roles.add(memberRole.getAuthority().getAuthorityName());
-//        }
-//
-//        log.info("[TokenProvider] authorites   {}", roles);
+
+        // 회원의 역할(role) 정보를 가져옵니다.
+        String role = member.getRole();
+
+        log.info("[TokenProvider] 권한 정보 : {}", role);
 
         /* 1. 회원 아이디를 "sub"이라는 클레임으로 토큰으로 추가 */
         Claims claims = Jwts.claims().setSubject(member.getId());
 
         /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
-        claims.put(AUTHORITIES_KEY, roles);
+        claims.put(AUTHORITIES_KEY, role);
 
         long now = System.currentTimeMillis();   // 현재시간을 밀리세컨드단위로 가져옴
 
