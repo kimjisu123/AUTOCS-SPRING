@@ -11,14 +11,15 @@ import java.util.Date;
 @ToString
 public class EmployeeDTO {
 
-    private int no;
+    private int employeeNo;
     private String name;
-    private Date join;
-    private Date out;
-    private String email;
-    private String phone;
-    private int managerNo;
-    private String DepartmentCode;
-    private String PositionCode;
-    private int MemberNo;
+    private Date employeeJoin;
+    private Date employeeOut;
+    private String employeeEmail;
+    private String employeePhone;
+    private int employeeManager;
+    private String departmentCode;
+    private String positionCode;
+    private int memberNo;
+
 }
