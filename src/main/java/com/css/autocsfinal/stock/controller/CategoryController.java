@@ -5,12 +5,15 @@ import com.css.autocsfinal.common.PageDTO;
 import com.css.autocsfinal.common.PagingResponseDTO;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.stock.dto.CategoryDTO;
+import com.css.autocsfinal.stock.entity.Category;
 import com.css.autocsfinal.stock.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -32,8 +35,15 @@ public class CategoryController {
                         , categoryService.insertCategory(categoryDTO)));
     }
 
-    /* 카테고리 조회 */
-    @GetMapping("/stock/category")
+    /* 카테고리 조회(물품등록) */
+    @GetMapping("/stock/category/all")  //productregist
+    public ResponseEntity<ResponseDTO> selectCategoryList(){
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", categoryService.selectCategoryList()));
+    }
+
+    /* 카테고리 조회 페이징(카데고리등록) */
+    @GetMapping("/stock/category") //category
     public ResponseEntity<ResponseDTO> selectCategoryListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset){
 

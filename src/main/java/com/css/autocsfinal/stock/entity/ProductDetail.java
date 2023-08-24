@@ -1,5 +1,7 @@
 package com.css.autocsfinal.stock.entity;
 
+import com.css.autocsfinal.stock.dto.StandardDTO;
+import com.css.autocsfinal.stock.dto.UnitDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +14,7 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
-public class Product {
+public class ProductDetail {
     @Id
     @Column(name = "PRODUCT_NO")
     private int productNo;
@@ -30,10 +32,16 @@ public class Product {
     private Date unusedDate;
     @Column(name = "STATUS")
     private String status;
-    @Column(name = "REF_PRODUCT_CATEGORY_NO")
-    private int refProductCategoryNo;
-    @Column(name = "REF_PRODUCT_STANDARD_NO")
-    private int refProductStandardNo;
-    @Column(name = "REF_PRODUCT_UNIT_NO")
-    private int refProductUnitNo;
+
+    @ManyToOne
+    @JoinColumn(name = "REF_PRODUCT_CATEGORY_NO")
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "REF_PRODUCT_STANDARD_NO")
+    private Standard standard;
+
+    @ManyToOne
+    @JoinColumn(name = "REF_PRODUCT_UNIT_NO")
+    private Unit unit;
 }
