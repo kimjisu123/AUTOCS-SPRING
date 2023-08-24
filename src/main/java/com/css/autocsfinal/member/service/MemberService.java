@@ -130,12 +130,14 @@ public class MemberService {
     }
 
 
-    public Object selectEmployee(String form) {
+    public Object selectEmployee(EmployeeDTO employeeDTO) {
 
-        List<Employee> employeeList = employeeRepository.findByName(form);
-
+        String memberName = employeeDTO.getName();
+        log.info("=====================================MemberName" + memberName);
+        List<Employee> employeeList = employeeRepository.findByName(memberName);
+        log.info("===============================employeeList!!!!!!!!!!!!!" + employeeList);
         List<EmployeeDTO> employeeDTOList = employeeList.stream().map(employee -> modelMapper.map(employee, EmployeeDTO.class)).collect(Collectors.toList());
-
+        log.info("===============================EmployeeDTOLIst!!!!!!!!!!!!!" + employeeDTOList);
         return employeeDTOList;
     }
 }

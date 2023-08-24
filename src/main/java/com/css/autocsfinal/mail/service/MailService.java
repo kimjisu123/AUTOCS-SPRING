@@ -36,4 +36,11 @@ public class MailService {
         return null;
 
     }
+
+    public Object deleteMail() {
+
+        mailRepository.deleteAll();
+
+        return null;
+    }
 }

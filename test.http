@@ -9,6 +9,6 @@ Content-Type: application/json
 Accept: application/json
 
 ### 회원 조회
-GET http://localhost:8080/member/selectEmployee
+POST http://localhost:8080/member/selectEmployee
 Content-Type: application/json
 Accept: application/json

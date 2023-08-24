@@ -35,4 +35,10 @@ public class MailController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO1)));
     }
+
+    @DeleteMapping("/mail")
+    public ResponseEntity<ResponseDTO> deleteMail(){
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 삭제가 되었습니다.", mailService.deleteMail()));
+    }
 }
