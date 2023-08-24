@@ -39,7 +39,4 @@ public class Member {
     @Column(name = "ROLE")
     private String role;
 
-//    @OneToMany(mappedBy = "member")
-//    private List<EmployeeAndDepartmentAndPosition> employeeAndDepartmentAndPositions;
-
 }

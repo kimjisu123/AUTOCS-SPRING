@@ -2,6 +2,7 @@ package com.css.autocsfinal.jwt;
 
 import com.css.autocsfinal.exception.TokenException;
 import com.css.autocsfinal.member.dto.TokenDTO;
+import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import io.jsonwebtoken.*;
@@ -43,14 +44,8 @@ public class TokenProvider {
 
 
     /* 1. 토큰(xxxxx.yyyyy.zzzzz) 생성 메소드 */
-    public TokenDTO generateTokenDTO(EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition){
+    public TokenDTO generateTokenDTO(Member member, EmployeeAndDepartmentAndPosition employee){
         log.info("[TokenProvider] generateTokenDTO Start =============================== ");
-
-        Member member = employeeAndDepartmentAndPosition.getMember();
-        if (member == null) {
-            // 멤버 정보가 없을 경우에 대한 처리
-            throw new RuntimeException("회원 정보가 없습니다.");
-        }
 
         String role = member.getRole();
 
@@ -60,10 +55,18 @@ public class TokenProvider {
         Claims claims = Jwts.claims().setSubject(member.getId());
 
         /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
-        claims.put(AUTHORITIES_KEY, member.getRole());
+        claims.put(AUTHORITIES_KEY, role);
 
-        //이거 안돼 claims.put("Name", employeeAndDepartmentAndPosition.getName());
-        //이거 돼 claims.put("NO", member.getNo());
+        claims.put("EmployeeNo", employee.getEmployeeNo());
+        claims.put("MemberNo", member.getNo());
+        claims.put("Name", employee.getName());
+        claims.put("JoinDate", employee.getEmployeeJoin());
+        claims.put("Email", employee.getEmployeeEmail());
+        claims.put("Phone", employee.getEmployeePhone());
+        claims.put("Manager", employee.getEmployeeManager());
+        claims.put("Department", employee.getDepartment().getName());
+        claims.put("Position", employee.getPosition().getName());
+
 
         long now = System.currentTimeMillis();   // 현재시간을 밀리세컨드단위로 가져옴
 
@@ -75,7 +78,7 @@ public class TokenProvider {
                 .compact();
         log.info("[TokenProvider] generateTokenDTO End =============================== ");
 
-        return new TokenDTO(BEARER_TYPE, employeeAndDepartmentAndPosition.getMember().getId()
+        return new TokenDTO(BEARER_TYPE, member.getId()
                 , accessToken, accessTokenExpriesIn.getTime());
     }
 
