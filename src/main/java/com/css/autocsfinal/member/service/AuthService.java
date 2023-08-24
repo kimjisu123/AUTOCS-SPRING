@@ -2,16 +2,16 @@ package com.css.autocsfinal.member.service;
 
 import com.css.autocsfinal.exception.LoginFailedException;
 import com.css.autocsfinal.jwt.TokenProvider;
+import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.member.dto.TokenDTO;
+import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.RandomStringUtils;
-import javax.transaction.Transactional;
 
 @Service
 @Slf4j
@@ -24,6 +24,8 @@ public class AuthService {
     private final TokenProvider tokenProvider;
 
     private final ModelMapper modelMapper;
+
+    private EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition;
 
 
     public AuthService(MemberRepository memberRepository
@@ -58,51 +60,16 @@ public class AuthService {
             throw new LoginFailedException("잘못된 비밀번호 입니다.");
         }
 
+        //토큰 발급을 위해 member를 담아서 변환
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = new EmployeeAndDepartmentAndPosition();
+        employeeAndDepartmentAndPosition.setMember(member);
+
         /* 3. 토큰 발급 */
-        TokenDTO tokenDTO = tokenProvider.generateTokenDTO(member);
+        TokenDTO tokenDTO = tokenProvider.generateTokenDTO(employeeAndDepartmentAndPosition);
         log.info("[AuthService] tokenDTO {} =======> ", tokenDTO);
 
         log.info("[AuthService] login End ==================================");
 
         return tokenDTO;
-    }
-
-    @Transactional
-    public Object signupMarket(MemberDTO memberDTO) {
-        log.info("[AuthService] 영업점 생성 Start ==================================");
-        log.info("[AuthService] memberDTO {} =======> ", memberDTO);
-
-        /* check
-         * 값을 받은건 MemberDTO클래스이다. 여기 담긴 값을 repository를 통해서 쿼리를 요청해야한다.
-         * 그래서 현재 MemberDTO객체를 entity 객체인 Member로 변경해주는 작업 필요하다. */
-        Member registMember = modelMapper.map(memberDTO, Member.class);
-
-        // 아이디 생성
-        int nextMemberCode = memberRepository.maxMemberCode() + 1;
-        String newUserId = "Market" + nextMemberCode;
-
-        // 랜덤한 비밀번호 생성
-        String newPassword = generateRandomPassword();
-
-        // 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(newPassword);
-
-        registMember.setId(newUserId);
-        registMember.setPwd(encodedPassword);
-        registMember.setRole("영업점");
-
-        Member result = memberRepository.save(registMember);
-
-        log.info("[AuthService] MemberInsert Result {}",
-                (result != null) ? "계정 생성 성공" : "계정 생성 실패");
-
-        return tokenProvider.generateTokenDTO(result);
-    }
-
-    private String generateRandomPassword() {
-        int length = 10;
-        boolean useLetters = true;
-        boolean useNumbers = true;
-        return RandomStringUtils.random(length, useLetters, useNumbers);
     }
 }

@@ -21,6 +21,7 @@ import java.util.Collection;
         private Character state;
 
         private String role;
+        
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

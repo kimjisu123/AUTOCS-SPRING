@@ -36,6 +36,10 @@ public class EmployeeAndDepartmentAndPosition {
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "REF_MEMBER_NO")
+    private Member member;
+
+    @ManyToOne
     @JoinColumn(name = "REF_DEPARTMENT_CODE")
     private Department department;
 
@@ -53,6 +57,7 @@ public class EmployeeAndDepartmentAndPosition {
                 ", employeeOut=" + employeeOut +
                 ", employeePhone='" + employeePhone + '\'' +
                 ", name='" + name + '\'' +
+                ", member='" + member + '\'' +
                 ", department=" + department +
                 ", position=" + position +
                 '}';

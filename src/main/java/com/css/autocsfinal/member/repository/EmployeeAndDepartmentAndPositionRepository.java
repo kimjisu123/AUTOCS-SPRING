@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface EmployeeAndDepartmentAndPositionRepository extends JpaRepository<EmployeeAndDepartmentAndPosition, Integer> {
-    @EntityGraph(attributePaths = {"department", "position"})
+    @EntityGraph(attributePaths = {"member", "department", "position"})
     List<EmployeeAndDepartmentAndPosition> findAll();
 }
