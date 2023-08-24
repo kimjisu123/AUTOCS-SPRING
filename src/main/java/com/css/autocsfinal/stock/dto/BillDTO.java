@@ -2,6 +2,8 @@ package com.css.autocsfinal.stock.dto;
 
 import lombok.*;
 
+import java.sql.Date;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -10,7 +12,7 @@ import lombok.*;
 public class BillDTO {
 
     private int billNo;
-    private java.util.Date registDate;
+    private Date registDate;
     private int refCompanyNo;
     private int refStoreInfoNo;
 

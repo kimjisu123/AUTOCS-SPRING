@@ -9,8 +9,7 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
-public class ProductDTO {
-
+public class ProductDetailDTO {
     private int productNo;
     private String name;
     private int stock;
@@ -19,8 +18,7 @@ public class ProductDTO {
     private Date registDate;
     private Date unusedDate;
     private String status;
-    private int refProductCategoryNo;
-    private int refProductStandardNo;
-    private int refProductUnitNo;
-
+    private CategoryDTO category;
+    private StandardDTO standard;
+    private UnitDTO unit;
 }
