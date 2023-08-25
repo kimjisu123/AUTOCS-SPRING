@@ -28,12 +28,24 @@ public class MailController {
                 .body(new ResponseDTO(HttpStatus.OK, "조회 성공",  mailService.findMail()));
     }
 
-    @PostMapping("/mail1")
+    @GetMapping("/mailBookmark")
+    public ResponseEntity<ResponseDTO> findMaillbookmark(){
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "북마크 조회 성공", mailService.mailBookmark()));
+    }
+
+    @PostMapping("/mail")
     public ResponseEntity<ResponseDTO> saveMail(){
 
-        MailDTO mailDTO1 = new MailDTO(0, "우리", "제목4", "내용4", new Date(), 'N');
+        MailDTO mailDTO1 = new MailDTO(0, "우리", "제목4", "내용4", new Date(), "N");
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO1)));
+    }
+
+    @PutMapping("/mail")
+    public ResponseEntity<ResponseDTO> putMail(@RequestBody MailDTO paramValue){
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공", mailService.setMail(paramValue)));
     }
 
     @DeleteMapping("/mail")
@@ -41,4 +53,5 @@ public class MailController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 삭제가 되었습니다.", mailService.deleteMail()));
     }
+
 }

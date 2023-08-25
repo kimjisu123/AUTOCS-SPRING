@@ -19,6 +19,6 @@ public class MailDTO {
 
     private String context;
     private Date goDate;
-    private char status;
+    private String status;
 
 }

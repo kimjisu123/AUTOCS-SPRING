@@ -41,5 +41,5 @@ public class Mail {
     private Date goDate;
 
     @Column(name = "STATUS")
-    private char status;
+    private String status;
 }

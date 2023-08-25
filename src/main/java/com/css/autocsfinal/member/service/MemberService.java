@@ -134,6 +134,7 @@ public class MemberService {
 
         String memberName = employeeDTO.getName();
         log.info("=====================================MemberName" + memberName);
+
         List<Employee> employeeList = employeeRepository.findByName(memberName);
         log.info("===============================employeeList!!!!!!!!!!!!!" + employeeList);
         List<EmployeeDTO> employeeDTOList = employeeList.stream().map(employee -> modelMapper.map(employee, EmployeeDTO.class)).collect(Collectors.toList());

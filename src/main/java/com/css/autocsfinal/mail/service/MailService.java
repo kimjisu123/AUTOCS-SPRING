@@ -4,13 +4,16 @@ import com.css.autocsfinal.mail.dto.MailDTO;
 import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.repository.MailRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MailService {
 
@@ -26,6 +29,19 @@ public class MailService {
         return mailDTOList;
     }
 
+    public Object mailBookmark() {
+//        List<Mail> mailList = mailRepository.findByStatus("N");
+
+        List<Mail> mailList = mailRepository.findByStatus("N    ");
+        log.info("============================================================= mailDTOList" + mailList);
+
+        List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
+
+        log.info("============================================================= mailDTOList" + mailDTOList);
+
+        return mailDTOList;
+
+    }
 
     public Object saveMail(MailDTO mailDTO1) {
 
@@ -43,4 +59,28 @@ public class MailService {
 
         return null;
     }
+
+    @Transactional
+    public Object setMail(MailDTO mailDTO) {
+
+        log.info("==================================================== DTO 값 확인 : " + mailDTO);
+
+        int mailNo = mailDTO.getMailNo();
+
+        Mail mail = mailRepository.findById(mailNo).get();
+
+        if(mail.getStatus().equals("N")){
+            mail.setStatus("Y");
+        } else {
+            mail.setStatus("N");
+        }
+
+        log.info("======================================= mailEntity 수정 and 값 확인 " + mail);
+
+        MailDTO resultMail = modelMapper.map(mail, MailDTO.class);
+
+        return resultMail;
+
+    }
+
 }
