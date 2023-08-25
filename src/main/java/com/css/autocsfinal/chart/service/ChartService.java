@@ -2,8 +2,10 @@ package com.css.autocsfinal.chart.service;
 
 import com.css.autocsfinal.chart.dto.ChartDTO;
 import com.css.autocsfinal.chart.dto.DeptResult;
+import com.css.autocsfinal.chart.dto.EmployeeAndPositionDTO;
 import com.css.autocsfinal.chart.entity.ChartEntity;
 import com.css.autocsfinal.chart.entity.DepartmentEntity;
+import com.css.autocsfinal.chart.entity.EmployeeAndPositionEntity;
 import com.css.autocsfinal.chart.repository.ChartRepository;
 import com.css.autocsfinal.chart.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class ChartService {
 
     private final ChartRepository chartRepository;
     private final DepartmentRepository departmentRepository;
+
     public List<ChartDTO> findChart() {
 
         log.info("[ChartService] findChart 시작함");
@@ -31,10 +34,10 @@ public class ChartService {
             ChartDTO chartDTO = new ChartDTO();
 
             chartDTO.setName(chart.getName());
-            chartDTO.setManagerNo(chartDTO.getManagerNo());
-            chartDTO.setEmployeeNo(chartDTO.getEmployeeNo());
-            chartDTO.setDepartment(chartDTO.getDepartment());
-            chartDTO.setPosition(chartDTO.getPosition());
+            chartDTO.setManagerNo(chart.getManagerNo());
+            chartDTO.setEmployeeNo(chart.getEmployeeNo());
+            chartDTO.setDepartment(chart.getDepartment().getName());
+            chartDTO.setPosition(chart.getPosition().getName());
 
             return chartDTO;
         }).collect(Collectors.toList());
@@ -44,8 +47,13 @@ public class ChartService {
 
     public DeptResult findDept() {
 
+        log.info("[ChartService] DeptResult findDept 실행");
         List<DepartmentEntity> deptList = departmentRepository.findAll();
-        DeptResult result = deptList.stream().map(DeptResult::new).collect(Collectors.toList()).get(6);
+        log.info("deptList : ", deptList);
+        log.info("[ChartService] DeptResult findDept findAll 완료");
+        DeptResult result = deptList.stream().map(DeptResult::new).collect(Collectors.toList()).get(deptList.size() - 1);
+
         return result;
     }
+
 }

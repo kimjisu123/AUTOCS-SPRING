@@ -2,6 +2,7 @@ package com.css.autocsfinal.chart.controller;
 
 import com.css.autocsfinal.chart.dto.ChartDTO;
 import com.css.autocsfinal.chart.dto.DeptResult;
+import com.css.autocsfinal.chart.dto.EmployeeAndPositionDTO;
 import com.css.autocsfinal.chart.service.ChartService;
 import com.css.autocsfinal.common.ResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +21,19 @@ public class ChartController {
 
     private final ChartService chartService;
 
-    @GetMapping
-    public ResponseEntity<ResponseDTO> findChart() {
+//    @GetMapping
+//    public ResponseEntity<ResponseDTO> findChart() {
+//
+//        List<ChartDTO> chartList = chartService.findChart();
+//
+//        HttpStatus httpStatus = HttpStatus.OK;
+//
+//        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "차트 조회 성공", chartList);
+//
+//        return ResponseEntity.status(httpStatus).body(responseDTO);
+//    }
 
-        List<ChartDTO> chartList = chartService.findChart();
-
-        HttpStatus httpStatus = HttpStatus.OK;
-
-        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "차트 조회 성공", chartList);
-
-        return ResponseEntity.status(httpStatus).body(responseDTO);
-    }
-
-    @GetMapping("/dept")
+    @GetMapping()
     public ResponseEntity<ResponseDTO> findDept() {
 
         DeptResult deptResult = chartService.findDept();
@@ -43,4 +44,5 @@ public class ChartController {
 
         return ResponseEntity.ok().body(responseDTO);
     }
+
 }

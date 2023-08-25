@@ -37,4 +37,7 @@ public class DepartmentEntity {
 
     @OneToMany(mappedBy = "parent")
     private List<DepartmentEntity> children = new ArrayList<>();
+
+    @OneToMany(mappedBy = "departmentCode")
+    private List<EmployeeAndPositionEntity> employee;
 }
