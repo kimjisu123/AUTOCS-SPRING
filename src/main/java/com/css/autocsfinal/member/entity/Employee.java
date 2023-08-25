@@ -48,8 +48,9 @@ public class Employee {
     @Column(name = "REF_DEPARTMENT_CODE")
     private String departmentCode;
 
-    @Column(name = "REF_POSITION_CODE")
-    private String positionCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_POSITION_CODE")
+    private Position position;
 
     @Column(name = "REF_MEMBER_NO")
     private int memberNo;
