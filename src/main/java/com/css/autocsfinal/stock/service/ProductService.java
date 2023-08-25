@@ -2,7 +2,10 @@ package com.css.autocsfinal.stock.service;
 
 import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.stock.dto.ProductDTO;
+import com.css.autocsfinal.stock.dto.ProductDetailDTO;
 import com.css.autocsfinal.stock.entity.Product;
+import com.css.autocsfinal.stock.entity.ProductDetail;
+import com.css.autocsfinal.stock.repository.ProductDetailRepository;
 import com.css.autocsfinal.stock.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 
@@ -22,10 +25,12 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductDetailRepository productDetailRepository;
     private final ModelMapper modelMapper;
 
-    public ProductService(ProductRepository productRepository, ModelMapper modelMapper) {
+    public ProductService(ProductRepository productRepository, ProductDetailRepository productDetailRepository, ModelMapper modelMapper) {
         this.productRepository = productRepository;
+        this.productDetailRepository = productDetailRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -35,26 +40,25 @@ public class ProductService {
         log.info("[ProductService] selectProductTotal Start ===================");
 
         /* 페이징 처리 결과를 Page 타입으로 반환 받는다. */
-//        List<Product> productList = productRepository.findByStatus("Y");
-        List<Product> productList = productRepository.findAll();
+        List<ProductDetail> productList = productDetailRepository.findAll();
         log.info("[ProductService] productList.size : {}", productList.size());
         log.info("[ProductService] selectProductTotal End ===================");
 
         return productList.size();
     }
 
-    public List<ProductDTO> selectProductListWithPaging(Criteria cri) {
+    public List<ProductDetailDTO> selectProductListWithPaging(Criteria cri) {
 
         log.info("[ProductService] selectProductListWithPaging Start ===================");
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count, Sort.by("productNo").descending());
 
-        Page<Product> result = productRepository.findAll(paging);
+        Page<ProductDetail> result =productDetailRepository.findAll(paging);
 
-        List<ProductDTO> productList = result.stream()
-                .map(product -> modelMapper
-                        .map(product, ProductDTO.class)).collect(Collectors.toList());
+        List<ProductDetailDTO> productList = result.stream()
+                .map(productDetail -> modelMapper
+                        .map(productDetail, ProductDetailDTO.class)).collect(Collectors.toList());
 
         log.info("[ProductService] selectProductListWithPaging End ===================");
         return productList;

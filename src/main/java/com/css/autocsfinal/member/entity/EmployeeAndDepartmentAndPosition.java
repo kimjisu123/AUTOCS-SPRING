@@ -35,11 +35,15 @@ public class EmployeeAndDepartmentAndPosition {
     @Column(name = "NAME")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_MEMBER_NO")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REF_DEPARTMENT_CODE")
     private Department department;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REF_POSITION_CODE")
     private Position position;
 
@@ -53,6 +57,7 @@ public class EmployeeAndDepartmentAndPosition {
                 ", employeeOut=" + employeeOut +
                 ", employeePhone='" + employeePhone + '\'' +
                 ", name='" + name + '\'' +
+                ", member='" + member + '\'' +
                 ", department=" + department +
                 ", position=" + position +
                 '}';

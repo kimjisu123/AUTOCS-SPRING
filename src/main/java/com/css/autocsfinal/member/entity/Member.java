@@ -3,6 +3,7 @@ package com.css.autocsfinal.member.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "TBL_MEMBER")
@@ -38,9 +39,4 @@ public class Member {
     @Column(name = "ROLE")
     private String role;
 
-    @Override
-    public String toString() {
-        return "Member [memberNo=" + no + ", Id=" + id + ", Pwd=" + pwd
-                + ", State=" + state + ", Role=" + role + "]";
-    }
 }
