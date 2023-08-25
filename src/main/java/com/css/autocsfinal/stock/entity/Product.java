@@ -14,6 +14,8 @@ import java.sql.Date;
 @ToString
 public class Product {
     @Id
+    @GeneratedValue(generator = "SEQ_PRODUCT_NO")
+    @SequenceGenerator(name = "SEQ_PRODUCT_NO", sequenceName = "SEQ_PRODUCT_NO", allocationSize = 1)
     @Column(name = "PRODUCT_NO")
     private int productNo;
     @Column(name = "NAME")
