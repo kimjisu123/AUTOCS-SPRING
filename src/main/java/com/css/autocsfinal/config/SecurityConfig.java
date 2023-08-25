@@ -63,19 +63,31 @@ public class SecurityConfig {
                 // options 메소드로 사전 요청을 보내게된다.
                 // 사전에 요청이 안전한지 확인하기 위함이다(유효한지 서버에 미리 파악할 수 있도록 보내는 수단을 의미)
 //                .antMatchers("/member/**").hasAnyRole("EMPLOYEE")
+                //---------------------------------------------------------------여기에 추가하세용
+
+
+
+
+
+
+
+
+
+
+
 
                .anyRequest().permitAll()  // 어떤 요청이든 허용 가능, 구현전에 추가해보기
-//                .and()
-//                .formLogin()        // 로그인 form을 따로 이용해 로그인 처리할 것이다.
-//                .loginPage("/login")  // login Page로 로그인페이지에서 submit요청하는 경로로 지정하겠다.
-//                .successForwardUrl("/")      // 성공 시 페이지 설정
-//                .and()
-//                .logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/login"))  // 로그아웃 시 요청 경로
-//                .deleteCookies("JSESSIONID")  // 쿠키 제거
-//                .and()
-//                .exceptionHandling()                     // 인가/인증 exception 핸들링 설정
-//                .accessDeniedPage("/noAuthority")     // 인가 되지 않았을 때 - 권한이 없는 기능을 요청했을 떄 랜더랑 할 페이지
+                .and()
+                .formLogin()        // 로그인 form을 따로 이용해 로그인 처리할 것이다.
+                .loginPage("/login")  // login Page로 로그인페이지에서 submit요청하는 경로로 지정하겠다.
+                .successForwardUrl("/")      // 성공 시 페이지 설정
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/login"))  // 로그아웃 시 요청 경로
+                .deleteCookies("JSESSIONID")  // 쿠키 제거
+                .and()
+                .exceptionHandling()                     // 인가/인증 exception 핸들링 설정
+                .accessDeniedPage("/noAuthority")     // 인가 되지 않았을 때 - 권한이 없는 기능을 요청했을 떄 랜더랑 할 페이지
                 .and()
                 /* 세션 인증 방식을 쓰지 않겠다는 설정 */
                 .sessionManagement()
