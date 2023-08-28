@@ -42,7 +42,7 @@ public class MemberController {
     //사원 조회 리스트
     @Operation(summary = "사원 조회 요청", description = "사원을 조회합니다.", tags = {"MemberController"})
     @GetMapping("/getEmployee")
-    public ResponseEntity<ResponseDTO> getEmployee2() {
+    public ResponseEntity<ResponseDTO> getEmployee() {
         System.out.println("check ==========================");
         List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = memberService.getEmployee();
 

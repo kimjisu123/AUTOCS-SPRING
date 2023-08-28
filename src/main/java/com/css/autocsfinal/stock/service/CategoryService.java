@@ -55,13 +55,25 @@ public class CategoryService {
         return (result > 0)? "카테고리 입력 성공": "카테고리 입력 실패";
     }
 
-    /* 카테고리 조회 */
+
     public int selectCategoryAll() {
 
         List<Category> categotyList = categoryRepository.findAll();
         return categotyList.size();
     }
 
+    /* 사용중인 카테고리 조회 */
+    public List<CategoryDTO> selectCategoryList() {
+
+        List<Category> result = categoryRepository.findByUseYnOrderByName("Y");
+
+        List<CategoryDTO> categotyList = result.stream()
+                .map(category -> modelMapper
+                        .map(category, CategoryDTO.class)).collect(Collectors.toList());
+        return categotyList;
+    }
+
+    /* 카테고리 조회 페이징 */
     public List<CategoryDTO> selectCategoryListWithPaging(Criteria cri) {
 
         int index = cri.getPageNum() - 1;
@@ -71,8 +83,8 @@ public class CategoryService {
         Page<Category> result = categoryRepository.findAll(paging);
 
         List<CategoryDTO> categoryList = result.stream()
-                .map(product -> modelMapper
-                        .map(product, CategoryDTO.class)).collect(Collectors.toList());
+                .map(category -> modelMapper
+                        .map(category, CategoryDTO.class)).collect(Collectors.toList());
         return categoryList;
     }
 

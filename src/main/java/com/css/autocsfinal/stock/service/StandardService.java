@@ -3,8 +3,11 @@ package com.css.autocsfinal.stock.service;
 
 import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.stock.dto.StandardDTO;
+import com.css.autocsfinal.stock.dto.UnitDTO;
 import com.css.autocsfinal.stock.entity.Standard;
+import com.css.autocsfinal.stock.entity.Unit;
 import com.css.autocsfinal.stock.repository.StandardRepository;
+import com.css.autocsfinal.stock.repository.UnitRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -14,7 +17,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +29,6 @@ public class StandardService {
     private final StandardRepository standardRepository;
 
     private final ModelMapper modelMapper;
-
 
 
     public StandardService(StandardRepository standardRepository, ModelMapper modelMapper) {
@@ -59,6 +63,18 @@ public class StandardService {
         return categotyList.size();
     }
 
+    /* 사용중인 규격 조회 */
+    public List<StandardDTO> selectStandardList() {
+
+        List<Standard> result = standardRepository.findByUseYnOrderByName("Y");
+
+        List<StandardDTO> standardList = result.stream()
+                .map(standard -> modelMapper
+                        .map(standard, StandardDTO.class)).collect(Collectors.toList());
+        return standardList;
+    }
+
+    /* 전체 규격 조회 페이징 */
     public List<StandardDTO> selectCStandardListWithPaging(Criteria cri) {
 
         int index = cri.getPageNum() - 1;

@@ -26,16 +26,23 @@ public class StandardController {
 
     /* 입력 */
     @PostMapping("/stock/standard")
-    public ResponseEntity<ResponseDTO> insertCategory(@ModelAttribute StandardDTO standardDTO){
+    public ResponseEntity<ResponseDTO> insertStandard(@ModelAttribute StandardDTO standardDTO){
 
         return ResponseEntity.ok()
                 .body(new ResponseDTO(HttpStatus.OK, "규격 입력 성공"
                         , standardService.insertStandard(standardDTO)));
     }
 
-    /* 조회 */
+    /* 규격 조회(물품등록) */
+    @GetMapping("/stock/standard/all")  //productregist
+    public ResponseEntity<ResponseDTO> selectStandardList(){
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", standardService.selectStandardList()));
+    }
+
+    /* 규격 조회 페이징(카데고리등록) */
     @GetMapping("/stock/standard")
-    public ResponseEntity<ResponseDTO> selectCategoryListWithPaging(
+    public ResponseEntity<ResponseDTO> selectStandardListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset){
 
         int total = standardService.selectStandardAll();
@@ -51,9 +58,10 @@ public class StandardController {
 
     /*수정 */
     @PutMapping("/stock/standard")
-    public ResponseEntity<ResponseDTO> updateCategory(@ModelAttribute StandardDTO standardDTO) {
+    public ResponseEntity<ResponseDTO> updateStandard(@ModelAttribute StandardDTO standardDTO) {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "규격 수정 성공",  standardService.updateStandard(standardDTO)));
     }
+
 
 }
