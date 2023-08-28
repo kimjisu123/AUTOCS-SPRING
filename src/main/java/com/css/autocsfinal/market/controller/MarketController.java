@@ -25,11 +25,12 @@ public class MarketController {
 
     @Operation(summary = "영업점 신청폼 등록 요청", description = "신청폼을 등록합니다.", tags = {"MarketController"})
     @PostMapping(value = "/applyMarket")
-    public ResponseEntity<ResponseDTO> applyMarket(@ModelAttribute ApplyFormDTO applyFormDTO, MultipartFile file) {
-        log.info("[MarketController] file {} =======> " + file);
+    public ResponseEntity<ResponseDTO> applyMarket(@ModelAttribute ApplyFormDTO applyFormDTO, MultipartFile fileImage) {
+
+        log.info("[MarketController] fileImage {} =======> " + fileImage);
 
         // 영업점 신청폼 등록
-        String resultMessage = marketService.insertApply(applyFormDTO, file);
+        String resultMessage = marketService.insertApply(applyFormDTO, fileImage);
 
         HttpStatus httpStatus = (resultMessage.contains("성공")) ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
 

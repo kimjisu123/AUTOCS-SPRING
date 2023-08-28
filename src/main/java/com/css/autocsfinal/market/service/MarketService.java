@@ -1,7 +1,6 @@
 package com.css.autocsfinal.market.service;
 
 import com.css.autocsfinal.market.dto.ApplyFileDTO;
-import com.css.autocsfinal.market.dto.ApplyFormAndApplyFileDTO;
 import com.css.autocsfinal.market.dto.ApplyFormDTO;
 import com.css.autocsfinal.market.entity.ApplyFile;
 import com.css.autocsfinal.market.entity.ApplyFormAndApplyFile;
@@ -10,17 +9,13 @@ import com.css.autocsfinal.market.repository.MarketRepository;
 import com.css.autocsfinal.util.FileUploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -49,88 +44,53 @@ public class MarketService {
     }
 
     @Transactional
-    public String insertApply(ApplyFormDTO applyFormDTO, MultipartFile file) {
+    public String insertApply(ApplyFormDTO applyFormDTO, MultipartFile fileImage) {
         log.info("[MarketService] 영업점 신청폼 Insert Start ===================");
         log.info("[MarketService] applyDTO {} =======> " + applyFormDTO);
-        log.info("[MarketService] file {} =======> " + file);
-
-        ApplyFormAndApplyFile insertMarketForm = modelMapper.map(applyFormDTO, ApplyFormAndApplyFile.class);
+        log.info("[MarketService] fileImage {} =======> " + fileImage);
 
         String imageName = UUID.randomUUID().toString().replace("-", "");
         String replaceFileName = null;
-        int result = 0; // 결과에 따른 값을 구분하기위한 용도의 변수
+        int result = 0; // 결과에 따른 값을 구분하기 위한 용도의 변수
 
-        try{
-            replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, file);
+        try {
+            replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, fileImage);
 
             Integer maxFileNo = marketRepository.findMaxFileNo();
-                int newFileNo = (maxFileNo != null) ? maxFileNo + 1 : 1;
+            int newFileNo = (maxFileNo != null) ? maxFileNo + 1 : 1;
 
-            log.info("[ProductService] insert Image Name : ", replaceFileName);
+            log.info("[ProductService] insert Image Name : {}", replaceFileName);
 
-            // 저장을 위해서 일반 DTO객체를 Entity객체로 변경
-            ApplyFileDTO applyFileDTO = new ApplyFileDTO(); // ApplyFileDTO 객체 생성
+            // ApplyFileDTO 객체 생성 및 값 설정
+            ApplyFileDTO applyFileDTO = new ApplyFileDTO();
             applyFileDTO.setFileNo(newFileNo);
-            applyFileDTO.setOriginal(imageName);
-            applyFileDTO.setChange(replaceFileName);
-            applyFileDTO.setRegistDate(LocalDate.now());
-            applyFileDTO.setKind("표준가맹계약서");
 
+            // ApplyFile 엔티티로 매핑하고 저장
             ApplyFile insertForm = modelMapper.map(applyFileDTO, ApplyFile.class);
-            marketRepository.save(insertForm);
+            insertForm.setOrignal(replaceFileName);
+            insertForm.setChange("표준가맹계약서" + newFileNo);
+            insertForm.setRegistDate(Date.valueOf(LocalDate.now()));
+            insertForm.setKine("표준가맹계약서");
 
-            result = 1;
+            ApplyFile savedFile = marketRepository.save(insertForm);
 
-        } catch (Exception e){
-            System.out.println("check");
+            Integer savedFileNo = savedFile.getFileNo();
+
+
+            // ApplyFormAndApplyFile 객체 생성 및 매핑
+            ApplyFormAndApplyFile insertMarketForm = modelMapper.map(applyFormDTO, ApplyFormAndApplyFile.class);
+            insertMarketForm.setFileNo(savedFileNo);
+            insertMarketForm.setState("W");
+
+            // ApplyFormAndApplyFile 객체 생성 및 매핑
+            ApplyFormAndApplyFile applyForm = marketApplyRepository.save(insertMarketForm);
+
+            log.info("[MarketService] insertApply End ===================");
+            return (applyForm != null) ? "영업점 신청폼 등록 성공" : "영업점 신청폼 등록 실패";
+        } catch (Exception e) {
+            log.error("Error while inserting apply form: {}", e.getMessage());
             FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
             throw new RuntimeException(e);
         }
-
-
-//        // 파일 처리 예시
-//        if (!file.isEmpty()) {
-//            MultipartFile paramFile = file;
-//            try {
-//                String originFileName = paramFile.getOriginalFilename();
-//                String ext = originFileName.substring(originFileName.lastIndexOf("."));
-//                String savedFileName = System.currentTimeMillis() + "_" + originFileName;
-//                String filePath = saveFileDirectoryPath + File.separator + savedFileName;
-//                File dest = new File(filePath);
-//
-//                // 파일 업로드 로직 추가 (MultipartFile을 File로 저장)
-//                paramFile.transferTo(dest);
-
-                // 파일 정보를 엔티티에 설정
-//                ApplyFile applyFile = new ApplyFile();
-//                Integer maxFileNo = marketRepository.findMaxFileNo();
-//                int newFileNo = (maxFileNo != null) ? maxFileNo + 1 : 1;
-//                applyFile.setFileNo(newFileNo);
-//
-//                insertMarketForm.getFile().setFileNo(applyFile.getFileNo());
-//                insertMarketForm.getFile().setOrignal(originFileName);
-//                insertMarketForm.getFile().setChange(savedFileName);
-//                insertMarketForm.getFile().setRegistDate(LocalDate.now());
-//                insertMarketForm.getFile().setKine("표준가맹계약서");
-//
-//                // 파일 삭제 (원본 파일)
-//                boolean isDeleted = dest.delete();
-//                if (isDeleted) {
-//                    System.out.println(originFileName + " 원본 파일 삭제 완료!");
-//                } else {
-//                    System.out.println(originFileName + " 원본 파일 삭제 실패!");
-//                }
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                System.out.println("파일 업로드 실패");
-//            }
-//        }
-
-        // ApplyFormAndApplyFile 객체 생성 및 매핑
-        ApplyFormAndApplyFile applyForm = marketApplyRepository.save(insertMarketForm);
-
-        log.info("[MarketService] insertApply End ===================");
-        return (applyForm != null) ? "영업점 신청폼 등록 성공" : "영업점 신청폼 등록 실패";
     }
 }

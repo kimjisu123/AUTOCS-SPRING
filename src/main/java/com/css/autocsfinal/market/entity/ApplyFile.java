@@ -37,7 +37,7 @@ public class ApplyFile {
     private String change;
 
     @Column(name = "REGIST_DATE")
-    private LocalDate registDate;
+    private Date registDate;
 
     @Column(name = "KIND")
     private String kine;

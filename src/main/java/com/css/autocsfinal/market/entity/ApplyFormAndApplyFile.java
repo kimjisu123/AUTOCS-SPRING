@@ -44,9 +44,12 @@ public class ApplyFormAndApplyFile {
     @Column(name = "STATE")
     private String state;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_APPLY_FILE_NO")
-    private ApplyFile file;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "REF_APPLY_FILE_NO")
+//    private ApplyFile file;
+
+    @Column(name = "REF_APPLY_FILE_NO")
+    private Integer fileNo;
 
 
 }
