@@ -59,11 +59,5 @@ public class MemberController {
         return ResponseEntity.status(httpStatus).body(responseDTO);
     }
 
-    @PostMapping("/selectEmployee")
-    public ResponseEntity<ResponseDTO> selectEmployee(@RequestBody EmployeeDTO paramValue){
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "사원 검색 성공", memberService.selectEmployee(paramValue)));
-    }
-
 
 }
