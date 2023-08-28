@@ -9,10 +9,8 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
-public class IoDTO {
-    private int productIoNo;
-    private int quantity;
+public class IoSummaryDTO {
+    private int refProductNo;
     private String io;
-    private Date registDate;
-    private String refProductNo;
+    private int totalQuantity;
 }

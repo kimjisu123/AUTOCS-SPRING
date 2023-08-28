@@ -12,10 +12,8 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
-public class Io {
+public class IoDetail {
     @Id
-    @GeneratedValue(generator = "SEQ_PRODUCT_IO_NO")
-    @SequenceGenerator(name = "SEQ_PRODUCT_IO_NO", sequenceName = "SEQ_PRODUCT_IO_NO", allocationSize = 1)
     @Column(name = "PRODUCT_IO_NO")
     private int productIoNo;
     @Column(name = "QUANTITY")
@@ -24,6 +22,8 @@ public class Io {
     private String io;
     @Column(name = "REGIST_DATE")
     private Date registDate;
-    @Column(name = "REF_PRODUCT_NO")
-    private String refProductNo;
+
+    @ManyToOne
+    @JoinColumn(name = "REF_PRODUCT_NO")
+    private ProductDetail refProductNo;
 }
