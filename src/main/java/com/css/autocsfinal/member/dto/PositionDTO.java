@@ -10,4 +10,6 @@ import lombok.*;
 public class PositionDTO {
     private String code;
     private String name;
+    private String upCode;
+
 }

@@ -34,3 +34,6 @@ jwt:
 logging:
   level:
     root: info
+
+market:
+  MarketGetFormFileDirectoryPath: C:/dev/file(Final)

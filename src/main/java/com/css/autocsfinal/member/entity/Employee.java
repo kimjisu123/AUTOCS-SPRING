@@ -16,7 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Employee {
 
     @Id
@@ -42,17 +41,31 @@ public class Employee {
     @Column(name = "PHOME")
     private String employeePhone;
 
-    @Column(name = "MANAGER_NO")
-    private int employeeManager;
-
     @Column(name = "REF_DEPARTMENT_CODE")
     private String departmentCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_POSITION_CODE")
-    private Position position;
+    @Column(name = "REF_POSITION_CODE")
+    private String position;
+
+    @Column(name = "UP_CODE")
+    private String upCode;
 
     @Column(name = "REF_MEMBER_NO")
     private int memberNo;
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeNo=" + employeeNo +
+                ", name='" + name + '\'' +
+                ", employeeJoin=" + employeeJoin +
+                ", employeeOut=" + employeeOut +
+                ", employeeEmail='" + employeeEmail + '\'' +
+                ", employeePhone='" + employeePhone + '\'' +
+                ", departmentCode=" + departmentCode +
+                ", upCode=" + upCode +
+                ", position=" + position +
+                ", memberNo=" + memberNo +
+                '}';
+    }
 }

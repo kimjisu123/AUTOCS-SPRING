@@ -36,7 +36,7 @@ public class ApplyFormAndApplyFile {
     private String name;
 
     @Column(name = "EMAIL")
-    private int email;
+    private String email;
 
     @Column(name = "LICENSE")
     private String license;
