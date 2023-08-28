@@ -35,5 +35,14 @@ logging:
   level:
     root: info
 
-market:
-  MarketGetFormFileDirectoryPath: C:/dev/file(Final)
+#market:
+#  MarketGetFormFileDirectoryPath: C:/dev/file(Final)
+
+## 이미지 저장할 위치와 응답할 때 이미지 주소 세팅
+image:
+  ## WebConfig에 세팅
+  add-resource-locations: classpath:/static/productimgs/
+  add-resource-handler: /productimgs/**
+
+  image-dir: src/main/resources/static/applyMimgs
+  image-url: http://localhost:8080/applyMimgs/

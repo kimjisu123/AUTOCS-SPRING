@@ -2,7 +2,7 @@ package com.css.autocsfinal.market.dto;
 
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,8 @@ public class ApplyFileDTO {
 
     private String change;
 
-    private Date registDate;
+    private LocalDate registDate;
 
     private String kind;
-}
+
+    }
