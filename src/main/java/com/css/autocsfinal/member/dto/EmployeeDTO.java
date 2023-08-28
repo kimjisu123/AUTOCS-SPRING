@@ -19,7 +19,9 @@ public class EmployeeDTO {
     private String employeePhone;
     private int employeeManager;
     private String departmentCode;
-    private String positionCode;
     private int memberNo;
+    private String positionCode;
+    private String upCode;
+
 
 }

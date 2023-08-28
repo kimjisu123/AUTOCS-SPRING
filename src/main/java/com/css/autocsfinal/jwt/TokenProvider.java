@@ -63,7 +63,7 @@ public class TokenProvider {
         claims.put("JoinDate", employee.getEmployeeJoin());
         claims.put("Email", employee.getEmployeeEmail());
         claims.put("Phone", employee.getEmployeePhone());
-        claims.put("Manager", employee.getEmployeeManager());
+        //claims.put("Manager", employee.getEmployeeManager());
         claims.put("Department", employee.getDepartment().getName());
         claims.put("Position", employee.getPosition().getName());
 

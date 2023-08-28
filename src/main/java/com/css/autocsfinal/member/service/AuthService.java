@@ -64,7 +64,7 @@ public class AuthService {
         employeeDTO.setEmployeeJoin(employee.getEmployeeJoin());
         employeeDTO.setEmployeeEmail(employee.getEmployeeEmail());
         employeeDTO.setEmployeePhone(employee.getEmployeePhone());
-        employeeDTO.setEmployeeManager(employee.getEmployeeManager());
+        //employeeDTO.setEmployeeManager(employee.getEmployeeManager());
         employeeDTO.setDepartment(employee.getDepartment().getName());
         employeeDTO.setPosition(employee.getPosition().getName());
 
