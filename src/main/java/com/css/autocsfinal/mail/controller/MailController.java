@@ -29,15 +29,16 @@ public class MailController {
     }
 
     @GetMapping("/mailBookmark")
-    public ResponseEntity<ResponseDTO> findMaillbookmark(){
+    public ResponseEntity<ResponseDTO> findMailbookmark(){
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "북마크 조회 성공", mailService.mailBookmark()));
     }
 
+
     @PostMapping("/mail")
     public ResponseEntity<ResponseDTO> saveMail(){
 
-        MailDTO mailDTO1 = new MailDTO(0, "우리", "제목4", "내용4", new Date(), "N");
+        MailDTO mailDTO1 = new MailDTO(0, "김지수", "제목4", "내용4", new Date(), "N");
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO1)));
     }

@@ -8,6 +8,11 @@ GET http://localhost:8080/mailBookmark
 Content-Type: application/json
 Accept: */*
 
+### 보낸 메일 조회
+GET http://localhost:8080/mailSent/41
+Content-Type: application/json
+Accept: */*
+
 ### 삭제
 DELETE http://localhost:8080/mail
 Content-Type: application/json
@@ -25,7 +30,7 @@ Accept: */*
 
 {
   "mailNo": 78,
-  "send": "우리",
+  "send": "김지수",
   "title": "제목4",
   "context": "내용4",
   "goDate": "2023-08-25T02:28:27.000+00:00",

@@ -1,8 +1,13 @@
 package com.css.autocsfinal.mail.service;
 
 import com.css.autocsfinal.mail.dto.MailDTO;
+import com.css.autocsfinal.mail.dto.MailListDTO;
 import com.css.autocsfinal.mail.entity.Mail;
+//import com.css.autocsfinal.mail.entity.MailList;
+//import com.css.autocsfinal.mail.repository.MailListRepository;
 import com.css.autocsfinal.mail.repository.MailRepository;
+import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,6 +23,7 @@ import java.util.stream.Collectors;
 public class MailService {
 
     private final MailRepository mailRepository;
+    private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
 
     public List<MailDTO> findMail() {
@@ -30,9 +36,8 @@ public class MailService {
     }
 
     public Object mailBookmark() {
-//        List<Mail> mailList = mailRepository.findByStatus("N");
 
-        List<Mail> mailList = mailRepository.findByStatus("N    ");
+        List<Mail> mailList = mailRepository.findByStatus("Y");
         log.info("============================================================= mailDTOList" + mailList);
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
@@ -63,8 +68,6 @@ public class MailService {
     @Transactional
     public Object setMail(MailDTO mailDTO) {
 
-        log.info("==================================================== DTO 값 확인 : " + mailDTO);
-
         int mailNo = mailDTO.getMailNo();
 
         Mail mail = mailRepository.findById(mailNo).get();
@@ -75,12 +78,13 @@ public class MailService {
             mail.setStatus("N");
         }
 
-        log.info("======================================= mailEntity 수정 and 값 확인 " + mail);
-
         MailDTO resultMail = modelMapper.map(mail, MailDTO.class);
 
         return resultMail;
 
     }
+
+
+
 
 }

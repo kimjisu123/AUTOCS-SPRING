@@ -12,4 +12,5 @@ import java.util.List;
 public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Query("SELECT m FROM Mail m WHERE m.status = :N")
     List<Mail> findByStatus(@Param("N") String N);
+
 }

@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "TBL_MAIL")
@@ -42,4 +43,8 @@ public class Mail {
 
     @Column(name = "STATUS")
     private String status;
+
+//    @OneToMany(mappedBy = "mail")
+//    @Column(name ="MAIL_NO")
+//    private List<MailList> mailList;
 }
