@@ -21,4 +21,7 @@ public class Position {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "UPPER_POSITION_CODE")
+    private String upCode;
+
 }

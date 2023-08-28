@@ -2,6 +2,8 @@ package com.css.autocsfinal.stock.dto;
 
 import lombok.*;
 
+import java.sql.Date;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -14,8 +16,8 @@ public class ProductDTO {
     private int stock;
     private int price;
     private String etc;
-    private java.util.Date registDate;
-    private java.util.Date unusedDate;
+    private Date registDate;
+    private Date unusedDate;
     private String status;
     private int refProductCategoryNo;
     private int refProductStandardNo;

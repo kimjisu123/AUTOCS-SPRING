@@ -3,6 +3,7 @@ package com.css.autocsfinal.stock.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Table(name = "TBL_PRODUCT")
@@ -13,6 +14,8 @@ import javax.persistence.*;
 @ToString
 public class Product {
     @Id
+    @GeneratedValue(generator = "SEQ_PRODUCT_NO")
+    @SequenceGenerator(name = "SEQ_PRODUCT_NO", sequenceName = "SEQ_PRODUCT_NO", allocationSize = 1)
     @Column(name = "PRODUCT_NO")
     private int productNo;
     @Column(name = "NAME")
@@ -24,9 +27,9 @@ public class Product {
     @Column(name = "ETC")
     private String etc;
     @Column(name = "REGIST_DATE")
-    private java.util.Date registDate;
+    private Date registDate;
     @Column(name = "UNUSED_DATE")
-    private java.util.Date unusedDate;
+    private Date unusedDate;
     @Column(name = "STATUS")
     private String status;
     @Column(name = "REF_PRODUCT_CATEGORY_NO")

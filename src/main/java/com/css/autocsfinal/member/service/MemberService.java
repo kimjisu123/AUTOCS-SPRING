@@ -4,14 +4,18 @@ import com.css.autocsfinal.jwt.TokenProvider;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.dto.PositionDTO;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
+import com.css.autocsfinal.member.entity.Position;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
+import com.css.autocsfinal.member.repository.PositionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.css.autocsfinal.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,14 +37,18 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    private final PositionRepository positionRepository;
+
     private final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
 
-    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository) {
+    @Autowired
+    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
         this.employeeRepository = employeeRepository;
         this.memberRepository = memberRepository;
+        this.positionRepository = positionRepository;
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository;
     }
 
@@ -97,6 +105,7 @@ public class MemberService {
         employeeDTO.setMemberNo(maxMemberCode);
 
         Employee registEmployee = modelMapper.map(employeeDTO, Employee.class);
+        log.info("================> {}", registEmployee);
 
         Employee savedEmployee = employeeRepository.save(registEmployee);
 

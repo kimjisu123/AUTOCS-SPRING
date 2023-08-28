@@ -21,4 +21,10 @@ public class Department {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "UPPER_DEPT_CODE")
+    private String upperDeptCode;
+
+    @Column(name="ANOTHER_NAME")
+    private String anotherName;
+
 }

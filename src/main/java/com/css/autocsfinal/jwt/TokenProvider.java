@@ -2,6 +2,8 @@ package com.css.autocsfinal.jwt;
 
 import com.css.autocsfinal.exception.TokenException;
 import com.css.autocsfinal.member.dto.TokenDTO;
+import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -42,10 +44,9 @@ public class TokenProvider {
 
 
     /* 1. 토큰(xxxxx.yyyyy.zzzzz) 생성 메소드 */
-    public TokenDTO generateTokenDTO(Member member){
+    public TokenDTO generateTokenDTO(Member member, EmployeeAndDepartmentAndPosition employee){
         log.info("[TokenProvider] generateTokenDTO Start =============================== ");
 
-        // 회원의 역할(role) 정보를 가져옵니다.
         String role = member.getRole();
 
         log.info("[TokenProvider] 권한 정보 : {}", role);
@@ -55,6 +56,17 @@ public class TokenProvider {
 
         /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
         claims.put(AUTHORITIES_KEY, role);
+
+        claims.put("EmployeeNo", employee.getEmployeeNo());
+        claims.put("MemberNo", member.getNo());
+        claims.put("Name", employee.getName());
+        claims.put("JoinDate", employee.getEmployeeJoin());
+        claims.put("Email", employee.getEmployeeEmail());
+        claims.put("Phone", employee.getEmployeePhone());
+        //claims.put("Manager", employee.getEmployeeManager());
+        claims.put("Department", employee.getDepartment().getName());
+        claims.put("Position", employee.getPosition().getName());
+
 
         long now = System.currentTimeMillis();   // 현재시간을 밀리세컨드단위로 가져옴
 
@@ -66,7 +78,8 @@ public class TokenProvider {
                 .compact();
         log.info("[TokenProvider] generateTokenDTO End =============================== ");
 
-        return new TokenDTO(BEARER_TYPE, member.getId(), accessToken, accessTokenExpriesIn.getTime());
+        return new TokenDTO(BEARER_TYPE, member.getId()
+                , accessToken, accessTokenExpriesIn.getTime());
     }
 
     /* 2. 토큰의 등록된 클레임의 subject에서 해당 회원의 아이디를 추출 */
