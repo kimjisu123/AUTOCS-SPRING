@@ -69,4 +69,12 @@ public class ProductController {
                         , productService.insertProduct(productDTO)));
     }
 
+    /* 물품 수정 */
+    @PutMapping(value = "/stock/productdelete")
+    public ResponseEntity<ResponseDTO> updateProduct(@ModelAttribute ProductDTO productDTO) {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "물품 수정 성공",  productService.updateProduct(productDTO)));
+    }
+
+
 }
