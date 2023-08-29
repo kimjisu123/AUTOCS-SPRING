@@ -45,8 +45,8 @@ public class Member {
     // 투두리스트 1:N연관관계 매핑 N쪽이 FK를 가진 연관관계의 주인이므로 mappedBy로 연관관계 지정
     //cascade = CascadeType.ALL은 JPA에서 연관된 엔티티 간의 작업을 전파(propagate)시키는 옵션입니다.
     // 이 옵션을 설정하면 부모 엔티티에 수행한 변경 작업이 자식 엔티티에도 자동으로 적용
-    @OneToMany(mappedBy = "member" ,cascade = CascadeType.ALL)
-    private List<Todo> todoList = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<Todo> todoList = new ArrayList<>();
 
 }
 

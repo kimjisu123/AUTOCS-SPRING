@@ -5,6 +5,7 @@ import com.css.autocsfinal.main.repository.TodoRepository;
 import com.css.autocsfinal.main.service.TodoService;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,6 +38,8 @@ class AutocsFinalApplicationTests {
         @Autowired
         private TodoRepository todoRepository;
 
+
+        @BeforeEach
         @Test
         public void testGetTodoListByMemberId() {
             // Given

@@ -23,9 +23,6 @@ public class EmployeeAndDepartmentAndPosition {
     @Column(name = "JOIN_DATE")
     private Date employeeJoin;
 
-    @Column(name = "MANAGER_NO")
-    private int employeeManager;
-
     @Column(name = "LEAVE_DATE")
     private Date employeeOut;
 
@@ -53,7 +50,6 @@ public class EmployeeAndDepartmentAndPosition {
                 "employeeNo=" + employeeNo +
                 ", employeeEmail='" + employeeEmail + '\'' +
                 ", employeeJoin=" + employeeJoin +
-                ", employeeManager=" + employeeManager +
                 ", employeeOut=" + employeeOut +
                 ", employeePhone='" + employeePhone + '\'' +
                 ", name='" + name + '\'' +

@@ -18,12 +18,6 @@ public class BeanConfiguration {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
-         //EmployeeDTO -> Employee 매핑 설정
-        TypeMap<EmployeeDTO, Employee> employeeDtoToEmployeeMap = modelMapper.createTypeMap(EmployeeDTO.class, Employee.class);
-        employeeDtoToEmployeeMap.addMapping(EmployeeDTO::getName, Employee::setName);
-        employeeDtoToEmployeeMap.addMapping(EmployeeDTO::getDepartmentCode, Employee::setDepartmentCode);
-        employeeDtoToEmployeeMap.addMapping(EmployeeDTO::getPositionCode, Employee::setPositionCode);
-        employeeDtoToEmployeeMap.addMapping(EmployeeDTO::getEmployeeJoin, Employee::setEmployeeJoin);
 
         return modelMapper;
     }

@@ -19,6 +19,8 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
+@Builder
+@Data
 public class Todo {
 
     @Id
