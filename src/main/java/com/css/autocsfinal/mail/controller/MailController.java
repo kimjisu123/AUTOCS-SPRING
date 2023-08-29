@@ -5,6 +5,7 @@ import com.css.autocsfinal.mail.dto.MailDTO;
 import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
@@ -36,11 +38,11 @@ public class MailController {
 
 
     @PostMapping("/mail")
-    public ResponseEntity<ResponseDTO> saveMail(){
+    public ResponseEntity<ResponseDTO> saveMail(@RequestBody MailDTO mailDTO){
 
-        MailDTO mailDTO1 = new MailDTO(0, "김지수", "제목4", "내용4", new Date(), "N");
+        log.info("====================================================================> {} 등록 테스트", mailDTO);
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO1)));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO)));
     }
 
     @PutMapping("/mail")
@@ -52,7 +54,15 @@ public class MailController {
     @DeleteMapping("/mail")
     public ResponseEntity<ResponseDTO> deleteMail(){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 삭제가 되었습니다.", mailService.deleteMail()));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 삭제 성공.", mailService.deleteMail()));
+    }
+
+    @DeleteMapping("/selectMail")
+    public ResponseEntity<ResponseDTO> selectDeleteMail(@RequestBody MailDTO mailDTO){
+
+        log.info("=================================================>{}", mailDTO);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "1개의 메일 삭제 성공", mailService.deleteSelectMail(mailDTO)));
     }
 
 }

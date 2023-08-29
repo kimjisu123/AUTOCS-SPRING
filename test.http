@@ -30,7 +30,7 @@ Accept: */*
 
 {
   "mailNo": 78,
-  "send": "김지수",
+  "receiver": "김지수",
   "title": "제목4",
   "context": "내용4",
   "goDate": "2023-08-25T02:28:27.000+00:00",

@@ -12,11 +12,8 @@ import java.util.Date;
 public class MailDTO {
 
     private int mailNo;
-
-    private String send;
-
+    private String receiver;
     private String title;
-
     private String context;
     private Date goDate;
     private String status;
