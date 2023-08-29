@@ -14,5 +14,5 @@ public class IoDTO {
     private int quantity;
     private String io;
     private Date registDate;
-    private String refProductNo;
+    private int refProductNo;
 }

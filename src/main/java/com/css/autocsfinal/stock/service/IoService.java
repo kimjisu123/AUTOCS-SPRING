@@ -19,6 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Tuple;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,22 +72,15 @@ public class IoService {
         return ioList.size();
     }
 
-    /* 입출고 조회 (물품별 그룹 페이지사이즈) */
-    public int selectIoGroupByProductNo(Date startDate, Date endDate) {
 
-        List<Object[]> ioList = ioDetailRepository.summarizeIoBetweenRegistDate();
+    /* 입출고 그룹화 조회 - 이름,날짜조회 (페이지사이즈) */
+    public int summarizeSize(String search, Date startDate, Date endDate) {
+
+        /* 페이징 처리 결과를 Page 타입으로 반환 받는다. */
+        List<Tuple> ioList = ioRepository.summarizeSize(search, startDate, endDate);
 
         return ioList.size();
     }
-
-
-    /* 입출고 조회 - 이름조회 (페이지사이즈) */
-//    public int selectIoListByName(String search) {
-//
-//        List<IoDetail> ioList = ioDetailRepository.findByNameContaining(search);
-//
-//        return ioList.size();
-//    }
 
 
     /* 입출고 조회 페이징*/
@@ -103,27 +98,21 @@ public class IoService {
         return ioList;
     }
 
+
     /* 입출고 조회 그룹화 - 이름검색, 페이징 필요 */
-    public List<IoSummaryDTO> getsummarizeIoBetweenRegistDate() {
-        log.info(" 그룹서비스  ===================");
-        List<Object[]> groupedData = ioDetailRepository.summarizeIoBetweenRegistDate();
+    public List<Tuple> summarize(Criteria cri, String search, Date startDate, Date endDate) {
 
-        List<IoSummaryDTO> ioSummaryList = new ArrayList<>();
-        for (Object[] data : groupedData) {
-            int refProductNo = (int) data[0];
-            String io = (String) data[1];
-            int totalQuantity = ((Number) data[2]).intValue();
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
 
-            IoSummaryDTO ioSummary = new IoSummaryDTO(refProductNo, io, totalQuantity);
-            ioSummaryList.add(ioSummary);
-        }
+        Page<Tuple> result =ioRepository.summarize(search, startDate, endDate, paging);
 
-        return ioSummaryList;
+        List<Tuple> ioList = result.stream()
+                .map(tuple -> modelMapper
+                        .map(tuple, Tuple.class)).collect(Collectors.toList());
+        return ioList;
     }
-
-
-
-
 
 
 }

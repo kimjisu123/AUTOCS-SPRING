@@ -25,5 +25,5 @@ public class Io {
     @Column(name = "REGIST_DATE")
     private Date registDate;
     @Column(name = "REF_PRODUCT_NO")
-    private String refProductNo;
+    private int refProductNo;
 }
