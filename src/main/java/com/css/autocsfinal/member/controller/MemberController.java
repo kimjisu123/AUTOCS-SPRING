@@ -4,14 +4,18 @@ import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.dto.PositionDTO;
 import com.css.autocsfinal.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -25,6 +29,8 @@ public class MemberController {
     @Operation(summary = "사원 등록 요청", description = "사원을 등록합니다.", tags = {"MemberController"})
     @PostMapping("/insertEmployee")
     public ResponseEntity<ResponseDTO> registerEmployee(@RequestBody EmployeeDTO employeeDTO, MemberDTO memberDTO) {
+
+        log.info("employeeDTO===========================> {}", employeeDTO);
 
         //사원 등록 전 아이디와 임시비밀번호발급
         String result1 = memberService.insertIdPwd(memberDTO);

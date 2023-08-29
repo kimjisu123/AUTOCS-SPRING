@@ -36,7 +36,7 @@ public class EmployeeAndDepartmentAndPosition {
     @JoinColumn(name = "REF_MEMBER_NO")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "REF_DEPARTMENT_CODE")
     private Department department;
 

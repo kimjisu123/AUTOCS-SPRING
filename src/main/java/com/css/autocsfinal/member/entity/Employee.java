@@ -16,7 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Employee {
 
     @Id
@@ -54,4 +53,19 @@ public class Employee {
     @Column(name = "REF_MEMBER_NO")
     private int memberNo;
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeNo=" + employeeNo +
+                ", name='" + name + '\'' +
+                ", employeeJoin=" + employeeJoin +
+                ", employeeOut=" + employeeOut +
+                ", employeeEmail='" + employeeEmail + '\'' +
+                ", employeePhone='" + employeePhone + '\'' +
+                ", departmentCode=" + departmentCode +
+                ", upCode=" + upCode +
+                ", position=" + position +
+                ", memberNo=" + memberNo +
+                '}';
+    }
 }
