@@ -137,7 +137,7 @@ public class MarketService {
                     applyFormNApplyFileDTO.setEmail(applyFormNApplyFile.getEmail());
                     applyFormNApplyFileDTO.setLicense(applyFormNApplyFile.getLicense());
                     applyFormNApplyFileDTO.setState(applyFormNApplyFile.getState());
-                    applyFormNApplyFileDTO.setFileUrl(IMAGE_URL + applyFormNApplyFile.getFile().getChange());
+                    applyFormNApplyFileDTO.setFileUrl(IMAGE_URL + applyFormNApplyFile.getFile().getOrignal());
 
                     return applyFormNApplyFileDTO;
                 })

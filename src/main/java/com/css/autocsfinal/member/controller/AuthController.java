@@ -20,12 +20,21 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @Operation(summary = "로그인 요청", description = "로그인 및 인증이 진행됩니다.", tags = {"AuthController"})
+    @Operation(summary = "직원 로그인 요청", description = "로그인 및 인증이 진행됩니다.", tags = {"AuthController"})
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> login(@RequestBody MemberDTO memberDTO){
 
         return ResponseEntity
                 .ok()
                 .body(new ResponseDTO(HttpStatus.OK, "로그인 성공", authService.login(memberDTO)));
+    }
+
+    @Operation(summary = "영업점 로그인 요청", description = "로그인 및 인증이 진행됩니다.", tags = {"AuthController"})
+    @PostMapping("/login2")
+    public ResponseEntity<ResponseDTO> loginGo(@RequestBody MemberDTO memberDTO){
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseDTO(HttpStatus.OK, "로그인 성공", authService.login2(memberDTO)));
     }
 }

@@ -14,17 +14,6 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-#  mail:
-#    host: smtp.naver.com
-#    port: 465
-#    username: eun06151
-#    password: rlagoems024371
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          ssl:
-#            enable: true
 
   # jpa config
   jpa:

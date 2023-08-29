@@ -1,5 +1,6 @@
 package com.css.autocsfinal.market.entity;
 
+import com.css.autocsfinal.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -41,6 +42,7 @@ public class StoreInfo {
     @Column(name = "PHONE")
     private String phone;
 
-    @Column(name = "REF_MEMBER_NO")
-    private int refMemberNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_MEMBER_NO")
+    private Member member;
 }
