@@ -104,7 +104,7 @@ public class MailService {
 
         List<MailList> mail = mailListRepository.findByEmployeeNo(employeeNo);
 
-        log.info("===========================> {}",mail);
+        log.info("===========================> {}",mail.get(0).getEmployee().getMailList());
 
         return null;
     }

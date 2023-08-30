@@ -2,6 +2,7 @@ package com.css.autocsfinal.mail.controller;
 
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.mail.dto.MailDTO;
+import com.css.autocsfinal.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
