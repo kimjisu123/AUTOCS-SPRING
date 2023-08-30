@@ -5,7 +5,9 @@ import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.main.dto.TodoDTO;
 import com.css.autocsfinal.main.entity.Todo;
 import com.css.autocsfinal.main.service.TodoService;
+import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.member.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,45 +30,44 @@ public class TodoController {
 
 
     // todo리스트 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<?> selectTodoList(@PathVariable String id) {
+    @GetMapping("/getTodolist")
+    public ResponseEntity<ResponseDTO> getTodoList() {
 
         log.info("[MemberController] selectTodoList start");
 
-        List<Todo> todoList = todoService.getTodoListByMemberId(id);
+        List<TodoDTO> todoList = todoService.getTodo();
 
         log.info("[MemberController] selectTodoList {}", todoList);
         log.info("[MemberController] selectTodoList end");
 
-        // 회원번호로 todo리스트 조회
-        return ResponseEntity.ok().body(todoList);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus ,"todo 조회" , todoList);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
 
     }
 
 
-    // INSERT
-//    @PostMapping
-//    public ResponseEntity<?> addTodoItem(@RequestBody TodoDTO todoDTO, BindingResult bindingResult) {
-//
-//       // todoService.insertTodo(todoDTO);
-//        return new ResponseEntity<>("추가되었습니다.", HttpStatus.OK);
-//
-//
-//    }
+    @GetMapping("/getTodoMember")
+    public ResponseEntity<ResponseDTO> getTodoListMember(){
+        log.info("[MemberController] selectTodoList start");
 
-    // UPDATE
-//    @PutMapping("/{no}")
-//    public ResponseEntity<?> modifyTodo() {
-//
-//        return new ResponseEntity<>('a',HttpStatus.OK);
-//    }
+        // memberNO가 1인 사용자의 todo를 가져오는 서비스 메서드 호출
+        List<TodoDTO> todoList = todoService.getTodoListByMember(1);
 
-    // DELETE
+        log.info("[MemberController] selectTodoList {}", todoList);
+        log.info("[MemberController] selectTodoList end");
 
-//    @DeleteMapping("/{no")
-//    public ResponseEntity<?> deleteTodo() {
-//
-//        return new ResponseEntity<>("g",HttpStatus.OK);
-//    }
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "memberNO가 1인 사용자의 todo 조회", todoList);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+    }
+
+
 
 }

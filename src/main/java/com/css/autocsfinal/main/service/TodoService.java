@@ -1,20 +1,22 @@
 package com.css.autocsfinal.main.service;
 
+import com.css.autocsfinal.exception.LoginFailedException;
 import com.css.autocsfinal.main.dto.TodoDTO;
 import com.css.autocsfinal.main.entity.Todo;
 import com.css.autocsfinal.main.repository.TodoRepository;
+import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.MemberRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,22 +33,53 @@ public class TodoService {
     }
 
 
-    // todo목록 조회하기 ( 특정 아이디의 todo리스트를 조회필요) List로 받아야할듯
-    @Transactional
-    public List<Todo> getTodoListByMemberId(String Id) {
+    // 한 회원 조회하기 ( 특정 아이디의 todo리스트를 조회필요) List로 받아야할듯
+    public List<TodoDTO> getTodoListByMember(int memberNo) {
+        List<Todo> todos = todoRepository.findByMemberNO(memberNo);
+        // todos 엔티티를 TodoDTO로 변환하여 반환하는 로직 구현
 
-        Member member = memberRepository.findById(Id);
-        if(member != null) {
-            //TodoDTO todoDTO = modelMapper.map(member.getTodoList(), TodoDTO.class);
+        // 예시로 변환 과정을 보여줍니다. 실제로는 실제 변환 로직을 구현해야 합니다.
+        List<TodoDTO> todoDTOList =todos.stream()
+                .map(todo -> {
+                    TodoDTO todoDTO = new TodoDTO();
+                    todoDTO.setTodoNo(todo.getTodoNo());
+                    todoDTO.setContent(todo.getContent());
+                    todoDTO.setTodoStatus(todo.getTodoStatus());
+                    todoDTO.setRegDate(new Date(System.currentTimeMillis()));
+                    todoDTO.setMemberNo(todo.getMember().getNo());
 
-            List<Todo> todoList = todoRepository.findByMember(member);
-
-            return todoList;
-
-        }
-        return Collections.emptyList();
-
+                    return todoDTO;
+                })
+                .collect(Collectors.toList());
+        return todoDTOList;
     }
+
+
+
+// 투두리스트 전체 조회
+public List<TodoDTO> getTodo() {
+    log.info("[TodoService] todo 조회하기 Start ===================");
+
+    List<Todo> todoList = todoRepository.findAll();
+    log.info("todoList : " + todoList);
+
+    // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
+    List<TodoDTO> todoDTOList = todoList.stream()
+            .map(todo -> {
+                TodoDTO todoDTO = new TodoDTO();
+                    todoDTO.setTodoNo(todo.getTodoNo());
+                    todoDTO.setContent(todo.getContent());
+                    todoDTO.setTodoStatus(todo.getTodoStatus());
+                    todoDTO.setRegDate(new Date(System.currentTimeMillis()));
+                    todoDTO.setMemberNo(todo.getMember().getNo());
+
+                return todoDTO;
+            })
+            .collect(Collectors.toList());
+
+    return todoDTOList;
+}
+
 
     // todo추가하기
 
@@ -98,7 +131,6 @@ public class TodoService {
 
 
     }
-
 
 
 

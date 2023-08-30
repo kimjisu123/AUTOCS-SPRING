@@ -5,6 +5,8 @@ import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.member.dto.PositionDTO;
+import com.css.autocsfinal.member.entity.Member;
+import com.css.autocsfinal.member.repository.MemberRepository;
 import com.css.autocsfinal.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.log4j.Log4j;
@@ -13,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -58,4 +62,8 @@ public class MemberController {
 
         return ResponseEntity.status(httpStatus).body(responseDTO);
     }
+
+
+    // 사원 정보 수정
+
 }
