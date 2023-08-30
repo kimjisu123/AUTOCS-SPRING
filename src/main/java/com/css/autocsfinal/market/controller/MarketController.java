@@ -9,6 +9,7 @@ import com.css.autocsfinal.market.service.MarketService;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -77,5 +78,33 @@ public class MarketController {
         return ResponseEntity
                 .status(httpStatus)
                 .body(new ResponseDTO(httpStatus, resultMessage, null));
+    }
+
+    //영업점 아이디 찾기
+    @GetMapping("/findStoreId")
+    public ResponseEntity<ResponseDTO> findStoreId(@RequestParam String email, @RequestParam String name) {
+        try {
+
+            // 이름과 이메일로 Store 정보 조회
+            StoreInfoDTO foundStore = marketService.findStoreInfoByNameAndEmail(email, name);
+
+            log.info("foundStore===========================> {}", foundStore);
+
+            if (foundStore != null) {
+                HttpStatus httpStatus = HttpStatus.OK;
+                ResponseDTO responseDTO = new ResponseDTO(httpStatus, "아이디 찾기 성공", foundStore);
+                return ResponseEntity.status(httpStatus).body(responseDTO);
+            }
+
+            // Store 정보나 아이디가 없을 경우
+            HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+            ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사용자 정보 또는 아이디를 찾을 수 없습니다.", null);
+            return ResponseEntity.status(httpStatus).body(responseDTO);
+        } catch (Exception e) {
+            log.error("Error while finding Store ID: {}", e.getMessage());
+            HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            ResponseDTO responseDTO = new ResponseDTO(httpStatus, "아이디 찾기 중 오류가 발생했습니다.", null);
+            return ResponseEntity.status(httpStatus).body(responseDTO);
+        }
     }
 }
