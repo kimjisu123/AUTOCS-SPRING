@@ -1,5 +1,6 @@
 package com.css.autocsfinal.market.dto;
 
+import com.css.autocsfinal.member.dto.MemberDTO;
 import lombok.*;
 
 @NoArgsConstructor
@@ -22,4 +23,7 @@ public class StoreInfoDTO {
     private String phone;
 
     private int refMemberNo;
+
+    //나중에 에러 날 수 있음
+    private MemberDTO member;
 }

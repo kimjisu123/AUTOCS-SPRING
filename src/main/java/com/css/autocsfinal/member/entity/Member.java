@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 @Entity
 @Table(name = "TBL_MEMBER")
@@ -18,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Member {
 
     @Id
@@ -41,8 +41,14 @@ public class Member {
     @Column(name = "ROLE")
     private String role;
 
-
-
-
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", "{", "}")
+                .add("\"no\" : \"" + no + "\"")
+                .add("\"id\" : \"" + id + "\"")
+                .add("\"pwd\" : \"" + pwd + "\"")
+                .add("\"state\" :\"" + state.trim() + "\"")
+                .add("\"role\" :\"" + role + "\"")
+                .toString();
+    }
 }
-

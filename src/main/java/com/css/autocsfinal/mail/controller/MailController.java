@@ -2,16 +2,12 @@ package com.css.autocsfinal.mail.controller;
 
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.mail.dto.MailDTO;
-import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,18 +25,24 @@ public class MailController {
                 .ok()
                 .body(new ResponseDTO(HttpStatus.OK, "조회 성공",  mailService.findMail()));
     }
-
     @GetMapping("/mailBookmark")
     public ResponseEntity<ResponseDTO> findMailbookmark(){
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "북마크 조회 성공", mailService.mailBookmark()));
     }
 
+    @GetMapping("/mailSent/{employeeNo}")
+    public ResponseEntity<ResponseDTO> findMailSent(@PathVariable int employeeNo){
+
+        log.info("===============================================================> {}", employeeNo);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "보낸 메일 조회 성공", mailService.mailSent(employeeNo)));
+    }
+
+
 
     @PostMapping("/mail")
     public ResponseEntity<ResponseDTO> saveMail(@RequestBody MailDTO mailDTO){
-
-//        MailDTO mailDTO1 = new MailDTO(0, "김지수", "제목4", "내용4", new Date(), "N");
 
         log.info("====================================================================> {} 등록 테스트", mailDTO);
 
