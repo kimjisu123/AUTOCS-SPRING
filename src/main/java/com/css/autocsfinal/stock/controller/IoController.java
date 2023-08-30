@@ -62,16 +62,22 @@ public class IoController {
     @GetMapping("/stock/check")
     public ResponseEntity<ResponseDTO> summarizeWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
-            @RequestParam(name = "s", defaultValue = "")String search,
+            @RequestParam(name = "s", defaultValue = "")String s,
             @RequestParam(name = "startDate", defaultValue = "")Date startDate,
             @RequestParam(name = "endDate", defaultValue = "")Date endDate){
+        log.info("check1");
+        log.info("offset  ==============> {} ", offset);
+        log.info("s================={}", s);
+        log.info("startDate =================={},", startDate);
+        log.info("endDate ================={}", endDate);
 
-        int total = ioService.summarizeSize(search, startDate, endDate);
+        int total = ioService.summarizeSize(s, startDate, endDate);
+        log.info("check1=============> {}", total);
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 10);
 
 
-        List<Tuple> tuplePage = ioService.summarize(cri,search, startDate, endDate);
+        List<Tuple> tuplePage = ioService.summarize(cri,s, startDate, endDate);
 
         List<IoSummaryDTO> ioSummaryPage = tuplePage.stream()
                 .map(tuple -> {
