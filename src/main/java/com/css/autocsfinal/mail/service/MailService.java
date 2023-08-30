@@ -3,7 +3,6 @@ package com.css.autocsfinal.mail.service;
 import com.css.autocsfinal.mail.dto.MailDTO;
 //import com.css.autocsfinal.mail.entity.MailList;
 //import com.css.autocsfinal.mail.repository.MailListRepository;
-import com.css.autocsfinal.mail.dto.MailListDTO;
 import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.entity.MailList;
 import com.css.autocsfinal.mail.repository.MailListRepository;
@@ -103,14 +102,10 @@ public class MailService {
 
     public Object mailSent(int employeeNo) {
 
-        MailList mailList = mailListRepository.findByEmployeeNo(employeeNo);
+        List<MailList> mail = mailListRepository.findByEmployeeNo(employeeNo);
 
-        log.info("==============================================>{}", mailList);
+        log.info("===========================> {}",mail);
 
-//        List<MailListDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailListDTO.class)).collect(Collectors.toList());
-
-
-
-        return mailList;
+        return null;
     }
 }

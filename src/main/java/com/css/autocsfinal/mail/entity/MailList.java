@@ -28,7 +28,4 @@ public class MailList {
     @JoinColumn(name="EMPLOYEE_NO", insertable = false, updatable = false)
     private EmployeeByMail employee;
 
-    @ManyToOne
-    @JoinColumn(name="MAIL_NO", insertable = false, updatable = false)
-    private Mail mail;
 }
