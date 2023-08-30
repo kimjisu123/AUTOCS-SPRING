@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,11 +48,15 @@ public class MailService {
         return mailDTOList;
 
     }
+    @Transactional
+    public Object saveMail(MailDTO mailDTO) {
 
-    public Object saveMail(MailDTO mailDTO1) {
+        mailDTO.setGoDate(new Date());
+        mailDTO.setStatus("N");
+        mailDTO.setContext(mailDTO.getContext().replace("<p>", ""));
+        mailDTO.setContext(mailDTO.getContext().replace("</p>", ""));
 
-
-        Mail mail = modelMapper.map(mailDTO1, Mail.class);
+        Mail mail = modelMapper.map(mailDTO, Mail.class);
         mailRepository.save(mail);
 
         return null;
@@ -85,6 +90,12 @@ public class MailService {
     }
 
 
+    public Object deleteSelectMail(MailDTO mailDTO) {
 
+        int mailNo = mailDTO.getMailNo();
 
+        mailRepository.deleteById(mailNo);
+
+        return null;
+    }
 }

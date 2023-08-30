@@ -29,8 +29,8 @@ public class Mail {
     )
     private int mailNo;
 
-    @Column(name = "SEND")
-    private String send;
+    @Column(name = "RECEIVER")
+    private String receiver;
 
     @Column(name = "TITLE")
     private String title;
