@@ -137,5 +137,38 @@ public class MemberService {
         return employeeDTOList;
     }
 
+    //사원조회
+    public List<EmployeeAndDepartmentAndPositionDTO> findEmployeeId() {
+        log.info("[MemberService] 아이디 찾기 Start ===================");
 
+        List<EmployeeAndDepartmentAndPosition> employeeList = employeeAndDepartmentAndPositionRepository.findAll();
+        log.info("employeeList : " + employeeList);
+
+        // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
+        List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = employeeList.stream()
+                .map(employeeAndDepartmentAndPosition -> {
+                    EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
+
+                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeAndDepartmentAndPosition.getEmployeeNo());
+                    employeeAndDepartmentAndPositionDTO.setName(employeeAndDepartmentAndPosition.getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeAndDepartmentAndPosition.getEmployeeJoin());
+                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeAndDepartmentAndPosition.getDepartment().getName());
+                    employeeAndDepartmentAndPositionDTO.setPosition(employeeAndDepartmentAndPosition.getPosition().getName());
+
+                    return employeeAndDepartmentAndPositionDTO;
+                })
+                .collect(Collectors.toList());
+
+        return employeeDTOList;
+    }
+
+    // Employee 정보 조회(아이디 찾기)
+    public EmployeeAndDepartmentAndPositionDTO findEmployeeByNameAndEmail(String name, String employeeEmail) {
+        EmployeeAndDepartmentAndPosition employee = employeeAndDepartmentAndPositionRepository.findByNameAndEmployeeEmail(name, employeeEmail);
+        if (employee != null) {
+            EmployeeAndDepartmentAndPositionDTO employeeDTO = modelMapper.map(employee, EmployeeAndDepartmentAndPositionDTO.class);
+            return employeeDTO;
+        }
+        return null;
+    }
 }
