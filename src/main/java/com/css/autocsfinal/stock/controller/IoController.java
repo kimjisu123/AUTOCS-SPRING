@@ -76,8 +76,8 @@ public class IoController {
         List<IoSummaryDTO> ioSummaryPage = tuplePage.stream()
                 .map(tuple -> {
                     int refProductNo = tuple.get(0, Integer.class);
-                    String io = tuple.get(1, String.class);
-                    long totalQuantity = tuple.get(2, Long.class);
+                    long totalQuantityIn = tuple.get(1, Long.class);
+                    long totalQuantityOut = tuple.get(2, Long.class);
                     String productName = tuple.get(3, String.class);
                     String categoryName = tuple.get(4, String.class);
                     String standardName = tuple.get(5, String.class);
@@ -86,7 +86,7 @@ public class IoController {
                     int price = tuple.get(8, Integer.class);
                     String etc = tuple.get(9, String.class);
 
-                    return new IoSummaryDTO(refProductNo, io, totalQuantity, productName, categoryName, standardName,
+                    return new IoSummaryDTO(refProductNo, totalQuantityIn, totalQuantityOut, productName, categoryName, standardName,
                             unitName, stock, price, etc );
                 })
                 .collect(Collectors.toList());
