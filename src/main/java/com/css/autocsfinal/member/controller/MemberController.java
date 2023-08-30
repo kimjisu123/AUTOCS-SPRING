@@ -58,4 +58,30 @@ public class MemberController {
 
         return ResponseEntity.status(httpStatus).body(responseDTO);
     }
+
+    //직원 아이디 찾기
+    @GetMapping("/findEmployeeId")
+    public ResponseEntity<ResponseDTO> findEmployeeId(@RequestParam String name, @RequestParam String employeeEmail) {
+        try {
+            // 이름과 이메일로 Employee 정보 조회
+            EmployeeAndDepartmentAndPositionDTO foundEmployee = memberService.findEmployeeByNameAndEmail(name, employeeEmail);
+
+            if (foundEmployee != null) {
+                HttpStatus httpStatus = HttpStatus.OK;
+                ResponseDTO responseDTO = new ResponseDTO(httpStatus, "아이디 찾기 성공", foundEmployee);
+                return ResponseEntity.status(httpStatus).body(responseDTO);
+            }
+
+            // Employee 정보나 아이디가 없을 경우
+            HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+            ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사용자 정보 또는 아이디를 찾을 수 없습니다.", null);
+            return ResponseEntity.status(httpStatus).body(responseDTO);
+        } catch (Exception e) {
+            log.error("Error while finding employee ID: {}", e.getMessage());
+            HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            ResponseDTO responseDTO = new ResponseDTO(httpStatus, "아이디 찾기 중 오류가 발생했습니다.", null);
+            return ResponseEntity.status(httpStatus).body(responseDTO);
+        }
+    }
+
 }

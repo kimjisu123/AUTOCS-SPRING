@@ -1,5 +1,6 @@
 package com.css.autocsfinal.member.repository;
 
+import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.entity.Department;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.Position;
