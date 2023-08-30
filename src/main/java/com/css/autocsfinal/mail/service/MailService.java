@@ -1,13 +1,13 @@
 package com.css.autocsfinal.mail.service;
 
 import com.css.autocsfinal.mail.dto.MailDTO;
-import com.css.autocsfinal.mail.dto.MailListDTO;
-import com.css.autocsfinal.mail.entity.Mail;
 //import com.css.autocsfinal.mail.entity.MailList;
 //import com.css.autocsfinal.mail.repository.MailListRepository;
+import com.css.autocsfinal.mail.dto.MailListDTO;
+import com.css.autocsfinal.mail.entity.Mail;
+import com.css.autocsfinal.mail.entity.MailList;
 import com.css.autocsfinal.mail.repository.MailListRepository;
 import com.css.autocsfinal.mail.repository.MailRepository;
-import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -103,10 +103,14 @@ public class MailService {
 
     public Object mailSent(int employeeNo) {
 
-        List<Mail> mail = mailListRepository.findMailListByEmployeeNo(employeeNo);
+        MailList mailList = mailListRepository.findByEmployeeNo(employeeNo);
 
-        log.info("===========================> {}",mail);
+        log.info("==============================================>{}", mailList);
 
-        return null;
+//        List<MailListDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailListDTO.class)).collect(Collectors.toList());
+
+
+
+        return mailList;
     }
 }

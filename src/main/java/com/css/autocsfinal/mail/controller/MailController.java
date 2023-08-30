@@ -2,16 +2,12 @@ package com.css.autocsfinal.mail.controller;
 
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.mail.dto.MailDTO;
-import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -40,7 +36,7 @@ public class MailController {
 
         log.info("===============================================================> {}", employeeNo);
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "북마크 조회 성공", mailService.mailSent(employeeNo)));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "보낸 메일 조회 성공", mailService.mailSent(employeeNo)));
     }
 
 

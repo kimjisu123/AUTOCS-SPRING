@@ -44,6 +44,4 @@ public class Mail {
     @Column(name = "STATUS")
     private String status;
 
-    @OneToMany(mappedBy = "mail")
-    private List<MailList> mailList;
 }

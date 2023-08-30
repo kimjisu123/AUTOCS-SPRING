@@ -17,18 +17,18 @@ import javax.persistence.*;
 public class MailList {
 
     @Id
-    @Column(name="EMPLOYEE_NO", updatable = false, insertable = false)
+    @Column(name="EMPLOYEE_NO")
     private int employeeNo;
 
     @Id
-    @Column(name ="MAIL_NO", updatable = false, insertable = false)
+    @Column(name ="MAIL_NO")
     private int mailNo;
 
     @ManyToOne
-    @JoinColumn(name="EMPLOYEE_NO")
-    private Employee employee;
+    @JoinColumn(name="EMPLOYEE_NO", insertable = false, updatable = false)
+    private EmployeeByMail employee;
 
     @ManyToOne
-    @JoinColumn(name="MAIL_NO")
+    @JoinColumn(name="MAIL_NO", insertable = false, updatable = false)
     private Mail mail;
 }
