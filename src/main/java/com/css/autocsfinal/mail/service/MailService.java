@@ -5,6 +5,7 @@ import com.css.autocsfinal.mail.dto.MailListDTO;
 import com.css.autocsfinal.mail.entity.Mail;
 //import com.css.autocsfinal.mail.entity.MailList;
 //import com.css.autocsfinal.mail.repository.MailListRepository;
+import com.css.autocsfinal.mail.repository.MailListRepository;
 import com.css.autocsfinal.mail.repository.MailRepository;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
@@ -26,6 +27,7 @@ public class MailService {
     private final MailRepository mailRepository;
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
+    private final MailListRepository mailListRepository;
 
     public List<MailDTO> findMail() {
 
@@ -95,6 +97,15 @@ public class MailService {
         int mailNo = mailDTO.getMailNo();
 
         mailRepository.deleteById(mailNo);
+
+        return null;
+    }
+
+    public Object mailSent(int employeeNo) {
+
+        List<Mail> mail = mailListRepository.findMailListByEmployeeNo(employeeNo);
+
+        log.info("===========================> {}",mail);
 
         return null;
     }

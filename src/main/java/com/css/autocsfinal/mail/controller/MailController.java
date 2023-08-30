@@ -29,12 +29,20 @@ public class MailController {
                 .ok()
                 .body(new ResponseDTO(HttpStatus.OK, "조회 성공",  mailService.findMail()));
     }
-
     @GetMapping("/mailBookmark")
     public ResponseEntity<ResponseDTO> findMailbookmark(){
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "북마크 조회 성공", mailService.mailBookmark()));
     }
+
+    @GetMapping("/mailSent/{employeeNo}")
+    public ResponseEntity<ResponseDTO> findMailSent(@PathVariable int employeeNo){
+
+        log.info("===============================================================> {}", employeeNo);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "북마크 조회 성공", mailService.mailSent(employeeNo)));
+    }
+
 
 
     @PostMapping("/mail")
