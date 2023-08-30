@@ -138,4 +138,7 @@ public class MemberService {
     }
 
 
+    //멤버 한명 조회
+//    public
+
 }

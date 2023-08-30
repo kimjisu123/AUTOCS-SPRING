@@ -16,6 +16,6 @@ public interface TodoRepository extends JpaRepository<Todo,Integer> {
     List<Todo> findAll();
 
     // 멤버번호로 리스트조회
-    List<Todo> findByMemberNO(int memberNo);
+    List<Todo> findByMemberNo(int memberNo);
 
 }
