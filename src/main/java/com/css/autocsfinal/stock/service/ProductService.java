@@ -1,14 +1,10 @@
 package com.css.autocsfinal.stock.service;
 
 import com.css.autocsfinal.common.Criteria;
-import com.css.autocsfinal.stock.dto.CategoryDTO;
 import com.css.autocsfinal.stock.dto.ProductDTO;
 import com.css.autocsfinal.stock.dto.ProductDetailDTO;
-import com.css.autocsfinal.stock.dto.StandardDTO;
-import com.css.autocsfinal.stock.entity.Category;
 import com.css.autocsfinal.stock.entity.Product;
 import com.css.autocsfinal.stock.entity.ProductDetail;
-import com.css.autocsfinal.stock.entity.Standard;
 import com.css.autocsfinal.stock.repository.ProductDetailRepository;
 import com.css.autocsfinal.stock.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
@@ -81,14 +77,14 @@ public class ProductService {
         return productList;
     }
 
-    /* 물품 조회 - 이름검색*/
+    /* 물품 조회 페이징 - 이름검색*/
     public List<ProductDetailDTO> selectProductListByNameWithPaging(Criteria cri,String search) {
 
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count, Sort.by("productNo").descending());
 
-        Page<ProductDetail> result =productDetailRepository.findByNameContaining(search,paging);
+        Page<ProductDetail> result =productDetailRepository.findByNameContainingAndStatus(search, "Y", paging);
 
         List<ProductDetailDTO> productList = result.stream()
                 .map(productDetail -> modelMapper
@@ -96,7 +92,6 @@ public class ProductService {
 
         return productList;
     }
-
 
 
     /* 물품 입력 */
@@ -113,7 +108,6 @@ public class ProductService {
             insertProduct.setRegistDate(new Date(System.currentTimeMillis()));
             insertProduct.setStatus("Y");
 
-
             productRepository.save(insertProduct);
             result = 1;
 
@@ -124,5 +118,19 @@ public class ProductService {
         return (result > 0)? "물품 입력 성공": "물품 입력 실패";
     }
 
+
+    /* 물품 수정 */
+    @Transactional
+    public String updateProduct(ProductDTO productDTO) {
+        int result = 0;
+        try {
+            Product product = productRepository.findById(productDTO.getProductNo()).get();
+            product.setUnusedDate(productDTO.getUnusedDate());
+            result = 1;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return (result > 0) ? "물품 업데이트 성공" : "물품 업데이트 실패";
+    }
 
 }
