@@ -12,4 +12,5 @@ public interface StoreInfoRepository extends JpaRepository<StoreInfo, Integer> {
 
     @EntityGraph(attributePaths = {"member"})
     StoreInfo findByEmailAndName(String email, String name);
+
 }
