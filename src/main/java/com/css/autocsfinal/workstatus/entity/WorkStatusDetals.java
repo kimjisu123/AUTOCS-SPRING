@@ -1,7 +1,7 @@
 //package com.css.autocsfinal.workstatus.entity;
 //
+//import com.css.autocsfinal.member.entity.Employee;
 //import lombok.*;
-//
 //import javax.persistence.*;
 //
 //@Entity

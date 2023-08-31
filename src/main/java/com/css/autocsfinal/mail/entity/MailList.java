@@ -2,8 +2,6 @@ package com.css.autocsfinal.mail.entity;
 
 import com.css.autocsfinal.member.entity.Employee;
 import lombok.*;
-import org.springframework.data.annotation.TypeAlias;
-
 import javax.persistence.*;
 
 @Entity
@@ -25,7 +23,11 @@ public class MailList {
     private int mailNo;
 
     @ManyToOne
-    @JoinColumn(name="EMPLOYEE_NO", insertable = false, updatable = false)
-    private EmployeeByMail employee;
+    @JoinColumn(name="MAIL_NO", insertable = false, updatable = false)
+    private Mail mail;
+
+    @ManyToOne
+    @JoinColumn(name = "EMPLOYEE_NO", insertable = false, updatable = false)
+    private Employee employee;
 
 }

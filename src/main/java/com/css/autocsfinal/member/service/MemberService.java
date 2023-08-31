@@ -171,4 +171,16 @@ public class MemberService {
         }
         return null;
     }
+
+    public Object findbyAllEmployee() {
+
+        List<EmployeeAndDepartmentAndPosition> employee = employeeAndDepartmentAndPositionRepository.findAll();
+
+        log.info("=========================================================> {}", employee);
+        if (employee != null) {
+            List<EmployeeAndDepartmentAndPositionDTO> employeeDTO = employee.stream().map(Employee -> modelMapper.map(Employee, EmployeeAndDepartmentAndPositionDTO.class)).collect(Collectors.toList());
+            return employeeDTO;
+        }
+        return null;
+    }
 }

@@ -1,12 +1,11 @@
 package com.css.autocsfinal.workstatus.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="TBL_WORK_STATUS")
+@Table(name ="TBL_WORK_STATUS")
 @SequenceGenerator(
         name = "WORK_STATUS_NO",
         sequenceName = "SEQ_WORK_STATUS_NO",

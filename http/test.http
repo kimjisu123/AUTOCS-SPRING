@@ -1,5 +1,5 @@
 ### 메일 조회
-GET http://localhost:8080/mail
+GET http://localhost:8080/mail/41
 Content-Type: application/json
 Accept: */*
 
@@ -23,7 +23,7 @@ POST http://localhost:8080/mail
 Content-Type: application/json
 Accept: */*
 
-### 메일 상태값 변경
+### 메일 상태값
 PUT http://localhost:8080/mail
 Content-Type: application/json
 Accept: */*
@@ -38,6 +38,8 @@ Accept: */*
 }
 
 ### 회원 조회
-POST http://localhost:8080/member/selectEmployee
+GET http://localhost:8080/member/selectEmployee
 Content-Type: application/json
 Accept: */*
+
+

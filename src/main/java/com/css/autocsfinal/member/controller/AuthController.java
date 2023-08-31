@@ -37,4 +37,6 @@ public class AuthController {
                 .ok()
                 .body(new ResponseDTO(HttpStatus.OK, "로그인 성공", authService.login2(memberDTO)));
     }
+
+
 }

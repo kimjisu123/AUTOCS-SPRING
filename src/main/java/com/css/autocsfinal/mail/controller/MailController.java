@@ -17,13 +17,12 @@ public class MailController {
 
     private final MailService mailService;
 
-    @GetMapping("/mail")
-    public ResponseEntity<ResponseDTO> findMail(){
-
+    @GetMapping("/mail/{employeeNo}")
+    public ResponseEntity<ResponseDTO> findMail(@PathVariable int employeeNo){
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "조회 성공",  mailService.findMail()));
+                .body(new ResponseDTO(HttpStatus.OK, "조회 성공",  mailService.findMail(employeeNo)));
     }
     @GetMapping("/mailBookmark")
     public ResponseEntity<ResponseDTO> findMailbookmark(){

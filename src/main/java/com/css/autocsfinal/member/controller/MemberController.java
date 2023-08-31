@@ -83,7 +83,10 @@ public class MemberController {
             return ResponseEntity.status(httpStatus).body(responseDTO);
         }
     }
+    @GetMapping("/selectEmployee")
+    public ResponseEntity<ResponseDTO> findbyAllEmployee(){
 
-
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "모든 회원 조회 성공", memberService.findbyAllEmployee()));
+    }
 
 }
