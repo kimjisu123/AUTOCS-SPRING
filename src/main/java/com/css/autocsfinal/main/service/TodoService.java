@@ -88,8 +88,8 @@ public List<TodoDTO> getTodo() {
     // todo추가하기
     @Transactional
     public String saveTodo(TodoDTO todoDTO) {
-        log.info("[ProductService] insertProduct Start ======================================");
-        log.info("[ProductService] productDTO : {} " , todoDTO);
+        log.info("[TodotService] insertProduct Start ======================================");
+        log.info("[TodotService] productDTO : {} " , todoDTO);
 
         int result = 0; // 결과에 따른 값을 구분하기 위한 용도의 변수
 
@@ -103,7 +103,7 @@ public List<TodoDTO> getTodo() {
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
-        log.info("[ProductService] insertProduct End ========================================");
+        log.info("[TodotService] insertProduct End ========================================");
 
         return (result > 0)? " todo 성공" : "todo 실패";
 

@@ -72,7 +72,7 @@ public class TodoController {
 
     // 저장하기
     @PostMapping("/insertTodo")
-    public ResponseEntity<ResponseDTO> saveTodo(@ModelAttribute TodoDTO todoDTO){
+    public ResponseEntity<ResponseDTO> saveTodo(@RequestBody TodoDTO todoDTO){
 
 
         log.info("====================================================================> {} 등록 테스트", todoDTO);
