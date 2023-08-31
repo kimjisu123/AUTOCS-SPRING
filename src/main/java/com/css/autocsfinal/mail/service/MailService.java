@@ -46,7 +46,6 @@ public class MailService {
 
         List<MailDTO> mailDTOList = mailList.stream().map(Mail -> modelMapper.map(Mail, MailDTO.class) ).collect(Collectors.toList());
 
-        log.info("==========================================>{}", mailDTOList);
 
         return mailDTOList;
     }
@@ -54,25 +53,31 @@ public class MailService {
     public Object mailBookmark() {
 
         List<Mail> mailList = mailRepository.findByStatus("Y");
-        log.info("============================================================= mailDTOList" + mailList);
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
-
-        log.info("============================================================= mailDTOList" + mailDTOList);
 
         return mailDTOList;
 
     }
     @Transactional
-    public Object saveMail(MailDTO mailDTO) {
+    public Object saveMail(MailDTO mailDTO, int employeeNo) {
 
         mailDTO.setGoDate(new Date());
         mailDTO.setStatus("N");
         mailDTO.setContext(mailDTO.getContext().replace("<p>", ""));
         mailDTO.setContext(mailDTO.getContext().replace("</p>", ""));
 
+
         Mail mail = modelMapper.map(mailDTO, Mail.class);
-        mailRepository.save(mail);
+
+        Mail mail2 =  mailRepository.save(mail);
+
+
+        int mailNo = mail2.getMailNo();
+
+        MailList mailList = new MailList(employeeNo, mailNo);
+
+        mailListRepository.save(mailList);
 
         return null;
     }
@@ -119,7 +124,6 @@ public class MailService {
 
         List<Mail> mailList = new ArrayList<>();
 
-        log.info("===========================================> {} ", mailLists);
 
         for(int i = 0; i< mailLists.size(); i++){
             mailList.add(mailLists.get(i).getMail());
@@ -127,7 +131,6 @@ public class MailService {
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
 
-        log.info("===========================================> {} ", mailDTOList);
 
         return mailDTOList;
     }

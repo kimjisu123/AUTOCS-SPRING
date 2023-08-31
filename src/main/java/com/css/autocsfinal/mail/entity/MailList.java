@@ -30,4 +30,8 @@ public class MailList {
     @JoinColumn(name = "EMPLOYEE_NO", insertable = false, updatable = false)
     private Employee employee;
 
+    public MailList(int employeeNo, int mailNo) {
+        this.employeeNo = employeeNo;
+        this.mailNo = mailNo;
+    }
 }

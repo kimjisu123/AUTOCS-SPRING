@@ -33,19 +33,18 @@ public class MailController {
     @GetMapping("/mailSent/{employeeNo}")
     public ResponseEntity<ResponseDTO> findMailSent(@PathVariable int employeeNo){
 
-        log.info("===============================================================> {}", employeeNo);
+
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "보낸 메일 조회 성공", mailService.mailSent(employeeNo)));
     }
 
 
 
-    @PostMapping("/mail")
-    public ResponseEntity<ResponseDTO> saveMail(@RequestBody MailDTO mailDTO){
+    @PostMapping("/mail/{employeeNo}")
+    public ResponseEntity<ResponseDTO> saveMail(@RequestBody MailDTO mailDTO, @PathVariable int employeeNo){
 
-        log.info("====================================================================> {} 등록 테스트", mailDTO);
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO)));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO, employeeNo)));
     }
 
     @PutMapping("/mail")
