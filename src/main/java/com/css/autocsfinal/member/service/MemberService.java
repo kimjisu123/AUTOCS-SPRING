@@ -127,8 +127,12 @@ public class MemberService {
                     employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeAndDepartmentAndPosition.getEmployeeNo());
                     employeeAndDepartmentAndPositionDTO.setName(employeeAndDepartmentAndPosition.getName());
                     employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeAndDepartmentAndPosition.getEmployeeJoin());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeOut(employeeAndDepartmentAndPosition.getEmployeeOut());
                     employeeAndDepartmentAndPositionDTO.setDepartment(employeeAndDepartmentAndPosition.getDepartment().getName());
                     employeeAndDepartmentAndPositionDTO.setPosition(employeeAndDepartmentAndPosition.getPosition().getName());
+                    employeeAndDepartmentAndPositionDTO.setReason(employeeAndDepartmentAndPosition.getReason());
+                    employeeAndDepartmentAndPositionDTO.setReason(employeeAndDepartmentAndPosition.getReason());
+                    employeeAndDepartmentAndPositionDTO.setMemberState(employeeAndDepartmentAndPosition.getMember().getState());
 
                     return employeeAndDepartmentAndPositionDTO;
                 })
@@ -180,5 +184,20 @@ public class MemberService {
     //비밀번호 업데이트
     public void updateMember(Member member) {
         memberRepository.save(member);
+    }
+
+    //아이디로 직원 찾기
+    public EmployeeAndDepartmentAndPosition findEmployee(int memberNo) {
+        return employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
+    }
+
+    //퇴사일과 사유 insert
+    public void saveEmployee(EmployeeAndDepartmentAndPosition foundEmployee) {
+        employeeAndDepartmentAndPositionRepository.save(foundEmployee);
+    }
+
+    //직원 번호로 전체 직원 찾기
+    public EmployeeAndDepartmentAndPosition findEmployeeByNo(int employeeNo) {
+        return employeeAndDepartmentAndPositionRepository.findByEmployeeNo(employeeNo);
     }
 }

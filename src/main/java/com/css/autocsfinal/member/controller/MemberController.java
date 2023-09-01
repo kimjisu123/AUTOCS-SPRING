@@ -6,6 +6,9 @@ import com.css.autocsfinal.market.service.EmailService;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.dto.RequestBodyTypeDTO;
+import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
+import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
@@ -147,8 +150,77 @@ public class MemberController {
             ResponseDTO responseDTO = new ResponseDTO(httpStatus, "아이디 찾기 중 오류가 발생했습니다.", null);
             return ResponseEntity.status(httpStatus).body(responseDTO);
         }
-
-
     }
 
+    //사원 계정 비활성화 신청
+    @Operation(summary = "사원 비활성화 신청 요청", description = "사원의 계정 비활성화를 신청합니다.", tags = {"MemberController"})
+    @PostMapping("/employeeOut")
+    public ResponseEntity<ResponseDTO> employeeOut(@RequestBody RequestBodyTypeDTO requestBody) {
+
+        EmployeeAndDepartmentAndPositionDTO employee = requestBody.getEmployee();
+        MemberDTO member = requestBody.getMember();
+
+        log.info("employee===========================> {}", employee);
+        log.info("member===========================> {}", member);
+        log.info("getName===========================> {}", employee.getName());
+        log.info("getDepartment===========================> {}", employee.getDepartment());
+        log.info("getDepartment===========================> {}", employee.getPosition());
+
+        int memberNo = member.getNo();
+
+        EmployeeAndDepartmentAndPosition foundEmployee = memberService.findEmployee(memberNo);
+
+        log.info("foundEmployee===========================> {}", foundEmployee);
+
+        //퇴사일과 사유 insert
+        foundEmployee.setEmployeeOut(employee.getEmployeeOut());
+        foundEmployee.setReason(employee.getReason());
+
+        // Save the updated employee
+        memberService.saveEmployee(foundEmployee);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "직원 계정 비활성화 신청 성공", foundEmployee);
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+    }
+
+    //직원 계정 비활성화
+    @Operation(summary = "직원 계정 비활성화 시작 요청", description = "계정 비활성화를 시작합니다.", tags = {"MemberController"})
+    @PostMapping("/employeeOutGo")
+    public ResponseEntity<ResponseDTO> employeeOutGo(@RequestBody EmployeeAndDepartmentAndPositionDTO employee) {
+        try {
+            log.info("employee===========================> {}", employee);
+            log.info("getEmployeeNo===========================> {}", employee.getEmployeeNo());
+            log.info("getName===========================> {}", employee.getName());
+
+            int employeeNo =  employee.getEmployeeNo();
+
+            // 직원 번호로 멤버 정보 찾기
+            EmployeeAndDepartmentAndPosition foundEmployee = memberService.findEmployeeByNo(employeeNo);
+            log.info("foundEmployee>>>>>>>>>>>>>>>>>>>>>>{}", foundEmployee);
+
+            if (foundEmployee != null) {
+
+                // 계정 상태값 변경해주기
+                foundEmployee.getMember().setState("N");
+                log.info("setState>>>>>>>>>>>>>>>>>>>>>>{}", foundEmployee);
+
+                memberService.saveEmployee(foundEmployee);
+
+
+                HttpStatus httpStatus = HttpStatus.OK;
+                ResponseDTO responseDTO = new ResponseDTO(httpStatus, "계정 비활성화 성공", null);
+                return ResponseEntity.status(httpStatus).body(responseDTO);
+            }
+            // Employee 정보나 아이디가 없을 경우
+            HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+            ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사용자 정보 또는 아이디를 찾을 수 없습니다.", null);
+            return ResponseEntity.status(httpStatus).body(responseDTO);
+        } catch (Exception e) {
+            log.error("Error while finding employee ID: {}", e.getMessage());
+            HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            ResponseDTO responseDTO = new ResponseDTO(httpStatus, "아이디 찾기 중 오류가 발생했습니다.", null);
+            return ResponseEntity.status(httpStatus).body(responseDTO);
+        }
+    }
 }
