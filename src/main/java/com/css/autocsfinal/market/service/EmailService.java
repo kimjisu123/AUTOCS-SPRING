@@ -18,6 +18,7 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
+    //영업점 계정 생성 안내
     public void sendEmail(String storeEmail, String newUserId, String newPassword) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -58,6 +59,161 @@ public class EmailService {
                     + "<div class=\"button-container\">"
                     + "<button class=\"custom-button\"><a href=\"http://localhost:3000/login\" style=\"color: white; text-decoration: none;\">로그인하러가기</a></button>"
                     + "</div>"
+                    + "</div>"
+                    + "</body>"
+                    + "</html>";
+
+            helper.setText(emailContent, true);
+            // 이미지를 추가합니다.
+            helper.addInline("logo", new ClassPathResource("loginMain.png"));
+
+            mailSender.send(message);
+
+            System.out.println("Email sent successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error sending email: " + e.getMessage());
+        }
+    }
+
+    //인증번호 발송
+    public void sendVerificationCode(String employeeEmail, String verificationCode) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom("eun06151@naver.com", "AUTOCS");
+
+            helper.setTo(employeeEmail);
+            helper.setSubject("인증번호가 발송 되었습니다.");
+
+            String emailContent = "<html>"
+                    + "<head>"
+                    + "<style>"
+                    + "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
+                    + ".container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #FFFFFF; background-color: white; text-align: center; }"
+                    + "h1 { color: black; margin-bottom: 10px; font-weight: bold; margin-left: 20px; }"
+                    + "p { margin-top: 10px; font-size: 18px; font-weight: bold; }"
+                    + ".whole { background-color: #2A3C1E; }"
+                    + ".image-container { display: flex; justify-content: center; align-items: center; }"
+                    + ".image { width: 120px; height: 160px; }"
+                    + ".separator { border-bottom: 1px solid #1C2C10; margin-bottom: 20px; margin-top: -10px; }"
+                    + "</style>"
+                    + "</head>"
+                    + "<body>"
+                    + "<div class=\"whole\">"
+                    + "<div class=\"image-container\">"
+                    + "<img src='cid:logo' class='image'/>"
+                    + "</div>"
+                    + "</div>"
+                    + "<div class=\"container\">"
+                    + "<h1>안녕하세요, 인증번호를 보내드립니다.</h1>"
+                    + "<div class=\"separator\"></div>"
+                    + "<p style=\"font-size: 18px;\">인증번호: " + verificationCode + "</p>"
+                    + "</div>"
+                    + "</body>"
+                    + "</html>";
+
+            helper.setText(emailContent, true);
+            // 이미지를 추가합니다.
+            helper.addInline("logo", new ClassPathResource("loginMain.png"));
+
+            mailSender.send(message);
+
+            System.out.println("Email sent successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error sending email: " + e.getMessage());
+        }
+    }
+
+    //인증번호 발송2
+    public void sendVerificationCode2(String email, String verificationCode) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom("eun06151@naver.com", "AUTOCS");
+
+            helper.setTo(email);
+            helper.setSubject("인증번호가 발송 되었습니다.");
+
+            String emailContent = "<html>"
+                    + "<head>"
+                    + "<style>"
+                    + "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
+                    + ".container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #FFFFFF; background-color: white; text-align: center; }"
+                    + "h1 { color: black; margin-bottom: 10px; font-weight: bold; margin-left: 20px; }"
+                    + "p { margin-top: 10px; font-size: 18px; font-weight: bold; }"
+                    + ".whole { background-color: #2A3C1E; }"
+                    + ".image-container { display: flex; justify-content: center; align-items: center; }"
+                    + ".image { width: 120px; height: 160px; }"
+                    + ".separator { border-bottom: 1px solid #1C2C10; margin-bottom: 20px; margin-top: -10px; }"
+                    + "</style>"
+                    + "</head>"
+                    + "<body>"
+                    + "<div class=\"whole\">"
+                    + "<div class=\"image-container\">"
+                    + "<img src='cid:logo' class='image'/>"
+                    + "</div>"
+                    + "</div>"
+                    + "<div class=\"container\">"
+                    + "<h1>안녕하세요, 인증번호를 보내드립니다.</h1>"
+                    + "<div class=\"separator\"></div>"
+                    + "<p style=\"font-size: 18px;\">인증번호: " + verificationCode + "</p>"
+                    + "</div>"
+                    + "</body>"
+                    + "</html>";
+
+            helper.setText(emailContent, true);
+            // 이미지를 추가합니다.
+            helper.addInline("logo", new ClassPathResource("loginMain.png"));
+
+            mailSender.send(message);
+
+            System.out.println("Email sent successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error sending email: " + e.getMessage());
+        }
+    }
+
+    //새로운 임시 비밀번호 발급
+    public void sendNewPwd(String email, String newPwd) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom("eun06151@naver.com", "AUTOCS");
+
+            helper.setTo(email);
+            helper.setSubject("임시 비밀번호가 발급 되었습니다.");
+
+            String emailContent = "<html>"
+                    + "<head>"
+                    + "<style>"
+                    + "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
+                    + ".container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #FFFFFF; background-color: white; text-align: center; }"
+                    + "h1 { color: black; margin-bottom: 10px; font-weight: bold; margin-left: 20px; }"
+                    + "p { margin-top: 10px; font-size: 18px; font-weight: bold; }"
+                    + ".whole { background-color: #2A3C1E; }"
+                    + ".image-container { display: flex; justify-content: center; align-items: center; }"
+                    + ".image { width: 120px; height: 160px; }"
+                    + ".separator { border-bottom: 1px solid #1C2C10; margin-bottom: 20px; margin-top: -10px; }"
+                    + "</style>"
+                    + "</head>"
+                    + "<body>"
+                    + "<div class=\"whole\">"
+                    + "<div class=\"image-container\">"
+                    + "<img src='cid:logo' class='image'/>"
+                    + "</div>"
+                    + "</div>"
+                    + "<div class=\"container\">"
+                    + "<h1>안녕하세요, 임시 비밀번호를 보내드립니다.</h1>"
+                    + "<div class=\"separator\"></div>"
+                    + "<p style=\"font-size: 18px;\">임시 비밀번호: " + newPwd + "</p>"
+                    + "<br>"
+                    + "<h2>마이페이지에서 비밀번호를 변경하시길 바랍니다.</h2>"
                     + "</div>"
                     + "</body>"
                     + "</html>";

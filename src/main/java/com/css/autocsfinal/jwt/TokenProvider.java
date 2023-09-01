@@ -58,13 +58,14 @@ public class TokenProvider {
         /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
         claims.put(AUTHORITIES_KEY, role);
 
+        log.info("state ====> {} ", member.getState());
+
         claims.put("EmployeeNo", employee.getEmployeeNo());
         claims.put("MemberNo", member.getNo());
         claims.put("Name", employee.getName());
         claims.put("JoinDate", employee.getEmployeeJoin());
         claims.put("Email", employee.getEmployeeEmail());
-        claims.put("Phone", employee.getEmployeePhone());
-        //claims.put("Manager", employee.getEmployeeManager());
+        claims.put("state", member.getState());
         claims.put("Department", employee.getDepartment().getName());
         claims.put("Position", employee.getPosition().getName());
 

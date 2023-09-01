@@ -8,11 +8,10 @@ import com.css.autocsfinal.market.entity.ApplyFile;
 import com.css.autocsfinal.market.entity.ApplyFormAndApplyFile;
 import com.css.autocsfinal.market.entity.ApplyFormNApplyFile;
 import com.css.autocsfinal.market.entity.StoreInfo;
-import com.css.autocsfinal.market.repository.ApplyFormNApplyFileRepository;
-import com.css.autocsfinal.market.repository.MarketApplyRepository;
-import com.css.autocsfinal.market.repository.MarketRepository;
-import com.css.autocsfinal.market.repository.StoreInfoRepository;
+import com.css.autocsfinal.market.repository.*;
+import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.MemberRepository;
 import com.css.autocsfinal.util.FileUploadUtils;
@@ -28,6 +27,7 @@ import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -57,7 +57,9 @@ public class MarketService {
 
     private final StoreInfoRepository storeInfoRepository;
 
-    public MarketService(ModelMapper modelMapper, MarketRepository marketRepository, MarketApplyRepository marketApplyRepository, ApplyFormNApplyFileRepository applyFormNApplyFileRepository, MemberRepository memberRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService, StoreInfoRepository storeInfoRepository) {
+    private final FindRepository findRepository;
+
+    public MarketService(ModelMapper modelMapper, MarketRepository marketRepository, MarketApplyRepository marketApplyRepository, ApplyFormNApplyFileRepository applyFormNApplyFileRepository, MemberRepository memberRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService, StoreInfoRepository storeInfoRepository, FindRepository findRepository) {
         this.modelMapper = modelMapper;
         this.marketRepository = marketRepository;
         this.marketApplyRepository = marketApplyRepository;
@@ -66,6 +68,7 @@ public class MarketService {
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.storeInfoRepository = storeInfoRepository;
+        this.findRepository = findRepository;
     }
 
     @Transactional
@@ -221,4 +224,27 @@ public class MarketService {
         log.info("[MarketService] insertMarket End ===================");
         return (savedStore != null) ? "영업점 등록 성공" : "영업점 등록 실패";
     }
+
+    // Store 정보 조회(아이디 찾기)
+    public StoreInfoDTO findStoreInfoByNameAndEmail(String email, String name) {
+
+        log.info("email ===================> {}", email);
+        log.info("name ===================> {}", name);
+
+        // 이름과 이메일 위치 변경(값이 왜 반대로 들어오는거야)
+        String chang = email;
+        email = name;
+        name = chang;
+
+        StoreInfo store = storeInfoRepository.findByEmailAndName(email, name);
+
+        log.info("store ===================> {}", store);
+        if (store != null) {
+            StoreInfoDTO storeInfoDTO = modelMapper.map(store, StoreInfoDTO.class);
+            log.info("storeInfoDTO ===================> {}", storeInfoDTO);
+            return storeInfoDTO;
+        }
+        return null;
+    }
+
 }

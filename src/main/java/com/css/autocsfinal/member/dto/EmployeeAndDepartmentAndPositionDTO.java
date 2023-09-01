@@ -20,7 +20,8 @@ public class EmployeeAndDepartmentAndPositionDTO {
 
     //나중에 이것때문에 에러 날 가능성 있음
     //1. 다른 타입의 member 추가
-    private String member;
+//    private String member;
+    private MemberDTO member;
     private String department;
     private String position;
 

@@ -3,6 +3,7 @@ package com.css.autocsfinal.member.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.StringJoiner;
 
 
 @Entity
@@ -23,5 +24,12 @@ public class Position {
 
     @Column(name = "UPPER_POSITION_CODE")
     private String upCode;
-
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", "{", "}")
+                .add("\"code\" : \"" + code + "\"")
+                .add("\"name\" : \"" + name + "\"")
+                .add("\"upCode\" : \"" + upCode + "\"")
+                .toString();
+    }
 }
