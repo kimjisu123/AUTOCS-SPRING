@@ -32,6 +32,9 @@ public class EmployeeAndDepartmentAndPosition {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "REASON")
+    private String reason;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REF_MEMBER_NO")
     private Member member;

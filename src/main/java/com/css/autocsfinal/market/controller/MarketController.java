@@ -169,4 +169,23 @@ public class MarketController {
             return ResponseEntity.status(httpStatus).body(responseDTO);
         }
     }
+
+    @Operation(summary = "영업점 계정 비활성화 신청폼 등록 요청", description = "신청폼을 등록합니다.", tags = {"MarketController"})
+    @PostMapping(value = "/StoreOut")
+    public ResponseEntity<ResponseDTO> StoreOut(@ModelAttribute StoreInfoDTO storeInfoDTO, MultipartFile fileImage) {
+
+        log.info("[MarketController] fileImage {} =======> " + fileImage);
+
+//        //영업점 번호 찾아서 OutForm등록
+//        String resultMessage = marketService.insertOutApply(storeInfoDTO, fileImage);
+//
+//        HttpStatus httpStatus = (resultMessage.contains("성공")) ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
+//
+//        return ResponseEntity
+//                .status(httpStatus)
+//                .body(new ResponseDTO(httpStatus, resultMessage, null));
+//    }
+
+        return null;
+    }
 }
