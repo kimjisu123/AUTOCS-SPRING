@@ -49,11 +49,26 @@ Content-Type: application/json
 Accept: */*
 
 {
-  "todoNo": 219,
-  "content": "내일 오후2시 영업1팀 미팅",
-  "todoStatus": "Y",
+  "todoNo": 277,
+  "content": "수정합니당",
+  "todoStatus": "N",
   "regDate": "2023-09-01",
   "upDate": null,
   "memberNo": 41,
   "url": null
-},
+}
+
+### 수정하기
+PUT http://localhost:8080/todo/updateTodo
+Content-Type: application/json
+Accept: */*
+
+{
+  "todoNo": 277,
+  "content": "수정합니당",
+  "todoStatus": "N",
+  "regDate": "2023-09-01",
+  "upDate": null,
+  "memberNo": 41,
+  "url": null
+}

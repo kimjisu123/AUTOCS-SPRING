@@ -156,13 +156,28 @@ public List<TodoDTO> getTodo() {
 
         }
 
+    @Transactional
+    public String updateTodo(TodoDTO todoDTO) {
+        int todoNo = todoDTO.getTodoNo();
+        Todo todo = todoRepository.findById(todoNo).get();
+        log.info("[TodotService] updateTodo Start ======================================");
+        log.info("[TodotService] updateTodo todoNo : {} " , todoNo);
+        int result = 0;
 
+        if(todo.getContent() != null){
+            todo.setContent(todoDTO.getContent());
+            log.info("[TodotService] updateTodo todo.getContent : {} " , todo.getContent());
+            result =1;
+        } else {
+            log.info("[TodotService] updateTodo 실패 ");
+            new RuntimeException();
+        }
+
+        Todo updateTodo = modelMapper.map(todoDTO,Todo.class);
+        return (result > 0)? " todo 수정 성공" : "todo 수정 실패";
 
     }
-
-
-
-
+}
 
 
     // todo수정하기

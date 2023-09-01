@@ -92,4 +92,9 @@ public class TodoController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상태 변경.", todoService.toggleTodo(todoDTO)));
     }
 
+    @PutMapping("/updateTodo")
+    public ResponseEntity<ResponseDTO> updateTodo(@RequestBody TodoDTO todoDTO){
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "투두 수정", todoService.updateTodo(todoDTO)));
+    }
+
 }
