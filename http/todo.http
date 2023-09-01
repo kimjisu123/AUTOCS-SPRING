@@ -3,7 +3,7 @@ GET http://localhost:8080/todo/getTodolist
 Accept: */*
 
 ### 회원의 투두리스트 조회
-GET http://localhost:8080/todo/1
+GET http://localhost:8080/todo/41
 Accept: */*
 
 
@@ -13,10 +13,47 @@ Content-Type: application/json
 Accept: */*
 
 {
-"todoNo": "",
-      "content": "투두투두투두.",
+
+      "content": "내일 오후2시 영업1팀 미팅",
       "todoStatus": "N",
-      "regDate": "2023-08-31",
-      "memberNo": 1
+      "memberNo": 41
 
 }
+
+
+### 투두 삭제
+DELETE http://localhost:8080/todo/deleteTodo
+Content-Type: application/json
+Accept: */*
+
+{
+  "todoNo": 130,
+  "content": "ㄹㄹㄹ",
+  "todoStatus": "N",
+  "regDate": "2023-09-01",
+  "upDate": null,
+  "memberNo": 41,
+  "url": null
+}
+
+
+### 투두 전체삭제
+DELETE http://localhost:8080/todo/deleteAllTodo
+Content-Type: application/json
+Accept: */*
+
+
+### 토글상태 변경
+PUT http://localhost:8080/todo/toggle
+Content-Type: application/json
+Accept: */*
+
+{
+  "todoNo": 219,
+  "content": "내일 오후2시 영업1팀 미팅",
+  "todoStatus": "Y",
+  "regDate": "2023-09-01",
+  "upDate": null,
+  "memberNo": 41,
+  "url": null
+},

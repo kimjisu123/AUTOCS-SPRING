@@ -38,7 +38,7 @@ public class Todo {
     private char todoStatus = 'N';   // todo리스트 기본 상태값 false
 
     @Column(name = "REG_DATE")
-    private LocalDate regDate;
+    private LocalDate regDate = LocalDate.now();
 
     @Column(name = "REGIST_DATE")
     private LocalDate upDate;
@@ -50,20 +50,6 @@ public class Todo {
 
 
 
-//    @Column(name = "REF_MEMBER_NO")
-//    private int memberNo;
-
-// 매개변수 생성자
-//    public Todo(String content, Date regDate, LocalDate upDate) {
-//        this.content = content;
-//        this.regDate = LocalDate.now(); // 등록한 날짜
-//        this.upDate = upDate;
-//    }
-
-    // todo완료 상태값
-//    public void todoStatus(Boolean aTrue) {
-//        this.todoStatus = !this.todoStatus;
-//    }
 
 
 

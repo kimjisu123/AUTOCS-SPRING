@@ -22,25 +22,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/todo")
 public class TodoController {
-
     private final TodoService todoService;
-
     public TodoController(TodoService todoService) {
         this.todoService = todoService;
     }
 
 
-    // todo리스트 조회
+    // 전체 조회
     @GetMapping("/getTodolist")
     public ResponseEntity<ResponseDTO> getTodoList() {
 
-        log.info("[MemberController] selectTodoList start");
-
         List<TodoDTO> todoList = todoService.getTodo();
-
         log.info("[MemberController] selectTodoList {}", todoList);
         log.info("[MemberController] selectTodoList end");
-
 
         HttpStatus httpStatus = HttpStatus.OK;
         ResponseDTO responseDTO = new ResponseDTO(httpStatus ,"todo 조회" , todoList);
@@ -49,37 +43,53 @@ public class TodoController {
     }
 
 
+    // 회원별 조회
     @GetMapping("/{memberNo}")
     public ResponseEntity<ResponseDTO> getTodoListMember(@PathVariable int memberNo){
+
         log.info("[MemberController] getTodoMember start");
         log.info("[MemberController] getTodoMember memberNo  {}" , memberNo);
+
         // memberNO가 1인 사용자의 todo를 가져오는 서비스 메서드 호출
         TodoDTO todoDTO = new TodoDTO();
         todoDTO.setMemberNo(memberNo);
-
         List<TodoDTO> todoList = todoService.getTodoByNo(todoDTO.getMemberNo());
 
         log.info("[MemberController] getTodoMember {}", todoList);
         log.info("[MemberController] getTodoMember end");
 
         HttpStatus httpStatus = HttpStatus.OK;
-
         ResponseDTO responseDTO = new ResponseDTO(httpStatus, "memberNO가 1인 사용자의 todo 조회", todoList);
-
         return ResponseEntity.status(httpStatus).body(responseDTO);
     }
 
 
-    // 저장하기
+    // 저장
     @PostMapping("/insertTodo")
     public ResponseEntity<ResponseDTO> saveTodo(@RequestBody TodoDTO todoDTO){
-
-
-        log.info("====================================================================> {} 등록 테스트", todoDTO);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", todoService.saveTodo(todoDTO)));
     }
 
+    //선택 삭제
+    @DeleteMapping ("/deleteTodo")
+    public ResponseEntity<ResponseDTO> deleteTodo(@RequestBody TodoDTO todoDTO){
 
+        log.info(" delete 를 위한 TodoDTO {}" , todoDTO);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "삭제 성공", todoService.deleteTodo(todoDTO)));
+    }
+
+    //전체 삭제
+    @DeleteMapping("/deleteAllTodo")
+    public ResponseEntity<ResponseDTO> deleteTodoAll(){
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 삭제.", todoService.deleteAllTodo()));
+    }
+
+
+    @PutMapping("/toggle")
+    public ResponseEntity<ResponseDTO> toggleTodo(@RequestBody TodoDTO todoDTO) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상태 변경.", todoService.toggleTodo(todoDTO)));
+    }
 
 }

@@ -1,6 +1,8 @@
 package com.css.autocsfinal.main.service;
 
 import com.css.autocsfinal.exception.LoginFailedException;
+import com.css.autocsfinal.mail.dto.MailDTO;
+import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.main.dto.TodoDTO;
 import com.css.autocsfinal.main.entity.Todo;
 import com.css.autocsfinal.main.repository.TodoRepository;
@@ -18,6 +20,7 @@ import org.testng.annotations.Test;
 import java.sql.Date;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,20 +113,62 @@ public List<TodoDTO> getTodo() {
 
     }
 
+    // 전체 todo삭제
+    public Object deleteAllTodo() {
+        log.info("[deleteAllTodo] deleteTodo Start ======================================");
+        todoRepository.deleteAll();
+
+        return null;
+    }
 
 
+    //todo삭제하기
 
+    public Object deleteTodo(TodoDTO todoDTO) {
 
+        log.info("[TodotService] deleteTodo Start ======================================");
+        log.info("[TodotService] todoDTO : {} " , todoDTO);
+        int todoNo = todoDTO.getTodoNo();
+        log.info("[TodotService] todoNo : {} " , todoNo);
+        todoRepository.deleteById(todoNo);
+
+        return null;
+    }
 
     // todo토글 (완료 상태 변경하기 할일 완료 진행)
+    @Transactional
+    public String toggleTodo(TodoDTO todoDTO) {
+        int todoNo = todoDTO.getTodoNo();
+        Todo todo = todoRepository.findById(todoNo).get();
+
+        log.info("[TodotService] toggleTodo Start ======================================");
+        log.info("[TodotService] toggleTodo todoNo : {} " , todoNo);
+        int result = 0;
+        if(todo.getTodoStatus() == 'N'){
+            todo.setTodoStatus('Y');
+            result = 1;
+        } else {
+            todo.setTodoStatus('N');
+        }
+
+        Todo insertTodo = modelMapper.map(todoDTO,Todo.class);
+        return (result > 0)? " todo 성공" : "todo 실패";
+
+        }
+
+
+
+    }
+
+
+
 
 
 
     // todo수정하기
 
 
-    //todo삭제하기
 
 
 
-}
+
