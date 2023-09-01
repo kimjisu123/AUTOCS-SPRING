@@ -172,6 +172,16 @@ public class MemberService {
         return null;
     }
 
+    //아이디로 멤버 조회
+    public Member findMemberById(String Id) {
+        return memberRepository.findById(Id);
+    }
+
+    //비밀번호 업데이트
+    public void updateMember(Member member) {
+        memberRepository.save(member);
+    }
+
     public Object findbyAllEmployee() {
 
         List<EmployeeAndDepartmentAndPosition> employee = employeeAndDepartmentAndPositionRepository.findAll();

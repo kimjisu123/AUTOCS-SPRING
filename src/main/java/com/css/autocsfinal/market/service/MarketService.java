@@ -9,7 +9,9 @@ import com.css.autocsfinal.market.entity.ApplyFormAndApplyFile;
 import com.css.autocsfinal.market.entity.ApplyFormNApplyFile;
 import com.css.autocsfinal.market.entity.StoreInfo;
 import com.css.autocsfinal.market.repository.*;
+import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.MemberRepository;
 import com.css.autocsfinal.util.FileUploadUtils;
@@ -228,6 +230,11 @@ public class MarketService {
 
         log.info("email ===================> {}", email);
         log.info("name ===================> {}", name);
+
+        // 이름과 이메일 위치 변경(값이 왜 반대로 들어오는거야)
+        String chang = email;
+        email = name;
+        name = chang;
 
         StoreInfo store = storeInfoRepository.findByEmailAndName(email, name);
 
