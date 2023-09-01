@@ -82,7 +82,12 @@ public class MailService {
         return null;
     }
 
+    @Transactional
     public Object deleteMail() {
+
+        log.info("[deleteMail] mailListRepository.deleteAll() start");
+        mailListRepository.deleteAll();
+        log.info("[deleteMail] mailListRepository.deleteAll() end");
 
         mailRepository.deleteAll();
 
@@ -108,16 +113,18 @@ public class MailService {
 
     }
 
-
+    @Transactional
     public Object deleteSelectMail(MailDTO mailDTO) {
 
         int mailNo = mailDTO.getMailNo();
 
         mailRepository.deleteById(mailNo);
+        mailListRepository.deleteById(mailNo);
 
         return null;
     }
 
+    @Transactional
     public Object mailSent(int employeeNo) {
 
         List<MailList> mailLists = mailListRepository.findByEmployeeNo(employeeNo);

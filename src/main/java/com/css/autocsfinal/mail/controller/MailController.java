@@ -62,7 +62,6 @@ public class MailController {
     @DeleteMapping("/selectMail")
     public ResponseEntity<ResponseDTO> selectDeleteMail(@RequestBody MailDTO mailDTO){
 
-        log.info("=================================================>{}", mailDTO);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "1개의 메일 삭제 성공", mailService.deleteSelectMail(mailDTO)));
     }

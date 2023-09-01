@@ -32,15 +32,16 @@ public class WorkStatus {
     @Column(name = "QUITTING_TIME")
     private Date quittingTime;
 
-    @Column(name = "TOTAL_HOURS_DUTY")
-    private Date totalHoursDuty;
-
     @Column(name = "VACATION_STATUS")
-    private char vactionStatus;
+    private char vacationStatus;
 
     @Column(name = "ABSENCE_WORK_STATUS")
     private char absenceWorkStatus;
 
     @Column(name = "WORKING_DATE")
-    private Date workingDate;
+    private String workingDate;
+
+    @Column(name = "EXTENSION_TIME")
+    private Date extensionTime;
+
 }

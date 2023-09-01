@@ -21,13 +21,13 @@ public class WorkStatusController {
 
     private final WorkStatusService workStatusService;
 
-    @GetMapping("/management")
+    @GetMapping("/workStatus")
     public ResponseEntity<ResponseDTO> findByAll(){
 
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "조회 성공",  workStatusService.selectReviewDetail()));
+                .body(new ResponseDTO(HttpStatus.OK, "근태 관리 성공",  workStatusService.selectReviewDetail()));
     }
 
 }

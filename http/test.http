@@ -42,4 +42,8 @@ GET http://localhost:8080/member/selectEmployee
 Content-Type: application/json
 Accept: */*
 
+### 근태 조회
+GET http://localhost:8080/workStatus
+Content-Type: application/json
+Accept: */*
 

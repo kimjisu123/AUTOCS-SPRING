@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,11 +24,22 @@ public class WorkStatusService {
 
     public Object selectReviewDetail() {
 
-        List<WorkStatus> result = workStatusRepsitory.findAll();
-        List<WorkStatusDTO> result2 = result.stream()
-                                        .map(WorkStatus -> modelMapper.map(WorkStatus, WorkStatusDTO.class))
-                                        .collect(Collectors.toList());
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//
+//        WorkStatus workStatus = new WorkStatus(3, new Date(), new Date(), 'N', 'N', "없앨까" , new Date());
+//
+//        workStatusRepsitory.save(workStatus);
+//
+//
+//
+//        log.info("==========================================> findAll start");
 
-        return result2;
+        List<WorkStatus> workStatusList = workStatusRepsitory.findAll();
+
+
+        log.info("==========================================> findAll end {}", workStatusList);
+
+        return workStatusList;
     }
 }
