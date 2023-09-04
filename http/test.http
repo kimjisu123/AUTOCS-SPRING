@@ -47,3 +47,34 @@ GET http://localhost:8080/workStatus
 Content-Type: application/json
 Accept: */*
 
+### 인사부 조회
+GET http://localhost:8080/personnel
+Content-Type: application/json
+Accept: */*
+
+### 재무/회계부 조회
+GET http://localhost:8080/accounting
+Content-Type: application/json
+Accept: */*
+
+### 경영부 조회
+GET http://localhost:8080/management
+Content-Type: application/json
+Accept: */*
+
+### 마케팅부 조회
+GET http://localhost:8080/marketing
+Content-Type: application/json
+Accept: */*
+
+### 영업부 조회
+GET http://localhost:8080/sales
+Content-Type: application/json
+Accept: */*
+
+### 서비스부 조회
+GET http://localhost:8080/service
+Content-Type: application/json
+Accept: */*
+
+

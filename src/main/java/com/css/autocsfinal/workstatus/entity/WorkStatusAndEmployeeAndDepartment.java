@@ -1,29 +1,21 @@
 package com.css.autocsfinal.workstatus.entity;
 
 import lombok.*;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name ="TBL_WORK_STATUS")
-@SequenceGenerator(
-        name = "WORK_STATUS_NO",
-        sequenceName = "SEQ_WORK_STATUS_NO",
-        initialValue = 1, allocationSize = 1
-)
+@Table(name = "TBL_WORK_STATUS")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
-public class WorkStatus {
+public class WorkStatusAndEmployeeAndDepartment {
 
     @Id
     @Column(name = "WORK_STATUS_CODE")
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "WORK_STATUS_NO"
-    )
     private int workStatusCode;
 
     @Column(name ="ATTENDANCE_TIME")
@@ -40,5 +32,8 @@ public class WorkStatus {
 
     @Column(name = "EXTENSION_TIME")
     private Date extensionTime;
+
+    @OneToMany(mappedBy = "workStatusCode")
+    private List<WorkStatusList> workStatusLists;
 
 }

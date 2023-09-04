@@ -2,6 +2,8 @@ package com.css.autocsfinal.workstatus.service;
 
 import com.css.autocsfinal.workstatus.dto.WorkStatusDTO;
 import com.css.autocsfinal.workstatus.entity.WorkStatus;
+import com.css.autocsfinal.workstatus.entity.WorkStatusAndEmployeeAndDepartment;
+import com.css.autocsfinal.workstatus.repository.WorkStatusAndEmployeeAndDepartmentRepository;
 import com.css.autocsfinal.workstatus.repository.WorkStatusRepsitory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,21 +21,11 @@ import java.util.stream.Collectors;
 public class WorkStatusService {
 
     private final WorkStatusRepsitory workStatusRepsitory;
+    private final WorkStatusAndEmployeeAndDepartmentRepository workStatusAndEmployeeAndDepartmentRepository;
 
     private final ModelMapper modelMapper;
 
     public Object selectReviewDetail() {
-
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//
-//
-//        WorkStatus workStatus = new WorkStatus(3, new Date(), new Date(), 'N', 'N', "없앨까" , new Date());
-//
-//        workStatusRepsitory.save(workStatus);
-//
-//
-//
-//        log.info("==========================================> findAll start");
 
         List<WorkStatus> workStatusList = workStatusRepsitory.findAll();
 
@@ -41,5 +33,60 @@ public class WorkStatusService {
         log.info("==========================================> findAll end {}", workStatusList);
 
         return workStatusList;
+    }
+
+    // 인사부
+    public Object findByPersonnel() {
+
+        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("인사부");
+
+        return workStatusAndEmployeeAndDepartments;
+    }
+
+    //재무/회계부
+    public Object findByAccounting() {
+
+        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("재무/회계부");
+
+        return workStatusAndEmployeeAndDepartments;
+
+    }
+
+    // 경영부
+    public Object findByManagement() {
+
+        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("경영부");
+
+        return workStatusAndEmployeeAndDepartments;
+    }
+
+    // 마케팅부
+    public Object findByMarketing() {
+
+        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("마케팅부");
+
+        return workStatusAndEmployeeAndDepartments;
+    }
+
+    // 영업부
+    public Object findBySales() {
+
+        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("영업부");
+
+        return workStatusAndEmployeeAndDepartments;
+    }
+
+    // 서비스부
+    public Object findByService() {
+
+        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("서비스부");
+
+        return workStatusAndEmployeeAndDepartments;
     }
 }

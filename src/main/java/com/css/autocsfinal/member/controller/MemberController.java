@@ -150,6 +150,7 @@ public class MemberController {
 
     }
 
+    // 직원 검색용 조회
     @GetMapping("/selectEmployee")
     public ResponseEntity<ResponseDTO> findbyAllEmployee(){
 
