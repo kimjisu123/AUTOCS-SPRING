@@ -3,6 +3,7 @@ package com.css.autocsfinal.market.dto;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Column;
 import java.util.List;
 
 

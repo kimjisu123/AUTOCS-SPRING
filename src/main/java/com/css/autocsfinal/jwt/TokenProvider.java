@@ -165,6 +165,8 @@ public class TokenProvider {
 
         claims.put("StoreNo", store.getStoreNo());
         claims.put("Name", store.getName());
+        claims.put("MemberNo", member.getNo());
+        claims.put("state", member.getState());
 
         long now = System.currentTimeMillis();   // 현재시간을 밀리세컨드단위로 가져옴
 

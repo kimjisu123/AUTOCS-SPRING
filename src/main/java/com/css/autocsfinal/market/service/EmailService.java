@@ -231,4 +231,54 @@ public class EmailService {
         }
     }
 
+    //계정 비활성화 완료 이메일 안내
+    public void sendStoreOut(String email) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom("eun06151@naver.com", "AUTOCS");
+
+            helper.setTo(email);
+            helper.setSubject("계정 비활성화가 완료 되었습니다.");
+
+            String emailContent = "<html>"
+                    + "<head>"
+                    + "<style>"
+                    + "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
+                    + ".container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #FFFFFF; background-color: white; text-align: center; }"
+                    + "h1 { color: black; margin-bottom: 10px; font-weight: bold; margin-left: 20px; }"
+                    + "p { margin-top: 10px; font-size: 18px; font-weight: bold; }"
+                    + ".whole { background-color: #2A3C1E; }"
+                    + ".image-container { display: flex; justify-content: center; align-items: center; }"
+                    + ".image { width: 120px; height: 160px; }"
+                    + ".separator { border-bottom: 1px solid #1C2C10; margin-bottom: 20px; margin-top: -10px; }"
+                    + "</style>"
+                    + "</head>"
+                    + "<body>"
+                    + "<div class=\"whole\">"
+                    + "<div class=\"image-container\">"
+                    + "<img src='cid:logo' class='image'/>"
+                    + "</div>"
+                    + "</div>"
+                    + "<div class=\"container\">"
+                    + "<h1>안녕하세요, 계정 비활성화가 완료 되었습니다.</h1>"
+                    + "<div class=\"separator\"></div>"
+                    + "<h2>감사합니다.</h2>"
+                    + "</div>"
+                    + "</body>"
+                    + "</html>";
+
+            helper.setText(emailContent, true);
+            // 이미지를 추가합니다.
+            helper.addInline("logo", new ClassPathResource("loginMain.png"));
+
+            mailSender.send(message);
+
+            System.out.println("Email sent successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error sending email: " + e.getMessage());
+        }
+    }
 }
