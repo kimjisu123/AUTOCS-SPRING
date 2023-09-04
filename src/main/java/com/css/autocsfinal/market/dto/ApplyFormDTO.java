@@ -18,6 +18,8 @@ public class ApplyFormDTO {
 
     private String address;
 
+    private String detailAddress;
+
     private String name;
 
     private String email;

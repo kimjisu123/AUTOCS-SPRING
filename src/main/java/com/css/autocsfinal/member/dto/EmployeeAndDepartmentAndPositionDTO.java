@@ -19,6 +19,7 @@ public class EmployeeAndDepartmentAndPositionDTO {
     private String employeePhone;
     private int employeeManager;
     private String reason;
+    private int annual;
 
     //나중에 이것때문에 에러 날 가능성 있음
     //1. 다른 타입의 member 추가

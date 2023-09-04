@@ -30,6 +30,9 @@ public class ApplyFormAndApplyFile {
     @Column(name = "ADDRESS")
     private String address;
 
+    @Column(name = "DETAIL_ADDRESS")
+    private String detailAddress;
+
     @Column(name = "NAME")
     private String name;
 

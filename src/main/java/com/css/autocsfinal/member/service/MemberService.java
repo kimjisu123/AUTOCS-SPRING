@@ -103,6 +103,12 @@ public class MemberService {
         // employeeDTO의 memberNo 설정
         employeeDTO.setMemberNo(maxMemberCode);
 
+        // 직원의 연차 설정 (positionCode에 따라)
+        String positionCode = employeeDTO.getPositionCode();
+        int annual = calculateAnnual(positionCode);
+
+        employeeDTO.setAnnual(annual);
+
         Employee registEmployee = modelMapper.map(employeeDTO, Employee.class);
         log.info("================> {}", registEmployee);
 
@@ -110,6 +116,25 @@ public class MemberService {
 
         log.info("[MemberService] insertEmployee End ===================");
         return (savedEmployee != null) ? "사원 등록 성공" : "사원 등록 실패";
+    }
+
+    // positionCode에 따라 연차를 계산하는 메서드
+    private int calculateAnnual(String positionCode) {
+        int annual = 0;
+
+        // positionCode에 따라 연차를 결정하는 규칙을 정의
+        switch (positionCode) {
+            case "i1":
+                annual = 0;
+                break;
+            case "s1":
+                annual = 12;
+                break;
+            default:
+                annual = 15;
+                break;
+        }
+        return annual;
     }
 
     //사원조회

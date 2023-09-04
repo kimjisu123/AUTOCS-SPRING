@@ -136,6 +136,7 @@ public class MarketService {
                     applyFormNApplyFileDTO.setApplyNo(applyFormNApplyFile.getApplyNo());
                     applyFormNApplyFileDTO.setName(applyFormNApplyFile.getName());
                     applyFormNApplyFileDTO.setAddress(applyFormNApplyFile.getAddress());
+                    applyFormNApplyFileDTO.setDetailAddress(applyFormNApplyFile.getDetailAddress());
                     applyFormNApplyFileDTO.setRegistDate(applyFormNApplyFile.getFile().getRegistDate());
                     applyFormNApplyFileDTO.setEmail(applyFormNApplyFile.getEmail());
                     applyFormNApplyFileDTO.setLicense(applyFormNApplyFile.getLicense());
@@ -305,6 +306,7 @@ public class MarketService {
                     storeAndOutDTO.setOutFileNo(StoreAndOut.getFileNo());
                     storeAndOutDTO.setName(StoreAndOut.getStore().getName());
                     storeAndOutDTO.setAddress(StoreAndOut.getStore().getAddress());
+                    storeAndOutDTO.setDetailAddress(StoreAndOut.getStore().getDetailAddress());
                     storeAndOutDTO.setRegistDate(StoreAndOut.getRegistDate());
                     storeAndOutDTO.setEmail(StoreAndOut.getStore().getEmail());
                     storeAndOutDTO.setLicense(StoreAndOut.getStore().getLicense());
