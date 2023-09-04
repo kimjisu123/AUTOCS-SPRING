@@ -1,12 +1,16 @@
-package com.css.autocsfinal.member.entity;
+package com.css.autocsfinal.mypage.entity;
 
-import com.css.autocsfinal.mypage.entity.MemberFile;
-import lombok.*;
+import com.css.autocsfinal.member.entity.Department;
+import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.entity.Member;
+import com.css.autocsfinal.member.entity.Position;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "TBL_EMPLOYEE")
@@ -14,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EmployeeAndDepartmentAndPosition {
+public class MemberAndEmployeeAndDepartmentAndPositionAndMemberFile {
 
     @Id
     @Column(name = "EMPLOYEE_NO")
@@ -46,14 +50,14 @@ public class EmployeeAndDepartmentAndPosition {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REF_POSITION_CODE")
     private Position position;
-//
-//    @ElementCollection
-//    @CollectionTable(name = "TBL_MEMBER_FILE", joinColumns = @JoinColumn(name ="REF_MEMBER_NO"))
-//    private List<MemberFile> memberFiles = new ArrayList<>();
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "REF_M_FILE_NO")
-//
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_M_FILE_NO")
+    private MemberFile memberFile;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_EMPLOYEE_NO")
+    private Employee employee;
 
 
 
@@ -69,6 +73,7 @@ public class EmployeeAndDepartmentAndPosition {
                 ", member='" + member + '\'' +
                 ", department=" + department +
                 ", position=" + position +
+                ", memberFile=" + memberFile +
                 '}';
     }
 }

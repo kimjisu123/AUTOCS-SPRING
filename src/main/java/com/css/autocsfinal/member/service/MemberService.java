@@ -4,13 +4,13 @@ import com.css.autocsfinal.jwt.TokenProvider;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
-import com.css.autocsfinal.member.dto.PositionDTO;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import com.css.autocsfinal.member.repository.PositionRepository;
+import com.css.autocsfinal.mypage.repository.MemberFileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
@@ -40,8 +40,10 @@ public class MemberService {
 
     private final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
 
+    private final MemberFileRepository memberFileRepository;
+
     @Autowired
-    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository) {
+    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, MemberFileRepository memberFileRepository) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
@@ -49,6 +51,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
         this.positionRepository = positionRepository;
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository;
+        this.memberFileRepository = memberFileRepository;
     }
 
     @Transactional
@@ -137,29 +140,26 @@ public class MemberService {
         return employeeDTOList;
     }
 
-    //사원조회
-    public List<EmployeeAndDepartmentAndPositionDTO> findEmployeeId() {
+    //한명의 사원조회
+    public EmployeeAndDepartmentAndPositionDTO findEmployeeId(int memberNo) {
         log.info("[MemberService] 아이디 찾기 Start ===================");
 
-        List<EmployeeAndDepartmentAndPosition> employeeList = employeeAndDepartmentAndPositionRepository.findAll();
+        EmployeeAndDepartmentAndPosition employeeList = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
         log.info("employeeList : " + employeeList);
 
         // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
-        List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = employeeList.stream()
-                .map(employeeAndDepartmentAndPosition -> {
                     EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
 
-                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeAndDepartmentAndPosition.getEmployeeNo());
-                    employeeAndDepartmentAndPositionDTO.setName(employeeAndDepartmentAndPosition.getName());
-                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeAndDepartmentAndPosition.getEmployeeJoin());
-                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeAndDepartmentAndPosition.getDepartment().getName());
-                    employeeAndDepartmentAndPositionDTO.setPosition(employeeAndDepartmentAndPosition.getPosition().getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeList.getEmployeeNo());
+                    employeeAndDepartmentAndPositionDTO.setName(employeeList.getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeList.getEmployeeJoin());
+                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeList.getDepartment().getName());
+                    employeeAndDepartmentAndPositionDTO.setPosition(employeeList.getPosition().getName());
+
 
                     return employeeAndDepartmentAndPositionDTO;
-                })
-                .collect(Collectors.toList());
 
-        return employeeDTOList;
+
     }
 
     // Employee 정보 조회(아이디 찾기)
@@ -182,3 +182,4 @@ public class MemberService {
         memberRepository.save(member);
     }
 }
+

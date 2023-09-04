@@ -22,6 +22,8 @@ public class EmployeeDTO {
     private int memberNo;
     private String positionCode;
     private String upCode;
+//    private int memberFileNo;
+
 
 
 }

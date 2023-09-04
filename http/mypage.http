@@ -1,4 +1,4 @@
 ### 사원 조회
-GET http://localhost:8080/myPage/1
+GET http://localhost:8080/myPage/memberInfo
 Content-Type: application/json
 Accept: */*

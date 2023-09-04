@@ -20,7 +20,6 @@ public class TodoDTO {
     private Date regDate;
     private Date upDate;
     private int memberNo;
-
     private String url;
 
 

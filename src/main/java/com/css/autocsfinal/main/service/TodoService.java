@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -166,7 +167,9 @@ public List<TodoDTO> getTodo() {
 
         if(todo.getContent() != null){
             todo.setContent(todoDTO.getContent());
+            todo.setUpDate(LocalDate.now());
             log.info("[TodotService] updateTodo todo.getContent : {} " , todo.getContent());
+            log.info("[TodotService] updateTodo todo.setUpDate : {} " , todo.getUpDate());
             result =1;
         } else {
             log.info("[TodotService] updateTodo 실패 ");
