@@ -27,8 +27,8 @@ public class DocumentEntity {
     @Column(name = "DOCUMENT_CODE")
     private int documentCode;
 
-    @Column(name = "WRITER")
-    private String writer;
+    @Column(name = "EMPLOYEE_NO")
+    private int employeeNO;
 
     @Column(name = "APPLICATION_DATE")
     private Date applicationDate;
@@ -39,8 +39,8 @@ public class DocumentEntity {
     @Column(name = "STATUS")
     private String status;
 
-    public DocumentEntity(String writer, Date applicationDate, String documentType) {
-        this.writer = writer;
+    public DocumentEntity(int employeeNO, Date applicationDate, String documentType) {
+        this.employeeNO = employeeNO;
         this.applicationDate = applicationDate;
         this.documentType = documentType;
     }

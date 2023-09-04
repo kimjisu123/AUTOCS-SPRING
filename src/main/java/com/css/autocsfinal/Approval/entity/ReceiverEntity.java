@@ -23,4 +23,7 @@ public class ReceiverEntity {
     @Id
     @Column(name = "DOCUMENT_CODE")
     private int documentCode;
+
+    @Column(name = "STATUS")
+    private String status;
 }

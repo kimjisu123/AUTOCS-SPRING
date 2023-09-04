@@ -1,8 +1,6 @@
 package com.css.autocsfinal.Approval.controller;
 
-import com.css.autocsfinal.Approval.dto.AppDeptResult;
-import com.css.autocsfinal.Approval.dto.DocumentDTO;
-import com.css.autocsfinal.Approval.dto.PurchaseListDTO;
+import com.css.autocsfinal.Approval.dto.*;
 import com.css.autocsfinal.Approval.entity.AppDeptEntity;
 import com.css.autocsfinal.Approval.service.ApprovalService;
 import com.css.autocsfinal.common.ResponseDTO;
@@ -11,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +45,28 @@ public class ApprovalController {
                                         List<MultipartFile> files) {
 
         approvalService.registPurchase(purchaseList, files);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "insert 성공", null));
+    }
+
+    /* 여비 정산서 insert */
+    @PostMapping(value = "/traffic")
+    public ResponseEntity<?> traffic(@ModelAttribute TrafficListDTO trafficList, List<MultipartFile> files) {
+
+        log.info("[ApprovalController] trafficList : {} ", trafficList);
+
+        approvalService.registTraffic(trafficList, files);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "insert 성공", null));
+    }
+
+    /* 업무 보고서 insert */
+    @PostMapping(value = "/business")
+    public ResponseEntity<?> business(@ModelAttribute BusinessDTO business, List<MultipartFile> files) {
+
+        log.info("[ApprovalController] businessContent : {} ", business );
+
+        approvalService.registBusiness(business, files);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "insert 성공", null));
     }
