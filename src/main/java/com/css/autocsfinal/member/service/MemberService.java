@@ -1,10 +1,10 @@
 package com.css.autocsfinal.member.service;
 
 import com.css.autocsfinal.jwt.TokenProvider;
+import com.css.autocsfinal.market.service.EmailService;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
-import com.css.autocsfinal.member.dto.PositionDTO;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
@@ -40,8 +40,10 @@ public class MemberService {
 
     private final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
 
+    private final EmailService emailService;
+
     @Autowired
-    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository) {
+    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, EmailService emailService) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
@@ -49,11 +51,14 @@ public class MemberService {
         this.memberRepository = memberRepository;
         this.positionRepository = positionRepository;
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
-    public String insertIdPwd(MemberDTO memberDTO) {
+    public String insertIdPwd(EmployeeDTO employeeDTO, MemberDTO memberDTO) {
         log.info("[MemberService] 아이디 비밀번호 발급 Start ===================");
+        log.info("[AuthService] employeeDTO {} =======> " + employeeDTO);
+        log.info("[AuthService] employeeEmail {} =======> " + employeeDTO.getEmployeeEmail());
         log.info("[AuthService] memberDTO {} =======> " + memberDTO);
 
         /* check
@@ -69,6 +74,10 @@ public class MemberService {
         String newPassword = generateRandomPassword();
 
         log.info("암호화 전 비밀번호 ============================>>>>>>>>>>>>>>>>>>>>>>>>>>> " + newPassword);
+
+        // 아이디와 임시 비밀번호를 이메일로 전송
+        String employeeEmail = employeeDTO.getEmployeeEmail();
+        emailService.sendEmail2(employeeEmail, newUserId, newPassword);
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(newPassword);

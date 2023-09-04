@@ -40,7 +40,7 @@ public class MemberController {
         log.info("employeeDTO===========================> {}", employeeDTO);
 
         //사원 등록 전 아이디와 임시비밀번호발급
-        String result1 = memberService.insertIdPwd(memberDTO);
+        String result1 = memberService.insertIdPwd(employeeDTO, memberDTO);
 
         //사원 등록
         String resultMessage = memberService.insertEmployee(employeeDTO);
