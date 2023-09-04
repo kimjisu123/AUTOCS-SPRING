@@ -70,4 +70,17 @@ public class ApprovalController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "insert 성공", null));
     }
+
+    /* 휴가 불러오기 */
+    @GetMapping("/getVacation/{employeeNo}")
+    public ResponseEntity<?> getVacation(@PathVariable int employeeNo) {
+
+        log.info("[ApprovalController] getVacation  empNo = {}", employeeNo);
+
+        int vacation = approvalService.getVacation(employeeNo);
+
+        log.info("[getVacation] vacation : {} ", vacation);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", vacation));
+    }
 }

@@ -6,18 +6,16 @@ import com.css.autocsfinal.Approval.dto.PurchaseListDTO;
 import com.css.autocsfinal.Approval.dto.TrafficListDTO;
 import com.css.autocsfinal.Approval.entity.*;
 import com.css.autocsfinal.Approval.repository.*;
+import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.Doc;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +36,7 @@ public class ApprovalService {
     private final ApprovalListRepository approvalListRepository;
     private final TrafficRepository trafficRepository;
     private final BusinessRepository businessRepository;
+    private final EmployeeRepository employeeRepository;
 
     public List<AppDeptResult> findDept() {
 
@@ -351,5 +350,12 @@ public class ApprovalService {
                 documentFileRepository.delete(documentFileEntity);
             }
         }
+    }
+
+    public int getVacation(int employeeNo) {
+
+        Employee employee = employeeRepository.findByEmployeeNo(employeeNo);
+
+        return employee.getAnnual();
     }
 }
