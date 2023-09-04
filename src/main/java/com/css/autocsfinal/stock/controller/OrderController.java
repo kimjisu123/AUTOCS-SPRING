@@ -5,6 +5,9 @@ import com.css.autocsfinal.common.PageDTO;
 import com.css.autocsfinal.common.PagingResponseDTO;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.stock.dto.OrderDTO;
+import com.css.autocsfinal.stock.dto.OrderProductDTO;
+import com.css.autocsfinal.stock.dto.StandardDTO;
+import com.css.autocsfinal.stock.entity.OrderProduct;
 import com.css.autocsfinal.stock.service.OrderService;
 import com.css.autocsfinal.stock.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -57,13 +60,27 @@ public class OrderController {
                         , orderService.insertOrder(orderDTO)));
     }
 
-    /* 주문번호 입력 */
-//    @DeleteMapping("/stock/order/delete")
-//    public ResponseEntity<ResponseDTO> deleteOrder(@ModelAttribute int orderNo){
-//
-//        return ResponseEntity.ok()
-//                .body(new ResponseDTO(HttpStatus.OK, "주문번호 삭제 성공"
-//                        , orderService.deleteOrder(orderNo)));
-//    }
+    /* 주문번호 수정 */
+    @PutMapping("/stock/order/update")
+    public ResponseEntity<ResponseDTO> updateOrder(@ModelAttribute OrderDTO orderDTO) {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "주문번호 수정 성공",  orderService.updateOrder(orderDTO)));
+    }
+
+    /* 주문물품 입력 */
+    @PostMapping("/stock/order/product")
+    public ResponseEntity<ResponseDTO> insertOrderProduct(@ModelAttribute OrderProductDTO orderProductDTO){
+
+        return ResponseEntity.ok()
+                .body(new ResponseDTO(HttpStatus.OK, "주문물품 입력 성공"
+                        , orderService.insertOrderProduct(orderProductDTO)));
+    }
+
+    /* 주문물품 수정 */
+    @PutMapping("/stock/order/orderlist")
+    public ResponseEntity<ResponseDTO> updateOrderProduct(@ModelAttribute OrderProductDTO orderProductDTO) {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "주문물품 수정 성공",  orderService.updateOrderProduct(orderProductDTO)));
+    }
 
 }

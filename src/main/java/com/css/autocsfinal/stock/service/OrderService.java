@@ -2,7 +2,12 @@ package com.css.autocsfinal.stock.service;
 
 import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.stock.dto.OrderDTO;
+import com.css.autocsfinal.stock.dto.OrderProductDTO;
+import com.css.autocsfinal.stock.dto.StandardDTO;
 import com.css.autocsfinal.stock.entity.Order;
+import com.css.autocsfinal.stock.entity.OrderProduct;
+import com.css.autocsfinal.stock.entity.Standard;
+import com.css.autocsfinal.stock.repository.OrderProductRepository;
 import com.css.autocsfinal.stock.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,10 +27,13 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+
+    private final OrderProductRepository orderProductRepository;
     private final ModelMapper modelMapper;
 
-    public OrderService(OrderRepository orderRepository, ModelMapper modelMapper) {
+    public OrderService(OrderRepository orderRepository, OrderProductRepository orderProductRepository, ModelMapper modelMapper) {
         this.orderRepository = orderRepository;
+        this.orderProductRepository = orderProductRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -74,6 +82,7 @@ public class OrderService {
         try{
             Order insertOrder = modelMapper.map(orderDTO, Order.class);
             insertOrder.setRegistDate(new Date(System.currentTimeMillis()));
+            insertOrder.setStatus("N");
             orderRepository.save(insertOrder);
             result = 1;
 
@@ -83,21 +92,53 @@ public class OrderService {
         return (result > 0)? "주문번호 입력 성공": "주문번호 입력 실패";
     }
 
-    /* 주문번호 삭제 */
-//    @Transactional
-//    public String deleteOrder(int orderNo) {
-//
-//        int result = 0;
-//
-//        try{
-//            Optional<Order> orderOptional = orderRepository.findById(orderNo);
-//            Order deleteOrder = modelMapper.map(orderNo, Order.class);
-//            orderRepository.delete(deleteOrder);
-//            result = 1;
-//        } catch (Exception e){
-//            throw new RuntimeException(e);
-//        }
-//        return (result > 0)? "주문번호 삭제 성공": "주문번호 삭제 실패";
-//    }
+    /* 주문번호 수정 */
+    @Transactional
+    public String updateOrder(OrderDTO orderDTO) {
+        int result = 0;
+        try {
+            Order order = orderRepository.findById(orderDTO.getOrderNo()).get();
+            order.setStatus(orderDTO.getStatus());
+            result = 1;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return (result > 0) ? "주문번호 업데이트 성공" : "주문번호 업데이트 실패";
+    }
+
+
+    /* 주문물품 입력 */
+    @Transactional
+    public String insertOrderProduct(OrderProductDTO orderProductDTO) {
+
+        int result = 0;
+
+        try{
+            OrderProduct insertOrderProduct = modelMapper.map(orderProductDTO, OrderProduct.class);
+            insertOrderProduct.setRegistDate(new Date(System.currentTimeMillis()));
+            insertOrderProduct.setStatus("WAITING");
+            orderProductRepository.save(insertOrderProduct);
+            result = 1;
+
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        return (result > 0)? "주문물품 입력 성공": "주문물품 입력 실패";
+    }
+
+    /* 주문물품 수정 */
+    @Transactional
+    public String updateOrderProduct(OrderProductDTO orderProductDTO) {
+        int result = 0;
+        try {
+            OrderProduct orderProduct = orderProductRepository.findById(orderProductDTO.getOrderProductNo()).get();
+            orderProduct.setStatus(orderProductDTO.getStatus());
+            result = 1;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return (result > 0) ? "주문물품 업데이트 성공" : "주문물품 업데이트 실패";
+    }
+
 
 }

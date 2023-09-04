@@ -24,4 +24,6 @@ public class Order {
     private int storeInfoNo;
     @Column(name = "REGIST_DATE")
     private Date registDate;
+    @Column(name = "STATUS")
+    private String status;
 }
