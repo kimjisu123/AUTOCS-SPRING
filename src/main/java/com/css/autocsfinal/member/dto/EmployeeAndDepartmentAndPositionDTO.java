@@ -1,6 +1,7 @@
 package com.css.autocsfinal.member.dto;
 
-import com.css.autocsfinal.mypage.entity.MemberFile;
+import com.css.autocsfinal.member.entity.Member;
+import com.css.autocsfinal.mypage.dto.MemberFileDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -25,7 +26,13 @@ public class EmployeeAndDepartmentAndPositionDTO {
     private MemberDTO member;
     private String department;
     private String position;
-//    private String originName;
+    private String memberId;
+    private String pw;
+    private int memberNo;
+//    private MemberFileDTO memberfile;
+//    private String memberFileName;
+
+
 
 
 }

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@RequestMapping
-@RestController("/myPage")
+@RestController
+@RequestMapping("/mypage")
 public class MypageController {
 
     private final MypageService mypageService;
@@ -25,24 +25,9 @@ public class MypageController {
         this.mypageService = mypageService;
     }
 
-    // 멤버 정보 불러오기
-//    @GetMapping("/{memberNo}")
-//    public ResponseEntity<ResponseDTO> getMemberInfo(@PathVariable int memberNo) {
-//
-//        log.info("[MypageController] getMemberInfo start");
-//        log.info("[MypageController] memberNo ===========>{}",memberNo);
-//        MemberDTO memberDTO = new MemberDTO();
-//        memberDTO.setNo(memberNo);
-//
-//        MemberFileDTO empInfo = mypageService.getMemberFile(memberDTO.getNo());
-//
-//        HttpStatus httpStatus = HttpStatus.OK;
-//
-//        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "memberNO가 1인 사용자의 memberDTO 조회", empInfo);
-//
-//        return ResponseEntity.status(httpStatus).body(responseDTO);
-//
-//    }
+
+
+
 
 
     // 전체 멤버 정보 불러오기
@@ -60,12 +45,17 @@ public class MypageController {
     }
 
     // 멤버 정보 수정하기
-
+    @PutMapping("/updatememberinfo")
+    public ResponseEntity<ResponseDTO> updateTodo(@RequestBody EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO){
+        log.info("[MypageController ]employeeAndDepartmentAndPositionDTO {}", employeeAndDepartmentAndPositionDTO);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원 정보 수정", mypageService.updateMemberInfo(employeeAndDepartmentAndPositionDTO)));
+    }
 
     // 비밀번호 재확인
 
 
     // 비밀 번호 변경하기
+
 
 
     // 멤버 사진 변경하기

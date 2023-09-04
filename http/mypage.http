@@ -1,4 +1,32 @@
 ### 사원 조회
-GET http://localhost:8080/myPage/memberInfo
+GET http://localhost:8080/mypage/memberInfo
 Content-Type: application/json
 Accept: */*
+
+
+### 회원정보 변경을 위한 불러오기
+GET http://localhost:8080/member/41
+Content-Type: application/json
+Accept: */*
+
+### 회원 정보 수정하기
+PUT http://localhost:8080/mypage/updatememberinfo
+Content-Type: application/json
+Accept: */*
+
+{
+  "employeeNo": 41,
+  "name": "김지수",
+  "employeeJoin": "2023-04-12T15:00:00.000+00:00",
+  "employeeEmail": "jisu123@gmail.com",
+  "employeePhone": "010-1234-1122",
+  "employeeManager": 0,
+  "member": null,
+  "department": "영업부",
+  "position": "대리",
+  "memberId": "Member41",
+  "pw": "$2a$10$hPbf.pZdXZtV/..bp3YEQuUBZeZhKgOHTByHrIJEFPeNvvQeLqD2K",
+  "memberNo": 41
+}
+
+

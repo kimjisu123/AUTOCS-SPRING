@@ -74,7 +74,4 @@ Accept: */*
 }
 
 
-### 회원정보 변경을 위한 불러오기
-GET http://localhost:8080/member/41
-Content-Type: application/json
-Accept: */*
+

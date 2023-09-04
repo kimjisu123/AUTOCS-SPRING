@@ -46,6 +46,11 @@ public class EmployeeAndDepartmentAndPosition {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REF_POSITION_CODE")
     private Position position;
+
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "REF_M_FILE_NO") // MemberFile과의 연관 관계
+//    private MemberFile memberFile;
 //
 //    @ElementCollection
 //    @CollectionTable(name = "TBL_MEMBER_FILE", joinColumns = @JoinColumn(name ="REF_MEMBER_NO"))
@@ -71,4 +76,6 @@ public class EmployeeAndDepartmentAndPosition {
                 ", position=" + position +
                 '}';
     }
+
+
 }

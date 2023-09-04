@@ -1,13 +1,12 @@
 package com.css.autocsfinal.mypage.entity;
 
 import com.css.autocsfinal.chart.entity.EmployeeAndPositionEntity;
-import com.css.autocsfinal.member.entity.Department;
-import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
-import com.css.autocsfinal.member.entity.Member;
-import com.css.autocsfinal.member.entity.Position;
+import com.css.autocsfinal.market.entity.StoreInfo;
+import com.css.autocsfinal.member.entity.*;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class MemberFile {
+public class MemberFile implements Serializable {
 
     @Id
     @Column(name = "M_FILE_NO")
@@ -45,22 +44,19 @@ public class MemberFile {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REF_MEMBER_NO")
     private Member member;
+
+//    @Column(name = "REF_MEMBER_NO")
+//    private int memberNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_EMPLOYEE_NO")
+    private Employee employee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_STORE_NO")
+    private StoreInfo storeInfo;
+
+
 //
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "REF_DEPARTMENT_CODE")
-//    private Department department;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "REF_POSITION_CODE")
-//    private Position position;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-////    @JoinColumn(name = "REF_POSITION_CODE")
-//    private EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition;
-//
-//
-//
-//    @OneToMany(mappedBy = "departmentCode")
-//    private List<EmployeeAndPositionEntity> employee;
+
 
 }

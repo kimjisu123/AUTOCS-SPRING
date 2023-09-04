@@ -52,12 +52,12 @@ public class MemberAndEmployeeAndDepartmentAndPositionAndMemberFile {
     private Position position;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_M_FILE_NO")
+    @JoinColumn(name = "REF_M_FILE_NO", referencedColumnName = "REF_MEMBER_NO", insertable = false, updatable = false) // MemberFile과의 연관 관계
     private MemberFile memberFile;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_EMPLOYEE_NO")
-    private Employee employee;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "REF_EMPLOYEE_NO")
+//    private Employee employee;
 
 
 

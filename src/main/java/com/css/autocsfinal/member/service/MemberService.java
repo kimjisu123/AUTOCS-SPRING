@@ -155,7 +155,12 @@ public class MemberService {
                     employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeList.getEmployeeJoin());
                     employeeAndDepartmentAndPositionDTO.setDepartment(employeeList.getDepartment().getName());
                     employeeAndDepartmentAndPositionDTO.setPosition(employeeList.getPosition().getName());
-
+                    employeeAndDepartmentAndPositionDTO.setEmployeeEmail(employeeList.getEmployeeEmail());
+                    employeeAndDepartmentAndPositionDTO.setEmployeePhone(employeeList.getEmployeePhone());
+                    employeeAndDepartmentAndPositionDTO.setMemberId(employeeList.getMember().getId());
+                    employeeAndDepartmentAndPositionDTO.setPw(employeeList.getMember().getPwd());
+                    employeeAndDepartmentAndPositionDTO.setMemberNo(employeeList.getMember().getNo());
+//                    employeeAndDepartmentAndPositionDTO.setMemberFileName(employeeList.getMemberFile().getOriginName());
 
                     return employeeAndDepartmentAndPositionDTO;
 

@@ -157,6 +157,7 @@ public List<TodoDTO> getTodo() {
 
         }
 
+    // todo수정하기
     @Transactional
     public String updateTodo(TodoDTO todoDTO) {
         int todoNo = todoDTO.getTodoNo();
@@ -183,7 +184,7 @@ public List<TodoDTO> getTodo() {
 }
 
 
-    // todo수정하기
+
 
 
 
