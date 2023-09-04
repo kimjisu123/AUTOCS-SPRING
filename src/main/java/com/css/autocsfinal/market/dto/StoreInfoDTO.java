@@ -16,6 +16,8 @@ public class StoreInfoDTO {
 
     private String address;
 
+    private String detailAddress;
+
     private String email;
 
     private String name;
