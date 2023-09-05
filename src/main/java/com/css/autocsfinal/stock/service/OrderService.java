@@ -98,6 +98,8 @@ public class OrderService {
         int result = 0;
         try {
             Order order = orderRepository.findById(orderDTO.getOrderNo()).get();
+            order.setRefBillNo(orderDTO.getRefBillNo());
+            order.setStoreInfoNo(orderDTO.getStoreInfoNo());
             order.setStatus(orderDTO.getStatus());
             result = 1;
         } catch (Exception e) {

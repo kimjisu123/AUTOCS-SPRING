@@ -19,7 +19,7 @@ public class Order {
     @Column(name = "ORDER_NO")
     private int orderNo;
     @Column(name = "REF_BILL_NO")
-    private String refBillNo;
+    private int refBillNo;
     @Column(name = "STORE_INFO_NO")
     private int storeInfoNo;
     @Column(name = "REGIST_DATE")
