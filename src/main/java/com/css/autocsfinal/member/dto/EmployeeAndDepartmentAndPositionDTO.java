@@ -14,9 +14,12 @@ public class EmployeeAndDepartmentAndPositionDTO {
     private int employeeNo;
     private String name;
     private Date employeeJoin;
+    private Date employeeOut;
     private String employeeEmail;
     private String employeePhone;
     private int employeeManager;
+    private String reason;
+    private int annual;
 
     //나중에 이것때문에 에러 날 가능성 있음
     //1. 다른 타입의 member 추가
@@ -24,5 +27,7 @@ public class EmployeeAndDepartmentAndPositionDTO {
     private MemberDTO member;
     private String department;
     private String position;
+
+    private String memberState;
 
 }

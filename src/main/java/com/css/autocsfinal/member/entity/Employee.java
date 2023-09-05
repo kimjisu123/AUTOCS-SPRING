@@ -53,6 +53,9 @@ public class Employee {
     @Column(name = "REF_MEMBER_NO")
     private int memberNo;
 
+    @Column(name = "ANNUAL")
+    private int annual;
+
     @Override
     public String toString() {
         return "Employee{" +

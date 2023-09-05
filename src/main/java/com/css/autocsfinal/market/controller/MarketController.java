@@ -1,12 +1,16 @@
 package com.css.autocsfinal.market.controller;
 
 import com.css.autocsfinal.common.ResponseDTO;
-import com.css.autocsfinal.market.dto.ApplyFormDTO;
-import com.css.autocsfinal.market.dto.ApplyFormNApplyFileDTO;
-import com.css.autocsfinal.market.dto.StoreInfoDTO;
+import com.css.autocsfinal.market.dto.*;
+import com.css.autocsfinal.market.entity.ApplyFormNApplyFile;
+import com.css.autocsfinal.market.entity.OutFile;
+import com.css.autocsfinal.market.repository.ApplyFormNApplyFileRepository;
+import com.css.autocsfinal.market.repository.OutFileRepository;
 import com.css.autocsfinal.market.service.EmailService;
 import com.css.autocsfinal.market.service.MarketService;
 import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.entity.Member;
+import com.css.autocsfinal.member.repository.MemberRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,9 +29,18 @@ public class MarketController {
     private final MarketService marketService;
     private final EmailService emailService;
 
-    public MarketController(MarketService marketService, EmailService emailService) {
+    private final OutFileRepository outFileRepository;
+
+    private final ApplyFormNApplyFileRepository applyFormNApplyFileRepository;
+
+    private final MemberRepository memberRepository;
+
+    public MarketController(MarketService marketService, EmailService emailService, OutFileRepository outFileRepository, ApplyFormNApplyFileRepository applyFormNApplyFileRepository, MemberRepository memberRepository) {
         this.marketService = marketService;
         this.emailService = emailService;
+        this.outFileRepository = outFileRepository;
+        this.applyFormNApplyFileRepository = applyFormNApplyFileRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Operation(summary = "영업점 신청폼 등록 요청", description = "신청폼을 등록합니다.", tags = {"MarketController"})
@@ -63,15 +76,15 @@ public class MarketController {
     //영업점 등록
     @Operation(summary = "영업점 계정생성 요청", description = "계정생성이 진행됩니다.", tags = {"MarketController"})
     @PostMapping("/insertMarket")
-    public ResponseEntity<ResponseDTO> insertMarket(@RequestBody StoreInfoDTO storeInfoDTO, MemberDTO memberDTO) {
+    public ResponseEntity<ResponseDTO> insertMarket(@RequestBody StoreInfo2DTO storeInfo2DTO, MemberDTO memberDTO) {
 
-        log.info("StoreInfoDTO===========================> {}", storeInfoDTO);
+        log.info("StoreInfoDTO===========================> {}", storeInfo2DTO);
 
         //영업점 등록 전 아이디와 임시비밀번호발급
-        String result1 = marketService.insertIdPwd(memberDTO, storeInfoDTO);
+        String result1 = marketService.insertIdPwd(memberDTO, storeInfo2DTO);
 
         //영업점 등록
-        String resultMessage = marketService.insertMarket(storeInfoDTO);
+        String resultMessage = marketService.insertMarket(storeInfo2DTO);
 
         HttpStatus httpStatus = (result1.contains("성공") && resultMessage.contains("성공")) ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
 
@@ -167,6 +180,76 @@ public class MarketController {
             HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             ResponseDTO responseDTO = new ResponseDTO(httpStatus, "아이디 찾기 중 오류가 발생했습니다.", null);
             return ResponseEntity.status(httpStatus).body(responseDTO);
+        }
+    }
+
+    @Operation(summary = "영업점 계정 비활성화 신청폼 등록 요청", description = "신청폼을 등록합니다.", tags = {"MarketController"})
+    @PostMapping(value = "/StoreOut")
+    public ResponseEntity<ResponseDTO> StoreOut(@ModelAttribute StoreInfoDTO storeInfoDTO, MultipartFile fileImage) {
+
+        log.info("[MarketController] storeInfoDTO {} =======> " + storeInfoDTO);
+        log.info("[MarketController] fileImage {} =======> " + fileImage);
+
+        // 영업점 계정 비활성화 신청폼 등록(이름과 번호로 매장찾기. .)
+        String resultMessage = marketService.insertOut(storeInfoDTO, fileImage);
+
+        HttpStatus httpStatus = (resultMessage.contains("성공")) ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity
+                .status(httpStatus)
+                .body(new ResponseDTO(httpStatus, resultMessage, null));
+    }
+
+    //영업점 계정 비활성화 신청 대기 중인 목록 조회
+    @Operation(summary = "영업점 계정 비활성화 신청 대기 조회 요청", description = "영업점 계정 비활성화 신청 대기 상태를 조회합니다.", tags = {"MarketController"})
+    @GetMapping("/getOutMarketStateW")
+    public ResponseEntity<ResponseDTO> getOutMarketStateW() {
+        System.out.println("check ==========================");
+        //영업점과 계정비활성화 파일DTO
+        List<StoreAndOutDTO> storeAndOutDTOListDTOList = marketService.getOutMarketStateW();
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "계정 비활성화 신청 대기 중인 영업점 조회 성공", storeAndOutDTOListDTOList);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+    }
+
+    //영업점 계정 비활성화(이건... 서비스로 안가네..?)
+    @Operation(summary = "영업점 계정 비활성화 요청", description = "영업점 계정 비활성화를 시작합니다.", tags = {"MarketController"})
+    @PostMapping("/StoreOutGOGO")
+    public ResponseEntity<ResponseDTO> StoreOutGOGO(@RequestParam int fileNo, @RequestParam String license, @RequestParam int no, @RequestParam String email) {
+
+        log.info("fileNo>>>>>>>>>>>>> {}", fileNo);
+        log.info("license>>>>>>>>>>>>> {}", license);
+        log.info("no>>>>>>>>>>>>> {}", no);
+        log.info("email>>>>>>>>>>>>> {}", email);
+
+        try {
+            //1. 파일 번호로 해당 테이블 상태값 업데이트
+            OutFile outFile = outFileRepository.findByFileNo(fileNo);
+            outFile.setState('X');
+            outFileRepository.save(outFile);
+
+            //2. 라이센스 번호로 해야할듯
+            ApplyFormNApplyFile applyForm = applyFormNApplyFileRepository.findByLicense(license);
+            applyForm.setState("X");
+            applyFormNApplyFileRepository.save(applyForm);
+
+
+            //3. 멤버 번호로 상태값 업데이트(비활성화)
+            Member member = memberRepository.findByNo(no);
+            member.setState("N");
+            memberRepository.save(member);
+
+            //4. 이메일로 계정 비활성화 안내
+            emailService.sendStoreOut(email);
+
+           String resultMessage = "계정 비활성화가 완료되었습니다.";
+           return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.CREATED, resultMessage, null));
+        } catch (Exception e) {
+           String resultMessage = "계정 비활성화 중 오류가 발생하였습니다.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(HttpStatus.BAD_REQUEST, resultMessage, null));
         }
     }
 }

@@ -15,6 +15,8 @@ public class ApplyFormNApplyFileDTO {
 
     private String address;
 
+    private String detailAddress;
+
     private String name;
 
     private String email;
