@@ -31,7 +31,6 @@ public class WorkStatusService {
 
     public Object findByEmployeeNo(int employeeNo) {
 
-        log.info("==========================================> Test ");
 
         List<WorkStatusList> workStatusList = workStatusListRepository.findByEmployeeNo(employeeNo);
 
@@ -45,7 +44,6 @@ public class WorkStatusService {
 
 
 
-        log.info("==========================================> workStatuses end {}", workStatuses);
 
         return workStatuses;
     }
@@ -53,11 +51,9 @@ public class WorkStatusService {
     // 본사 근태관리 조회
     public Object findByDepartmentAll() {
 
-        log.info("======================Test 시작 =======================>{}");
 
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
             workStatusAndEmployeeAndDepartmentRepository.findAll();
-        log.info("======================Test 끝 =======================>{}", workStatusAndEmployeeAndDepartments);
 
         return workStatusAndEmployeeAndDepartments;
 
@@ -135,7 +131,6 @@ public class WorkStatusService {
 
         WorkStatusList listResult = workStatusListRepository.save(workStatusList);
 
-        log.info("============================================>{}", listResult);
         return null;
     }
 
@@ -146,7 +141,6 @@ public class WorkStatusService {
 
         WorkStatus result = new WorkStatus();
 
-        log.info("=============================Test=========11111111111111111============>{}", workStatus);
 
         if (workStatus.isPresent()) {
             WorkStatus  recentlyTime = workStatus.get();
@@ -154,19 +148,15 @@ public class WorkStatusService {
             result = workStatusRepsitory.save(recentlyTime);
         }
 
-        log.info("=============================Test=============22222222222222222222========>{}", workStatus);
 
         Long resultTime = ( result.getQuittingTime().getTime() - result.getAttendanceTime().getTime() );
 
-        log.info("=============================Test=============444444444444444========>{}", resultTime);
 
         Date extensionTime = new Date(resultTime);
 
-        log.info("=============================Test=============555555555555555555========>{}", extensionTime);
 
         result.setExtensionTime(extensionTime);
 
-        log.info("=============================Test=============333333333333333333========>{}", result);
 
         return result;
 
