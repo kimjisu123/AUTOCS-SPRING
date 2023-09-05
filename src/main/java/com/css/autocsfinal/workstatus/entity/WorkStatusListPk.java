@@ -16,5 +16,4 @@ public class WorkStatusListPk implements Serializable {
 
     private int workStatusCode;
 
-
 }

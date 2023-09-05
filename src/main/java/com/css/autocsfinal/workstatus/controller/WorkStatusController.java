@@ -2,15 +2,14 @@ package com.css.autocsfinal.workstatus.controller;
 
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.workstatus.dto.WorkStatusDTO;
+import com.css.autocsfinal.workstatus.repository.WorkStatusListRepository;
 import com.css.autocsfinal.workstatus.service.WorkStatusService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -21,12 +20,12 @@ public class WorkStatusController {
 
     private final WorkStatusService workStatusService;
 
-    @GetMapping("/workStatus")
-    public ResponseEntity<ResponseDTO> findByAll(){
+    @GetMapping("/workStatus/{employeeNo}")
+    public ResponseEntity<ResponseDTO> findByAll(@PathVariable int employeeNo){
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "근태 관리 조회 성공",  workStatusService.selectReviewDetail()));
+                .body(new ResponseDTO(HttpStatus.OK, "근태 관리 조회 성공",  workStatusService.findByEmployeeNo(employeeNo)));
     }
 
     @GetMapping("/department")
@@ -91,4 +90,18 @@ public class WorkStatusController {
                 .body(new ResponseDTO(HttpStatus.OK, "서비스부 조회 성공", workStatusService.findByService()));
     }
 
+    // 출근하기
+    @PostMapping("/attendance/{employeeNo}")
+    public ResponseEntity<ResponseDTO> saveAttendance(@PathVariable int employeeNo ){
+
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "출근 성공", workStatusService.saveAttendance(employeeNo)));
+    }
+
+    // 퇴근
+    @PutMapping("/quitting/{employeeNo}")
+    public ResponseEntity<ResponseDTO> saveQuitting(@PathVariable int employeeNo){
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "퇴근 성공", workStatusService.saveQuitting()));
+    }
 }

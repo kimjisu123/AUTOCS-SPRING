@@ -43,7 +43,7 @@ Content-Type: application/json
 Accept: */*
 
 ### 근태 조회
-GET http://localhost:8080/workStatus
+GET http://localhost:8080/workStatus/41
 Content-Type: application/json
 Accept: */*
 
@@ -79,5 +79,15 @@ Accept: */*
 
 ### 본사 근태관리 조회
 GET http://localhost:8080/department
+Content-Type: application/json
+Accept: */*
+
+### 출근
+POST http://localhost:8080/attendance/41
+Content-Type: application/json
+Accept: */*
+
+### 퇴근
+PUT http://localhost:8080/quitting/41
 Content-Type: application/json
 Accept: */*
