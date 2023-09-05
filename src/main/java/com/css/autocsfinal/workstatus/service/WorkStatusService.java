@@ -32,7 +32,7 @@ public class WorkStatusService {
     public Object findByEmployeeNo(int employeeNo) {
 
 
-        List<WorkStatusList> workStatusList = workStatusListRepository.findByEmployeeNo(employeeNo);
+        List<WorkStatusList> workStatusList = workStatusListRepository.findByEmployeeNoOrderByWorkStatusCode(employeeNo);
 
         List<WorkStatus> workStatuses = new ArrayList<>();
 
