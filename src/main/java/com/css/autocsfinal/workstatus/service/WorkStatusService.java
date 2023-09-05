@@ -1,8 +1,7 @@
 package com.css.autocsfinal.workstatus.service;
 
-import com.css.autocsfinal.workstatus.dto.WorkStatusDTO;
 import com.css.autocsfinal.workstatus.entity.WorkStatus;
-import com.css.autocsfinal.workstatus.entity.WorkStatusAndEmployeeAndDepartment;
+import com.css.autocsfinal.workstatus.entity.WorkStatusAndEmployeeAndDepartmentAndPostion;
 import com.css.autocsfinal.workstatus.repository.WorkStatusAndEmployeeAndDepartmentRepository;
 import com.css.autocsfinal.workstatus.repository.WorkStatusRepsitory;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +31,23 @@ public class WorkStatusService {
         return workStatusList;
     }
 
+    // 본사 근태관리 조회
+    public Object findByDepartmentAll() {
+
+        log.info("======================Test 시작 =======================>{}");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
+            workStatusAndEmployeeAndDepartmentRepository.findAll();
+        log.info("======================Test 끝 =======================>{}", workStatusAndEmployeeAndDepartments);
+
+        return workStatusAndEmployeeAndDepartments;
+
+    }
+
     // 인사부
     public Object findByPersonnel() {
 
-        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("인사부");
 
         return workStatusAndEmployeeAndDepartments;
@@ -47,7 +56,7 @@ public class WorkStatusService {
     //재무/회계부
     public Object findByAccounting() {
 
-        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("재무/회계부");
 
         return workStatusAndEmployeeAndDepartments;
@@ -57,7 +66,7 @@ public class WorkStatusService {
     // 경영부
     public Object findByManagement() {
 
-        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("경영부");
 
         return workStatusAndEmployeeAndDepartments;
@@ -66,7 +75,7 @@ public class WorkStatusService {
     // 마케팅부
     public Object findByMarketing() {
 
-        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("마케팅부");
 
         return workStatusAndEmployeeAndDepartments;
@@ -75,7 +84,7 @@ public class WorkStatusService {
     // 영업부
     public Object findBySales() {
 
-        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("영업부");
 
         return workStatusAndEmployeeAndDepartments;
@@ -84,9 +93,10 @@ public class WorkStatusService {
     // 서비스부
     public Object findByService() {
 
-        List<WorkStatusAndEmployeeAndDepartment> workStatusAndEmployeeAndDepartments =
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("서비스부");
 
         return workStatusAndEmployeeAndDepartments;
     }
+
 }

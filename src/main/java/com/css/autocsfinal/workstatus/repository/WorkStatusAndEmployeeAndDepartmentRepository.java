@@ -1,7 +1,6 @@
 package com.css.autocsfinal.workstatus.repository;
 
-import com.css.autocsfinal.workstatus.entity.WorkStatus;
-import com.css.autocsfinal.workstatus.entity.WorkStatusAndEmployeeAndDepartment;
+import com.css.autocsfinal.workstatus.entity.WorkStatusAndEmployeeAndDepartmentAndPostion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,8 +9,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WorkStatusAndEmployeeAndDepartmentRepository extends JpaRepository<WorkStatusAndEmployeeAndDepartment, Long> {
+public interface WorkStatusAndEmployeeAndDepartmentRepository extends JpaRepository<WorkStatusAndEmployeeAndDepartmentAndPostion, Long> {
 
-    @Query("SELECT w, l, e, d FROM WorkStatusAndEmployeeAndDepartment w join w.workStatusLists l join l.employee e join e.department d where d.name =:name")
-    List<WorkStatusAndEmployeeAndDepartment> findByDepartmentName(@Param("name") String departmentName);
+    @Query("SELECT w, l, e, d, p FROM WorkStatusAndEmployeeAndDepartmentAndPostion w " +
+            "join w.workStatusLists l " +
+            "join l.employee e " +
+            "join e.department d " +
+            "join e.position p " +
+            "where d.name =:name")
+    List<WorkStatusAndEmployeeAndDepartmentAndPostion> findByDepartmentName(@Param("name") String departmentName);
 }

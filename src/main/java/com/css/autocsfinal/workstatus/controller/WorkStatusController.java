@@ -29,6 +29,14 @@ public class WorkStatusController {
                 .body(new ResponseDTO(HttpStatus.OK, "근태 관리 조회 성공",  workStatusService.selectReviewDetail()));
     }
 
+    @GetMapping("/department")
+    public ResponseEntity<ResponseDTO> findByDepartmentAll(){
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseDTO(HttpStatus.OK, "본사 근태 관리 조회 성공", workStatusService.findByDepartmentAll()));
+    }
+
     // 인사부 조회
     @GetMapping("/personnel")
     public ResponseEntity<ResponseDTO> findByPersonnel(){

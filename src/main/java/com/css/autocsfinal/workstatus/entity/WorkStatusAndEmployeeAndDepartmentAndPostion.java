@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class WorkStatusAndEmployeeAndDepartment {
+public class WorkStatusAndEmployeeAndDepartmentAndPostion {
 
     @Id
     @Column(name = "WORK_STATUS_CODE")

@@ -1,6 +1,7 @@
 package com.css.autocsfinal.workstatus.entity;
 
 import com.css.autocsfinal.member.entity.Department;
+import com.css.autocsfinal.member.entity.Position;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,9 +46,6 @@ public class EmployeeByWorkStatus {
     @Column(name = "PHOME")
     private String employeePhone;
 
-    @Column(name = "REF_POSITION_CODE")
-    private String position;
-
     @Column(name = "UP_CODE")
     private String upCode;
 
@@ -57,6 +55,10 @@ public class EmployeeByWorkStatus {
     @ManyToOne
     @JoinColumn(name ="REF_DEPARTMENT_CODE")
     private Department department;
+
+    @ManyToOne
+    @JoinColumn(name="REF_POSITION_CODE")
+    private Position position;
 
     @Override
     public String toString() {
