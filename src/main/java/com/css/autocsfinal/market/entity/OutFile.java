@@ -3,14 +3,13 @@ package com.css.autocsfinal.market.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Table(name = "TBL_APPLY_FILE")
+@Table(name = "TBL_OUT_FILE")
 @SequenceGenerator(
-        name = "APPLY_FILE_SEQ_GENERATOR", // 엔티티에서 지정한 시퀀스이름
-        sequenceName = "SEQ_APPLY_FILE_NO", // 실제 데이터베이스에 있는 시퀀스 명
+        name = "OUT_FILE_SEQ_GENERATOR", // 엔티티에서 지정한 시퀀스이름
+        sequenceName = "SEQ_OUT_FILE_NO", // 실제 데이터베이스에 있는 시퀀스 명
         initialValue = 1, allocationSize = 1
 )
 @NoArgsConstructor
@@ -18,14 +17,14 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class ApplyFile {
+public class OutFile {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "APPLY_FILE_SEQ_GENERATOR"
+            generator = "OUT_FILE_SEQ_GENERATOR"
     )
-    @Column(name = "APPLY_FILE_NO")
+    @Column(name = "OUT_FILE_NO")
     private int fileNo;
 
     @Column(name = "ORIGINAL")
@@ -39,4 +38,10 @@ public class ApplyFile {
 
     @Column(name = "KIND")
     private String kine;
+
+    @Column(name = "STATE")
+    private char state;
+
+    @Column(name = "REF_STORE_NO")
+    private Integer storeNo;
 }

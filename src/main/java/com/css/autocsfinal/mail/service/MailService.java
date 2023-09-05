@@ -7,6 +7,10 @@ import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.entity.MailList;
 import com.css.autocsfinal.mail.repository.MailListRepository;
 import com.css.autocsfinal.mail.repository.MailRepository;
+import com.css.autocsfinal.member.dto.EmployeeDTO;
+import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
+import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,12 +32,20 @@ public class MailService {
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
     private final MailListRepository mailListRepository;
+    private final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
 
-    public List<MailDTO> findMail() {
+    public List<MailDTO> findMail(int employeeNo) {
 
-        List<Mail> mailList = mailRepository.findAll();
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+        List<Mail> mailList = mailRepository.findByPositionAndReceiverOrderByMailNoDesc(positionName, name);
 
         List<MailDTO> mailDTOList = mailList.stream().map(Mail -> modelMapper.map(Mail, MailDTO.class) ).collect(Collectors.toList());
+
 
         return mailDTOList;
     }
@@ -40,28 +53,33 @@ public class MailService {
     public Object mailBookmark() {
 
         List<Mail> mailList = mailRepository.findByStatus("Y");
-        log.info("============================================================= mailDTOList" + mailList);
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
-
-        log.info("============================================================= mailDTOList" + mailDTOList);
 
         return mailDTOList;
 
     }
     @Transactional
-    public Object saveMail(MailDTO mailDTO) {
+    public Object saveMail(MailDTO mailDTO, int employeeNo) {
 
         mailDTO.setGoDate(new Date());
         mailDTO.setStatus("N");
         mailDTO.setContext(mailDTO.getContext().replace("<p>", ""));
         mailDTO.setContext(mailDTO.getContext().replace("</p>", ""));
 
+
         Mail mail = modelMapper.map(mailDTO, Mail.class);
-        mailRepository.save(mail);
+
+        Mail mail2 =  mailRepository.save(mail);
+
+
+        int mailNo = mail2.getMailNo();
+
+        MailList mailList = new MailList(employeeNo, mailNo);
+
+        mailListRepository.save(mailList);
 
         return null;
-
     }
 
     public Object deleteMail() {
@@ -102,10 +120,18 @@ public class MailService {
 
     public Object mailSent(int employeeNo) {
 
-        List<MailList> mail = mailListRepository.findByEmployeeNo(employeeNo);
+        List<MailList> mailLists = mailListRepository.findByEmployeeNo(employeeNo);
 
-        log.info("===========================> {}",mail.get(0).getEmployee().getMailList());
+        List<Mail> mailList = new ArrayList<>();
 
-        return null;
+
+        for(int i = 0; i< mailLists.size(); i++){
+            mailList.add(mailLists.get(i).getMail());
+        }
+
+        List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
+
+
+        return mailDTOList;
     }
 }

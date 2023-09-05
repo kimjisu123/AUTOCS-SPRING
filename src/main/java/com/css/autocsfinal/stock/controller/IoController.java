@@ -62,22 +62,28 @@ public class IoController {
     @GetMapping("/stock/check")
     public ResponseEntity<ResponseDTO> summarizeWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
-            @RequestParam(name = "s", defaultValue = "")String search,
+            @RequestParam(name = "s", defaultValue = "")String s,
             @RequestParam(name = "startDate", defaultValue = "")Date startDate,
             @RequestParam(name = "endDate", defaultValue = "")Date endDate){
+        log.info("check1");
+        log.info("offset  ==============> {} ", offset);
+        log.info("s================={}", s);
+        log.info("startDate =================={},", startDate);
+        log.info("endDate ================={}", endDate);
 
-        int total = ioService.summarizeSize(search, startDate, endDate);
+        int total = ioService.summarizeSize(s, startDate, endDate);
+        log.info("check1=============> {}", total);
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 10);
 
 
-        List<Tuple> tuplePage = ioService.summarize(cri,search, startDate, endDate);
+        List<Tuple> tuplePage = ioService.summarize(cri,s, startDate, endDate);
 
         List<IoSummaryDTO> ioSummaryPage = tuplePage.stream()
                 .map(tuple -> {
                     int refProductNo = tuple.get(0, Integer.class);
-                    String io = tuple.get(1, String.class);
-                    long totalQuantity = tuple.get(2, Long.class);
+                    long totalQuantityIn = tuple.get(1, Long.class);
+                    long totalQuantityOut = tuple.get(2, Long.class);
                     String productName = tuple.get(3, String.class);
                     String categoryName = tuple.get(4, String.class);
                     String standardName = tuple.get(5, String.class);
@@ -86,7 +92,7 @@ public class IoController {
                     int price = tuple.get(8, Integer.class);
                     String etc = tuple.get(9, String.class);
 
-                    return new IoSummaryDTO(refProductNo, io, totalQuantity, productName, categoryName, standardName,
+                    return new IoSummaryDTO(refProductNo, totalQuantityIn, totalQuantityOut, productName, categoryName, standardName,
                             unitName, stock, price, etc );
                 })
                 .collect(Collectors.toList());

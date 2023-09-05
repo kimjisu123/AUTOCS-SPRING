@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-public class StoreInfo {
+public class StoreInfo2 {
 
     @Id
     @GeneratedValue(
@@ -45,7 +45,6 @@ public class StoreInfo {
     @Column(name = "PHONE")
     private String phone;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_MEMBER_NO")
-    private Member member;
+    @Column(name = "REF_MEMBER_NO")
+    private int memberNo;
 }

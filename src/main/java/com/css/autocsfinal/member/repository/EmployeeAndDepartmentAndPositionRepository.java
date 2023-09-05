@@ -22,4 +22,7 @@ public interface EmployeeAndDepartmentAndPositionRepository extends JpaRepositor
     //아이디 찾기
     @EntityGraph(attributePaths = {"member", "department", "position"})
     EmployeeAndDepartmentAndPosition findByNameAndEmployeeEmail(String name, String employeeEmail);
+
+    @EntityGraph(attributePaths = {"member", "department", "position"})
+    EmployeeAndDepartmentAndPosition findByEmployeeNo(int employeeNo);
 }
