@@ -74,10 +74,10 @@ public class IoService {
 
 
     /* 입출고 그룹화 조회 - 이름,날짜조회 (페이지사이즈) */
-    public int summarizeSize(String search, Date startDate, Date endDate) {
+    public int summarizeSize(String s, Date startDate, Date endDate) {
 
         /* 페이징 처리 결과를 Page 타입으로 반환 받는다. */
-        List<Tuple> ioList = ioRepository.summarizeSize(search, startDate, endDate);
+        List<Tuple> ioList = ioRepository.summarizeSize(s, startDate, endDate);
 
         return ioList.size();
     }
@@ -99,14 +99,14 @@ public class IoService {
     }
 
 
-    /* 입출고 조회 그룹화 - 이름검색, 페이징 필요 */
-    public List<Tuple> summarize(Criteria cri, String search, Date startDate, Date endDate) {
+    /* 입출고 조회 그룹화 - 이름 날짜 검색, 페이징 */
+    public List<Tuple> summarize(Criteria cri, String s, Date startDate, Date endDate) {
 
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count);
 
-        Page<Tuple> result =ioRepository.summarize(search, startDate, endDate, paging);
+        Page<Tuple> result =ioRepository.summarize(s, startDate, endDate, paging);
 
         List<Tuple> ioList = result.stream()
                 .map(tuple -> modelMapper

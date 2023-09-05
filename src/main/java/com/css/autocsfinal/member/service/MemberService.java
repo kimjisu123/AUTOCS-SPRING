@@ -1,10 +1,10 @@
 package com.css.autocsfinal.member.service;
 
 import com.css.autocsfinal.jwt.TokenProvider;
+import com.css.autocsfinal.market.service.EmailService;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
-import com.css.autocsfinal.member.dto.PositionDTO;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
@@ -40,8 +40,10 @@ public class MemberService {
 
     private final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
 
+    private final EmailService emailService;
+
     @Autowired
-    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository) {
+    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, EmailService emailService) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
@@ -49,11 +51,14 @@ public class MemberService {
         this.memberRepository = memberRepository;
         this.positionRepository = positionRepository;
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
-    public String insertIdPwd(MemberDTO memberDTO) {
+    public String insertIdPwd(EmployeeDTO employeeDTO, MemberDTO memberDTO) {
         log.info("[MemberService] 아이디 비밀번호 발급 Start ===================");
+        log.info("[AuthService] employeeDTO {} =======> " + employeeDTO);
+        log.info("[AuthService] employeeEmail {} =======> " + employeeDTO.getEmployeeEmail());
         log.info("[AuthService] memberDTO {} =======> " + memberDTO);
 
         /* check
@@ -69,6 +74,10 @@ public class MemberService {
         String newPassword = generateRandomPassword();
 
         log.info("암호화 전 비밀번호 ============================>>>>>>>>>>>>>>>>>>>>>>>>>>> " + newPassword);
+
+        // 아이디와 임시 비밀번호를 이메일로 전송
+        String employeeEmail = employeeDTO.getEmployeeEmail();
+        emailService.sendEmail2(employeeEmail, newUserId, newPassword);
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(newPassword);
@@ -103,6 +112,12 @@ public class MemberService {
         // employeeDTO의 memberNo 설정
         employeeDTO.setMemberNo(maxMemberCode);
 
+        // 직원의 연차 설정 (positionCode에 따라)
+        String positionCode = employeeDTO.getPositionCode();
+        int annual = calculateAnnual(positionCode);
+
+        employeeDTO.setAnnual(annual);
+
         Employee registEmployee = modelMapper.map(employeeDTO, Employee.class);
         log.info("================> {}", registEmployee);
 
@@ -110,6 +125,25 @@ public class MemberService {
 
         log.info("[MemberService] insertEmployee End ===================");
         return (savedEmployee != null) ? "사원 등록 성공" : "사원 등록 실패";
+    }
+
+    // positionCode에 따라 연차를 계산하는 메서드
+    private int calculateAnnual(String positionCode) {
+        int annual = 0;
+
+        // positionCode에 따라 연차를 결정하는 규칙을 정의
+        switch (positionCode) {
+            case "i1":
+                annual = 0;
+                break;
+            case "s1":
+                annual = 12;
+                break;
+            default:
+                annual = 15;
+                break;
+        }
+        return annual;
     }
 
     //사원조회
@@ -127,8 +161,12 @@ public class MemberService {
                     employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeAndDepartmentAndPosition.getEmployeeNo());
                     employeeAndDepartmentAndPositionDTO.setName(employeeAndDepartmentAndPosition.getName());
                     employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeAndDepartmentAndPosition.getEmployeeJoin());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeOut(employeeAndDepartmentAndPosition.getEmployeeOut());
                     employeeAndDepartmentAndPositionDTO.setDepartment(employeeAndDepartmentAndPosition.getDepartment().getName());
                     employeeAndDepartmentAndPositionDTO.setPosition(employeeAndDepartmentAndPosition.getPosition().getName());
+                    employeeAndDepartmentAndPositionDTO.setReason(employeeAndDepartmentAndPosition.getReason());
+                    employeeAndDepartmentAndPositionDTO.setReason(employeeAndDepartmentAndPosition.getReason());
+                    employeeAndDepartmentAndPositionDTO.setMemberState(employeeAndDepartmentAndPosition.getMember().getState());
 
                     return employeeAndDepartmentAndPositionDTO;
                 })
@@ -192,6 +230,21 @@ public class MemberService {
             return employeeDTO;
         }
         return null;
+    }
+
+    //아이디로 직원 찾기
+    public EmployeeAndDepartmentAndPosition findEmployee(int memberNo) {
+        return employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
+    }
+
+    //퇴사일과 사유 insert
+    public void saveEmployee(EmployeeAndDepartmentAndPosition foundEmployee) {
+        employeeAndDepartmentAndPositionRepository.save(foundEmployee);
+    }
+
+    //직원 번호로 전체 직원 찾기
+    public EmployeeAndDepartmentAndPosition findEmployeeByNo(int employeeNo) {
+        return employeeAndDepartmentAndPositionRepository.findByEmployeeNo(employeeNo);
     }
 
 }

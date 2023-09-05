@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class StoreInfoDTO {
+public class StoreInfo2DTO {
 
     private int storeNo;
 
@@ -24,8 +24,8 @@ public class StoreInfoDTO {
 
     private String phone;
 
-    private int refMemberNo;
+    private int memberNo;
 
     //나중에 에러 날 수 있음
-    private MemberDTO member;
+    //ivate MemberDTO member;
 }
