@@ -46,7 +46,7 @@ public class MemberService {
     private final MemberFileRepository memberFileRepository;
 
     @Autowired
-    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, ,MemberFileRepository memberFileRepository,EmailService emailService) {
+    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, EmailService emailService, MemberFileRepository memberFileRepository) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
