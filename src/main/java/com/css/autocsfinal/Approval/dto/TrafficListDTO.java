@@ -11,6 +11,7 @@ import java.util.List;
 @ToString
 public class TrafficListDTO {
 
+    private String documentTitle;
     private List<String> trafficDate;
     private List<String> trafficTime;
     private List<String> from;

@@ -43,9 +43,6 @@ public class PurchaseEntity {
     @Column(name = "REMARKS")
     private String remarks;
 
-    @Column(name = "PURCHASE_TITLE")
-    private String purchaseTitle;
-
     @Column(name = "DOCUMENT_CODE")
     private int documentCode;
 }

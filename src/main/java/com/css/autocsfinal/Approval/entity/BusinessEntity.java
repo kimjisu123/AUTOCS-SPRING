@@ -25,9 +25,6 @@ public class BusinessEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BUSINESS_GENERATOR")
     private int businessReport;
 
-    @Column(name = "BUSINESS_TITLE")
-    private String businessTitle;
-
     @Column(name = "BUSINESS_CONTENT")
     private String businessContent;
 

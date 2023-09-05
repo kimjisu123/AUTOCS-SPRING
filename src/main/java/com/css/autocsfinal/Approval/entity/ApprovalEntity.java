@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "TBL_APPROVAL")
@@ -31,8 +32,21 @@ public class ApprovalEntity {
     @Column(name = "EMPLOYEE_NO")
     private int employeeNo;
 
-    public ApprovalEntity(int documentCode, int employeeNo) {
+
+    @Column(name = "STATUS")
+    private String status;
+
+    @Column(name = "TIME_STAMP")
+    private Date timeStamp;
+
+    @Column(name = "CMT")
+    private String CMT;
+
+    public ApprovalEntity(int documentCode, int employeeNo, String status, Date timeStamp, String CMT) {
         this.documentCode = documentCode;
         this.employeeNo = employeeNo;
+        this.status = status;
+        this.timeStamp = timeStamp;
+        this.CMT = CMT;
     }
 }

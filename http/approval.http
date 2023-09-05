@@ -1,3 +1,7 @@
 ### 결재 라인 불러오기
 GET http://localhost:8080/approval/appLine
 Accept: */*
+
+### 전자결재 홈 문서 불러오기
+GET http://localhost:8080/approval/41
+Accept: */*

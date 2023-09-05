@@ -1,24 +1,23 @@
 package com.css.autocsfinal.Approval.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
-public class BusinessDTO {
+@Getter
+@ToString
+public class PayListDTO {
 
     private String documentTitle;
-    private String businessNote;
+    private List<Date> payDate;
+    private List<String> payReason;
+    private List<Integer> payPrice;
     private int empNo;
     private String empName;
-    private String business;
     private List<Integer> allow;
     private List<Integer> receive;
 }
-
