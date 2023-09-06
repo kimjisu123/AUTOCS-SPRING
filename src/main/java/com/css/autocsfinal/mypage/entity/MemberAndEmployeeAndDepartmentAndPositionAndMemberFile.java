@@ -51,9 +51,9 @@ public class MemberAndEmployeeAndDepartmentAndPositionAndMemberFile {
     @JoinColumn(name = "REF_POSITION_CODE")
     private Position position;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_M_FILE_NO", referencedColumnName = "REF_MEMBER_NO", insertable = false, updatable = false) // MemberFile과의 연관 관계
-    private MemberFile memberFile;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "REF_M_FILE_NO", referencedColumnName = "REF_MEMBER_NO", insertable = false, updatable = false) // MemberFile과의 연관 관계
+//    private MemberFile memberFile;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "REF_EMPLOYEE_NO")
@@ -73,7 +73,6 @@ public class MemberAndEmployeeAndDepartmentAndPositionAndMemberFile {
                 ", member='" + member + '\'' +
                 ", department=" + department +
                 ", position=" + position +
-                ", memberFile=" + memberFile +
                 '}';
     }
 }

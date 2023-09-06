@@ -21,7 +21,6 @@ import java.util.List;
 )
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
@@ -33,11 +32,14 @@ public class MemberFile implements Serializable {
             strategy = GenerationType.SEQUENCE,
             generator = "SEQ_MEMBER_FILE_GENERATOR"
     )
-    private int fileNo;
+    private int memberFileNo;
+
     @Column(name = "ORIGIN_NAME")
     private String originName;
+
     @Column(name = "CHANGE_NAME")
     private String changeName;
+
     @Column(name = "TODAY")
     private LocalDate regDate = LocalDate.now();
 //
@@ -45,18 +47,23 @@ public class MemberFile implements Serializable {
     @JoinColumn(name = "REF_MEMBER_NO")
     private Member member;
 
-//    @Column(name = "REF_MEMBER_NO")
-//    private int memberNo;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_EMPLOYEE_NO")
-    private Employee employee;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_STORE_NO")
-    private StoreInfo storeInfo;
-
-
+//    @ManyToOne(fetch = FetchType.LAZY, targetEntity = EmployeeAndDepartmentAndPosition.class)
+//    @JoinColumn(name = "REF_EMPLOYEE") // EmployeeAndDepartmentAndPosition과의 연관 관계
+//    private EmployeeAndDepartmentAndPosition employee;
 //
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "REF_STORE_NO")
+//    private StoreInfo storeInfo;
 
 
+    @Override
+    public String toString() {
+        return "MemberFile{" +
+                "memberFileNo=" + memberFileNo +
+                ", originName='" + originName + '\'' +
+                ", changeName='" + changeName + '\'' +
+                ", regDate=" + regDate +
+                ", member=" + member +
+                '}';
+    }
 }

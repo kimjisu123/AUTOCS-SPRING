@@ -66,8 +66,6 @@ public class EmployeeAndDepartmentAndPosition {
 //    @JoinColumn(name = "REF_M_FILE_NO")
 //
 
-
-
     @Override
     public String toString() {
         return "EmployeeAndDepartmentAndPosition{" +
@@ -77,11 +75,11 @@ public class EmployeeAndDepartmentAndPosition {
                 ", employeeOut=" + employeeOut +
                 ", employeePhone='" + employeePhone + '\'' +
                 ", name='" + name + '\'' +
-                ", member='" + member + '\'' +
+                ", reason='" + reason + '\'' +
+                ", annual=" + annual +
+                ", member=" + member +
                 ", department=" + department +
                 ", position=" + position +
                 '}';
     }
-
-
 }

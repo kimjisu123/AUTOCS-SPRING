@@ -1,38 +1,58 @@
 package com.css.autocsfinal.mypage.service;
 
 
-import com.css.autocsfinal.main.entity.Todo;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
+import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import com.css.autocsfinal.member.repository.MemberRepository;
 import com.css.autocsfinal.mypage.dto.MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO;
+import com.css.autocsfinal.mypage.dto.MemberFileDTO;
 import com.css.autocsfinal.mypage.entity.MemberAndEmployeeAndDepartmentAndPositionAndMemberFile;
+import com.css.autocsfinal.mypage.entity.MemberFile;
 import com.css.autocsfinal.mypage.repository.MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository;
 import com.css.autocsfinal.mypage.repository.MemberFileRepository;
+import com.css.autocsfinal.util.FileUploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+
 
 @Service
 @Slf4j
 public class MypageService {
 
+    @Value("${image.image-dir2}")
+    private String IMAGE_DIR;
+
+    @Value("${image.image-url2}")
+    private String IMAGE_URL;
+
+
+
     private final MemberRepository memberRepository;
     public final MemberFileRepository memberFileRepository;
+    public final PasswordEncoder passwordEncoder;
     public final MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository;
-
     public final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
     public final ModelMapper modelMapper;
-    public MypageService(MemberFileRepository memberFileRepository, EmployeeRepository employeeRepository, MemberRepository memberRepository, MemberRepository memberRepository1, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository1, ModelMapper modelMapper) {
+    public MypageService(MemberFileRepository memberFileRepository, EmployeeRepository employeeRepository, MemberRepository memberRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, PasswordEncoder passwordEncoder, MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository1, ModelMapper modelMapper) {
         this.memberFileRepository = memberFileRepository;
         this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
         this.memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository = memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository;
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository1;
         this.modelMapper = modelMapper;
@@ -41,61 +61,157 @@ public class MypageService {
 
 
 
-    //사원조회
 
-    public List<MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO> getEmployeeFile() {
-        log.info("[MemberFileService] 사원 조회 Start ===================");
-
-        List<MemberAndEmployeeAndDepartmentAndPositionAndMemberFile> empinfoList = memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository.findAll();
-        log.info("empinfoList : " + empinfoList);
-
-        // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
-        List<MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO> employeeDTOList = empinfoList.stream()
-                .map(memberAndEmployeeAndDepartmentAndPositionAndMemberFile -> {
-                    MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO= new MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO();
-
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setEmployeeNo(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getEmployeeNo());
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setName(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getName());
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setEmployeeJoin(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getEmployeeJoin());
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setDepartment(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getDepartment().getName());
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setPosition(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getPosition().getName());
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setEmployeeEmail(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getEmployeeEmail());
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setMemberNo(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getMember().getNo());
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setFileNo(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getMemberFile().getFileNo());
-                    memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO.setOriginName(memberAndEmployeeAndDepartmentAndPositionAndMemberFile.getMemberFile().getOriginName());
-
-
-                    return memberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO;
-                })
-                .collect(Collectors.toList());
-
-        return employeeDTOList;
-    }
 
     @Transactional
-    public String updateMemberInfo(EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO) {
-
+    public String updateMemberInfo(EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO , MultipartFile fileImage)  {
+            // 멤버 번호 담기
             int memberNo = employeeAndDepartmentAndPositionDTO.getMemberNo();
-//            int memberNo = 41;
+        log.info("[MypageService] updateMemberInfo memberNo : {} " , memberNo);
+            //사진파일 매핑
+            String imageName = UUID.randomUUID().toString().replace("-", "");
+            String replaceFileName = null;
+
             EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
             log.info("[MypageService] updateMemberInfo Start ======================================");
-            log.info("[MypageService] updateMemberInfo memberNo : {} " , memberNo);
+            log.info("[MypageService] updateMemberInfo fileImage : {} " , fileImage);
             int result = 0;
 
-            if(employeeAndDepartmentAndPosition != null){
-                employeeAndDepartmentAndPosition.setEmployeePhone(employeeAndDepartmentAndPositionDTO.getEmployeePhone());
-                employeeAndDepartmentAndPosition.setEmployeeEmail(employeeAndDepartmentAndPositionDTO.getEmployeeEmail());
-                employeeAndDepartmentAndPosition.setEmployeeNo(employeeAndDepartmentAndPositionDTO.getEmployeeNo());
+            try {
 
+
+
+                MemberFile memberFile = new MemberFile();
+                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, fileImage);
+                log.info("[MypageService]  Image Name : {}", replaceFileName);
+                employeeAndDepartmentAndPosition.setEmployeePhone(employeeAndDepartmentAndPositionDTO.getEmployeePhone());
+                log.info("[MypageService]  getEmployeePhone : {}", employeeAndDepartmentAndPosition.getEmployeePhone());
+                employeeAndDepartmentAndPosition.setEmployeeEmail(employeeAndDepartmentAndPositionDTO.getEmployeeEmail());
+                log.info("[MypageService]  getEmployeeEmail : {}", employeeAndDepartmentAndPosition.getEmployeeEmail());
+                employeeAndDepartmentAndPositionRepository.save(employeeAndDepartmentAndPosition);
+
+                Member member = memberRepository.findByNo(employeeAndDepartmentAndPositionDTO.getMemberNo());
+                memberFile.setMember(member);
+
+                log.info("[MypageService]  Image Name : {}", memberFile);
+                memberFile.setOriginName(replaceFileName);
+                memberFile.setRegDate(LocalDate.now());
+//                memberFile.setOriginName(img);
+                MemberFile saveFile = memberFileRepository.save(memberFile);
+                log.info("[MypageService] updateMemberInfo 성공 ======================================");
                 result =1;
-            } else {
+
+            } catch (Exception e){
+
                 log.info("[MypageService] updateMemberInfo 실패 ");
-                new RuntimeException();
+                FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+                throw new RuntimeException(e);
+
             }
         return (result > 0)? " 회원정보 수정 성공" : "회원정보 수정 실패";
 
         }
+
+    // 비밀번호 체크
+    @Transactional
+    public String checkPwd(int memberNo ,String checkpw) {
+
+        Member member = memberRepository.findByNo(memberNo);
+        log.info("[MypageService] checkPwd Start ======================================");
+        log.info("[MypageService] checkPwd member : {} " , member);
+        log.info("[MypageService] 기존회원의 비밀번호 : {} " , member.getPwd());
+        log.info("[MypageService] checkpw : {} " , checkpw);
+
+
+        String pw = member.getPwd();  // 기존 비밀번호
+        boolean result = passwordEncoder.matches(checkpw, pw);
+        log.info("[MypageService] 비밀번호 일치 결과 : {} " , result);
+        log.info("[MypageService] checkPwd end ======================================");
+
+        return result? "true" : "false";
+
+
     }
+
+    @Transactional
+    // 비밀번호 변경
+    public String changePwd(int memberNo, String newPw) {
+
+        Member member = memberRepository.findByNo(memberNo);
+        log.info("[MypageService] changePwd Start ======================================");
+        log.info("[MypageService] changePwd member : {} " , member);
+        log.info("[MypageService] 기존회원의 비밀번호 : {} " , member.getPwd());
+        int result = 0;
+        String encodedPassword = passwordEncoder.encode(newPw);
+        log.info("[MypageService] encodedPassword : {} " , encodedPassword);
+
+        if(encodedPassword != null) {
+
+            member.setPwd(encodedPassword);
+            log.info("[MypageService] 기존회원의 바뀐 비밀번호 : {} " , member.getPwd());
+            memberRepository.save(member);
+            log.info("[MypageService] changePwd 성공!!!!!!!! ======================================");
+            result = 1;
+
+        }
+        return result == 1 ? "true" : "false";
+    }
+
+    @Transactional
+    public String updateImg(MemberFileDTO memberFileDTO, MultipartFile empImage) {
+        log.info("[MypageService] updateImg Start ======================================");
+        log.info("[MypageService] updateImg memberFileDTO ================================= {}", memberFileDTO );
+        log.info("[MypageService] updateImg empImage ================================= {}", empImage );
+        int memberNo = memberFileDTO.getMemberNo();
+        MemberFile memberFile = new MemberFile();
+        String imageName = UUID.randomUUID().toString().replace("-","");
+        String replaceFileName = null;
+            int result =0;
+
+
+            try {
+
+                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName,empImage);
+                Member member = memberRepository.findByNo(memberNo);
+                System.out.println("member = " + member);
+                memberFile.setMember(member);
+                memberFile.setOriginName(replaceFileName);
+                log.info("[MypageService] memberFile.getOriginName() ================================= {}", memberFile.getOriginName() );
+                memberFile.setRegDate(LocalDate.now());
+                memberFileRepository.save(memberFile);
+                result = 1;
+
+
+            } catch (Exception e){
+
+                FileUploadUtils.deleteFile(IMAGE_DIR,replaceFileName);
+                throw new RuntimeException(e);
+            }
+        log.info("[MypageService] updateImg End ======================================");
+
+        return result == 1 ? "true" : "false";
+    }
+
+    public MemberFileDTO getMemberImg(int memberNo) {
+        log.info("[TodoService] 이미지 조회하기 Start ===================");
+
+        int fileNo = 0;
+        Integer maxImgNo = memberFileRepository.findMaxMemberFileNo(memberNo);
+        fileNo = maxImgNo;
+        log.info("[TodoService] maxImgNo ===================", maxImgNo);
+        MemberFile memberImg = memberFileRepository.findById(fileNo);
+
+        MemberFileDTO memberFileDTO = new MemberFileDTO();
+        memberFileDTO.setMemberNo(memberImg.getMember().getNo());
+        memberFileDTO.setMemberFileNo(fileNo);
+        memberFileDTO.setOriginName(memberImg.getOriginName());
+        log.info("[TodoService] 이미지 이름 ===================", memberFileDTO.getOriginName());
+        log.info("[TodoService] 이미지 조회하기 end ===================");
+
+
+        return memberFileDTO;
+    }
+}
 
 
 

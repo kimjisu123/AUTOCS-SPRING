@@ -46,3 +46,7 @@ image:
   image-dir: src/main/resources/static/applyMimgs
   image-url: http://localhost:8080/applyMimgs/
 
+  image-dir2: src/main/resources/static/memberimgs
+  image-url2: http://localhost:8080/memberimgs/
+
+

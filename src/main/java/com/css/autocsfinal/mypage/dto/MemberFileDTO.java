@@ -19,24 +19,26 @@ import java.util.Date;
 @NoArgsConstructor
 public class MemberFileDTO {
 
-    private int fileNo;
+    private int memberFileNo;;
     private String originName;
     private String changeName;
     private Date regDate;
     private Member member;
 
     private int memberNo;
-    private String departmentCode;
-    private String positionCode;
+//    private String departmentCode;
+//    private String positionCode;
 
-    private Department department;
-    private Position position;
+//    private Department department;
+//    private Position position;
 
 //
-    private int employeeNo;
-    private String employeeName;
-    private Date employeeJoin;
-    private String employeeEmail;
-    private String employeePhone;
-    private int employeeManager;
+//    private int employeeNo;
+//    private String employeeName;
+//    private Date employeeJoin;
+//    private String employeeEmail;
+//    private String employeePhone;
+//    private int employeeManager;
+
+
 }

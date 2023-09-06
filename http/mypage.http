@@ -1,3 +1,5 @@
+
+
 ### 사원 조회
 GET http://localhost:8080/mypage/memberInfo
 Content-Type: application/json
@@ -15,18 +17,59 @@ Content-Type: application/json
 Accept: */*
 
 {
-  "employeeNo": 41,
-  "name": "김지수",
-  "employeeJoin": "2023-04-12T15:00:00.000+00:00",
-  "employeeEmail": "susu@gmail.com",
-  "employeePhone": "010-1114-1122",
+  "employeeNo": 180,
+  "name": "권지은",
+  "employeeJoin": "2023-09-03T15:00:00.000+00:00",
+  "employeeOut": null,
+  "employeeEmail": "eun06151@naver.com",
+  "employeePhone": "010-1234-1234",
   "employeeManager": 0,
+  "reason": null,
+  "annual": 0,
   "member": null,
-  "department": "영업부",
-  "position": "대리",
-  "memberId": "Member41",
-  "pw": "$2a$10$hPbf.pZdXZtV/..bp3YEQuUBZeZhKgOHTByHrIJEFPeNvvQeLqD2K",
-  "memberNo": 41
+  "department": "인사부",
+  "position": "차장",
+  "memberId": "Member221",
+  "pw": "$2a$10$0TARWkrI3nMoVd5dvmkmKOru63Lqj8oDZCacyPv7/J7X7t3hvobLG",
+  "memberNo": 240,
+  "memberFile": "dfaa58382a7640219383978bbe40c887.jpg",
+  "memberFileNo": 0,
+  "memberState": null
 }
 
 
+### 회원 비밀번호 일치 체크
+POST http://localhost:8080/mypage/checkpwd
+Content-Type: application/json
+Accept: */*
+
+{ "memberNo": 41,
+  "checkpw": "poyrdK9Ik7" }
+
+
+### 회원 비밀번호 변경하기
+PUT http://localhost:8080/mypage/changepwd
+Content-Type: application/json
+Accept: */*
+
+{ "memberNo": 240,
+"newpw": "qwer1234!!" }
+
+
+
+### 회원 사진 변경하기
+POST http://localhost:8080/mypage/empimg
+Content-Type: application/json
+Accept: */*
+
+{
+  "memberNo": 240,
+  "originName": "3695ab85677d4adf80691f6c31474c1a.jpg",
+  "memberFileNo": null,
+  "memberState": null
+}
+
+### 회원의 사진파일 가져오기
+GET http://localhost:8080/mypage/img/240
+Content-Type: application/json
+Accept: */*

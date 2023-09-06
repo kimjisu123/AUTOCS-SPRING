@@ -69,10 +69,11 @@ public class Employee {
                 ", employeeOut=" + employeeOut +
                 ", employeeEmail='" + employeeEmail + '\'' +
                 ", employeePhone='" + employeePhone + '\'' +
-                ", departmentCode=" + departmentCode +
-                ", upCode=" + upCode +
-                ", position=" + position +
+                ", departmentCode='" + departmentCode + '\'' +
+                ", position='" + position + '\'' +
+                ", upCode='" + upCode + '\'' +
                 ", memberNo=" + memberNo +
+                ", annual=" + annual +
                 '}';
     }
 }

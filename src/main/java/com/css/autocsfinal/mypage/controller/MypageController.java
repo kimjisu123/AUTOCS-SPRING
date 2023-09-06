@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -25,45 +27,66 @@ public class MypageController {
         this.mypageService = mypageService;
     }
 
-
-
-
-
-
     // 전체 멤버 정보 불러오기
-    @GetMapping("/memberInfo")
-    public ResponseEntity<ResponseDTO> getMemberInfo() {
+//    @GetMapping("/memberInfo")
+//    public ResponseEntity<ResponseDTO> getMemberInfo() {
 
-        log.info("[MypageController] getMemberInfo start");
+//        log.info("[MypageController] getMemberInfo start");
 
-        List<MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO> empInfoList = mypageService.getEmployeeFile();
+//        List<MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO> empInfoList = mypageService.getEmployeeFile();
 
-        HttpStatus httpStatus = HttpStatus.OK;
-        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "memberDTO 조회", empInfoList);
-        return ResponseEntity.status(httpStatus).body(responseDTO);
+//        HttpStatus httpStatus = HttpStatus.OK;
+//        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "memberDTO 조회", empInfoList);
+//        return ResponseEntity.status(httpStatus).body(responseDTO);
 
-    }
+//    }
 
     // 멤버 정보 수정하기
     @PutMapping("/updatememberinfo")
-    public ResponseEntity<ResponseDTO> updateTodo(@RequestBody EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO){
-        log.info("[MypageController ]employeeAndDepartmentAndPositionDTO {}", employeeAndDepartmentAndPositionDTO);
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원 정보 수정", mypageService.updateMemberInfo(employeeAndDepartmentAndPositionDTO)));
+    public ResponseEntity<ResponseDTO> updateTodo(@ModelAttribute EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO, MultipartFile fileImage) throws IOException {
+        System.out.println("memberFileDTO 컨트롤러에 진입은 했나? = " + employeeAndDepartmentAndPositionDTO);
+        log.info("[MypageController]employeeAndDepartmentAndPositionDTO {}", employeeAndDepartmentAndPositionDTO);
+        log.info("[MarketController] fileImage {} =======> " + fileImage);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원 정보 수정", mypageService.updateMemberInfo(employeeAndDepartmentAndPositionDTO, fileImage)));
     }
 
     // 비밀번호 재확인
+    @PostMapping("/checkpwd")
+    public ResponseEntity<ResponseDTO> checkPwd(@RequestParam("memberNo") int memberNo, @RequestParam("checkpw") String checkPw){
+        log.info("[ MypageController ] checkpw {}", checkPw);
 
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "비밀번호 확인", mypageService.checkPwd(memberNo,checkPw)));
+    }
 
     // 비밀 번호 변경하기
+    @PutMapping("/changepwd")
+    public ResponseEntity<ResponseDTO> changePwd(@RequestParam("memberNo") int memberNo, @RequestParam("newpw") String newPw){
+        log.info("[ MypageController ]  changePwd newPw {}", newPw);
+        log.info("[ MypageController ]  changePwd memberNo {}", memberNo);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "비밀번호 확인", mypageService.changePwd(memberNo,newPw)));
+    }
 
 
+//     멤버 사진 변경하기
 
-    // 멤버 사진 변경하기
+    @GetMapping ("/img/{memberNo}")
+    public ResponseEntity<ResponseDTO> getEmpImg(@PathVariable int memberNo){
+        log.info("[MemberController] getEmpImg start");
+        log.info("[MemberController] getEmpImg memberNo  {}" , memberNo);
 
-//    @PutMapping("/empeimg")
-//    public ResponseEntity<ResponseDTO> updateEmpImg(@RequestBody MemberFileDTO memberFileDTO){
-//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "투두 수정", mypageService.updateImg(memberFileDTO)));
-//    }
+        MemberFileDTO memberFileDTO = new MemberFileDTO();
+        memberFileDTO.setMemberNo(memberNo);
+        MemberFileDTO memberFileDTOList = mypageService.getMemberImg(memberFileDTO.getMemberNo());
+
+        log.info("[MemberController] memberFileDTOList  {}" , memberFileDTOList);
+        log.info("[MemberController] getEmpImg end");
+        HttpStatus httpStatus = HttpStatus.OK;
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "회원의 프로필사진 조회", memberFileDTOList);
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+    }
+
+
 
 
 

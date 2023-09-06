@@ -20,6 +20,8 @@ public class EmployeeDTO {
     private int employeeManager;
     private String departmentCode;
     private int memberNo;
+    private int memberFileNo;
+    private String memberFile;
     private String positionCode;
     private String upCode;
     private int annual;

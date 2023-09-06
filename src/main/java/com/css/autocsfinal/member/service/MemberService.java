@@ -181,7 +181,7 @@ public class MemberService {
 
     //한명의 사원조회
     public EmployeeAndDepartmentAndPositionDTO findEmployeeId(int memberNo) {
-        log.info("[MemberService] 아이디 찾기 Start ===================");
+        log.info("[MemberService] 마이페이지에 띄울 한명의 사원 조회 Start ===================");
 
         EmployeeAndDepartmentAndPosition employeeList = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
         log.info("employeeList : " + employeeList);
@@ -199,7 +199,8 @@ public class MemberService {
                     employeeAndDepartmentAndPositionDTO.setMemberId(employeeList.getMember().getId());
                     employeeAndDepartmentAndPositionDTO.setPw(employeeList.getMember().getPwd());
                     employeeAndDepartmentAndPositionDTO.setMemberNo(employeeList.getMember().getNo());
-//                    employeeAndDepartmentAndPositionDTO.setMemberFileName(employeeList.getMemberFile().getOriginName());
+
+
 
                     return employeeAndDepartmentAndPositionDTO;
 

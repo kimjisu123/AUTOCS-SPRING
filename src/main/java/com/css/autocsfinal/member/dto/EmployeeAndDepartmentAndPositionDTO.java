@@ -32,8 +32,8 @@ public class EmployeeAndDepartmentAndPositionDTO {
     private String memberId;
     private String pw;
     private int memberNo;
-//    private MemberFileDTO memberfile;
-//    private String memberFileName;
+    private String memberFile;
+    private int memberFileNo;
 
 
 
