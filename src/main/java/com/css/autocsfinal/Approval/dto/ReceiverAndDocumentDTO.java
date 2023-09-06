@@ -5,18 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class DocumentDTO {
+public class ReceiverAndDocumentDTO {
 
-    private String documentTitle;
-    private int documentCode;
     private int employeeNo;
-    private Date applicationDate;
-    private String documentType;
+    private DocumentAndEmployeeDTO document;
     private String status;
 }

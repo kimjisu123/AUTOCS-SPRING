@@ -5,3 +5,12 @@ Accept: */*
 ### 전자결재 홈 문서 불러오기
 GET http://localhost:8080/approval/41
 Accept: */*
+
+### 결재 대기 문서 조회
+GET http://localhost:8080/approval/appWait/41
+
+### 참조 대기 문서 조회
+GET http://localhost:8080/approval/seeWait/40
+
+### 참조 대기 문서함 조회
+GET http://localhost:8080/approval/mySee/40

@@ -3,26 +3,31 @@ package com.css.autocsfinal.Approval.service;
 import com.css.autocsfinal.Approval.dto.*;
 import com.css.autocsfinal.Approval.entity.*;
 import com.css.autocsfinal.Approval.repository.*;
+import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ApprovalService {
 
+    private final ModelMapper modelMapper;
     private final ApprovalRepository approvalRepository;
     private final AppEmplRepository appEmplRepository;
     private final DocumentRepository documentRepository;
@@ -35,6 +40,8 @@ public class ApprovalService {
     private final EmployeeRepository employeeRepository;
     private final VacationRepository vacationRepository;
     private final PayRepository payRepository;
+    private final ApprovalAndDocumentRepository approvalAndDocumentRepository;
+    private final ReceiverAndDocumentRepository receiverAndDocumentRepository;
 
     /* 결재선 가져오기 */
     public List<AppDeptResult> findDept() {
@@ -122,6 +129,7 @@ public class ApprovalService {
         documentEntity.setApplicationDate(date);
         documentEntity.setDocumentType("구매요청");
         documentEntity.setDocumentTitle(purchaseList.getDocumentTitle());
+        documentEntity.setStatus("결재요청");
         documentRepository.save(documentEntity);
 
         int documentCode = documentEntity.getDocumentCode();;
@@ -212,7 +220,8 @@ public class ApprovalService {
         DocumentEntity documentEntity = new DocumentEntity();
         documentEntity.setEmployeeNo(trafficList.getEmpNo());
         documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("구매요청");
+        documentEntity.setDocumentType("여비정산");
+        documentEntity.setStatus("결재요청");
         documentEntity.setDocumentTitle(trafficList.getDocumentTitle());
         documentRepository.save(documentEntity);
 
@@ -295,8 +304,9 @@ public class ApprovalService {
         DocumentEntity documentEntity = new DocumentEntity();
         documentEntity.setEmployeeNo(business.getEmpNo());
         documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("구매요청");
+        documentEntity.setDocumentType("업무보고");
         documentEntity.setDocumentTitle(business.getDocumentTitle());
+        documentEntity.setStatus("결재요청");
         documentRepository.save(documentEntity);
 
         int documentCode = documentEntity.getDocumentCode();
@@ -377,7 +387,8 @@ public class ApprovalService {
         DocumentEntity documentEntity = new DocumentEntity();
         documentEntity.setEmployeeNo(vacation.getEmpNo());
         documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("구매요청");
+        documentEntity.setDocumentType("휴가신청");
+        documentEntity.setStatus("결재요청");
         documentEntity.setDocumentTitle(vacation.getDocumentTitle());
         documentRepository.save(documentEntity);
 
@@ -458,7 +469,8 @@ public class ApprovalService {
         DocumentEntity documentEntity = new DocumentEntity();
         documentEntity.setEmployeeNo(pay.getEmpNo());
         documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("구매요청");
+        documentEntity.setDocumentType("비용청구");
+        documentEntity.setStatus("결재요청");
         documentEntity.setDocumentTitle(pay.getDocumentTitle());
         documentRepository.save(documentEntity);
 
@@ -560,9 +572,9 @@ public class ApprovalService {
 
             for(int j = 0; j < approval.size(); j++) {
 
-                if(approval != null && approval.get(i).getStatus().equals("결재요청")) {
+                if(approval != null && approval.get(j).getStatus().equals("결재요청")) {
                     count1 += 1;
-                } else if(approval != null && approval.get(i).getStatus().equals("승인됨")) {
+                } else if(approval != null && approval.get(j).getStatus().equals("승인됨")) {
                     count2 += 1;
                 }
             }
@@ -608,8 +620,151 @@ public class ApprovalService {
         return passData3;
     }
 
-//    /* 발신 문서함 */
-//    public Object findSend(int employeeNo) {
-//
-//    }
+    /* 발신 문서함 페이징 처리 */
+    public int selectTotal(int employeeNo) {
+
+        List<DocumentEntity> document = documentRepository.findByEmployeeNo(employeeNo);
+
+        return document.size();
+    }
+
+    /* 발신 문서함 */
+    public List<DocumentDTO> sendWithPaging(Criteria cri, int employeeNo) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("applicationDate").descending());
+
+        Page<DocumentEntity> result = documentRepository.findByEmployeeNo(employeeNo, paging);
+
+        List<DocumentDTO> documentList = result.stream()
+                .map(document -> modelMapper
+                        .map(document, DocumentDTO.class)).collect(Collectors.toList());
+
+        return documentList;
+    }
+
+    /* 업무 문서함 페이징 처리 */
+    public int selectMyBusiness(int employeeNo) {
+
+        List<DocumentEntity> document = documentRepository.findByEmployeeNoAndDocumentType(employeeNo, "업무보고");
+
+        return document.size();
+    }
+
+    /* 업무 문서함 */
+    public List<DocumentDTO> myBusinessWithPaging(Criteria cri, int employeeNo) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("applicationDate").descending());
+
+        Page<DocumentEntity> result = documentRepository.findByEmployeeNoAndDocumentType(employeeNo, paging, "업무보고");
+
+        List<DocumentDTO> documentList = result.stream()
+                .map(document -> modelMapper
+                        .map(document,DocumentDTO.class)).collect(Collectors.toList());
+
+        return documentList;
+    }
+
+    /* 결재 대기 페이징*/
+    public int selectAppWait(int employeeNo) {
+
+        List<ApprovalEntity> approval = approverRepository.findByEmployeeNoAndStatus(employeeNo, "결재요청");
+
+        return approval.size();
+    }
+
+    /* 결재 대기 페이지 */
+    public List<ApprovalAndDocumentDTO> appWaitPaging(Criteria cri, int employeeNo) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("approvalCode").ascending());
+
+        Page<ApprovalAndDocumentEntity> result = approvalAndDocumentRepository.findByEmployeeNoAndStatus(employeeNo, "결재요청",paging);
+
+        List<ApprovalAndDocumentDTO> approvalList = result.stream()
+                .map(approval -> modelMapper
+                        .map(approval, ApprovalAndDocumentDTO.class)).collect(Collectors.toList());
+
+        return approvalList;
+    }
+
+    /* 참조/열람 대기 페이징*/
+    public int selectSeeWait(int employeeNo) {
+
+        List<ReceiverEntity> receive = receiveRepository.findByEmployeeNoAndStatus(employeeNo, "대기중");
+
+        return receive.size();
+    }
+
+    /* 참조/열람 대기 페이지 */
+    public List<ReceiverAndDocumentDTO> seeWaitPaging(Criteria cri, int employeeNo) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("documentCode").ascending());
+
+        ReceiverDocumentEntityKey key = new ReceiverDocumentEntityKey();
+        key.setNo(employeeNo);
+        Page<ReceiveDocumentEntity> result = receiverAndDocumentRepository.findByKeyNoAndStatus(employeeNo,"대기중", paging);
+
+        List<ReceiverAndDocumentDTO> receiverList = result.stream()
+                .map(receiver -> modelMapper
+                        .map(receiver, ReceiverAndDocumentDTO.class)).collect(Collectors.toList());
+
+        return receiverList;
+    }
+
+    /* 결재 문서함 페이징 */
+    public int selectMyApp(int employeeNo) {
+
+        List<ApprovalEntity> approval = approverRepository.findByEmployeeNo(employeeNo);
+
+        return approval.size();
+    }
+
+    /* 결재 문서함 페이지 */
+    public List<ApprovalAndDocumentDTO> myAppPaging(Criteria cri, int employeeNo) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("documentCode").ascending());
+
+        Page<ApprovalAndDocumentEntity> result = approvalAndDocumentRepository.findByEmployeeNo(employeeNo, paging);
+
+
+        List<ApprovalAndDocumentDTO> myAppList = result.stream()
+                .map(myApp -> modelMapper
+                        .map(myApp, ApprovalAndDocumentDTO.class)).collect(Collectors.toList());
+
+        return myAppList;
+    }
+
+    /* 참조/열람 문서함 페이징 */
+    public int selectMySee(int employeeNo) {
+
+        List<ReceiverEntity> receive = receiveRepository.findByEmployeeNo(employeeNo);
+
+        return receive.size();
+    }
+
+    public Object mySeePaging(Criteria cri, int employeeNo) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("documentCode").ascending());
+
+        ReceiverDocumentEntityKey key = new ReceiverDocumentEntityKey();
+        key.setNo(employeeNo);
+        Page<ReceiveDocumentEntity> result = receiverAndDocumentRepository.findByKeyNo(employeeNo, paging);
+
+        List<ReceiverAndDocumentDTO> receiverList = result.stream()
+                .map(receiver -> modelMapper
+                        .map(receiver, ReceiverAndDocumentDTO.class)).collect(Collectors.toList());
+
+        return receiverList;
+    }
 }

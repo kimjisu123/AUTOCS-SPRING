@@ -1,5 +1,6 @@
 package com.css.autocsfinal.Approval.dto;
 
+import com.css.autocsfinal.member.dto.EmployeeDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-public class DocumentDTO {
+public class DocumentAndEmployeeDTO {
 
     private String documentTitle;
     private int documentCode;
-    private int employeeNo;
+    private EmployeeDTO employee;
     private Date applicationDate;
     private String documentType;
     private String status;
