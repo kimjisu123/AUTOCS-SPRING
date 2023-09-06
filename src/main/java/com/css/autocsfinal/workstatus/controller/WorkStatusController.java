@@ -31,6 +31,7 @@ public class WorkStatusController {
     @GetMapping("/department")
     public ResponseEntity<ResponseDTO> findByDepartmentAll(){
 
+        log.info("============================?>>");
         return ResponseEntity
                 .ok()
                 .body(new ResponseDTO(HttpStatus.OK, "본사 근태 관리 조회 성공", workStatusService.findByDepartmentAll()));

@@ -1,8 +1,15 @@
 package com.css.autocsfinal.workstatus.service;
 
+import com.css.autocsfinal.member.entity.Member;
+import com.css.autocsfinal.member.repository.EmployeeRepository;
+import com.css.autocsfinal.member.repository.MemberRepository;
+import com.css.autocsfinal.workstatus.dto.EmployeeByWorkStatusDTO;
+import com.css.autocsfinal.workstatus.dto.WorkStatusResult;
+import com.css.autocsfinal.workstatus.entity.EmployeeByWorkStatus;
 import com.css.autocsfinal.workstatus.entity.WorkStatus;
 import com.css.autocsfinal.workstatus.entity.WorkStatusAndEmployeeAndDepartmentAndPostion;
 import com.css.autocsfinal.workstatus.entity.WorkStatusList;
+import com.css.autocsfinal.workstatus.repository.EmployeeByWorkStatusRepository;
 import com.css.autocsfinal.workstatus.repository.WorkStatusAndEmployeeAndDepartmentRepository;
 import com.css.autocsfinal.workstatus.repository.WorkStatusListRepository;
 import com.css.autocsfinal.workstatus.repository.WorkStatusRepsitory;
@@ -12,10 +19,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,7 @@ public class WorkStatusService {
     private final WorkStatusRepsitory workStatusRepsitory;
     private final WorkStatusListRepository workStatusListRepository;
     private final WorkStatusAndEmployeeAndDepartmentRepository workStatusAndEmployeeAndDepartmentRepository;
+    private final EmployeeByWorkStatusRepository employeeByWorkStatusRepository;
 
 
     private final ModelMapper modelMapper;
@@ -50,11 +56,11 @@ public class WorkStatusService {
 
     // 본사 근태관리 조회
     public Object findByDepartmentAll() {
+        log.info("=====================11111111111111111111111111111111");
+        List<WorkStatusResult> workStatusAndEmployeeAndDepartments =
+            workStatusAndEmployeeAndDepartmentRepository.findAllWorkStatusResult();
 
-
-        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
-            workStatusAndEmployeeAndDepartmentRepository.findAll();
-
+        log.info("=====================222222222222222222222222222222222222");
         return workStatusAndEmployeeAndDepartments;
 
     }
@@ -161,4 +167,7 @@ public class WorkStatusService {
         return result;
 
     }
+
+
+
 }

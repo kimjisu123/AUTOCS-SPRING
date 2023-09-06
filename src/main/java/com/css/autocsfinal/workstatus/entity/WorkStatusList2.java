@@ -1,8 +1,5 @@
 package com.css.autocsfinal.workstatus.entity;
 
-import com.css.autocsfinal.mail.entity.Mail;
-import com.css.autocsfinal.member.entity.Employee;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-public class WorkStatusList {
+public class WorkStatusList2 {
 
     @Id
     @Column(name="EMPLOYEE_NO")
@@ -29,12 +26,7 @@ public class WorkStatusList {
     @JoinColumn(name="WORK_STATUS_CODE", insertable = false, updatable = false)
     private WorkStatus workStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "EMPLOYEE_NO", insertable = false, updatable = false)
-    private EmployeeByWorkStatus employee;
-
-
-    public WorkStatusList(int employeeNo, int workStatusCode) {
+    public WorkStatusList2(int employeeNo, int workStatusCode) {
         this.employeeNo = employeeNo;
         this.workStatusCode = workStatusCode;
     }

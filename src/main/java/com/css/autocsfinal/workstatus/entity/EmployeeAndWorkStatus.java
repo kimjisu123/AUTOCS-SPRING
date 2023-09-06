@@ -1,13 +1,11 @@
 package com.css.autocsfinal.workstatus.entity;
 
-import com.css.autocsfinal.mail.entity.MailList;
 import com.css.autocsfinal.member.entity.Department;
 import com.css.autocsfinal.member.entity.Position;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EmployeeByWorkStatus {
+public class EmployeeAndWorkStatus {
 
     @Id
     @Column(name = "EMPLOYEE_NO")
@@ -62,6 +60,9 @@ public class EmployeeByWorkStatus {
     @ManyToOne
     @JoinColumn(name="REF_POSITION_CODE")
     private Position position;
+
+    @OneToMany(mappedBy = "employeeNo")
+    private List<WorkStatusList2> workStatusLists;
 
     @Override
     public String toString() {
