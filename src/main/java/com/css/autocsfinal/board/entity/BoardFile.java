@@ -11,7 +11,7 @@ import java.sql.Date;
 @SequenceGenerator(
         name = "BOARD_FILE_SEQ_GENERATOR",
         sequenceName = "SEQ_BOARD_FILE_NO",
-        initialValue = 1, allocationSize = 1
+        initialValue = 50, allocationSize = 1
 )
 @NoArgsConstructor
 @AllArgsConstructor
