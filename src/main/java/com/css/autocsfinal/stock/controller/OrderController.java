@@ -25,9 +25,9 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    /* 주문번호 전체조회 (불용일등록)*/
+    /* 주문번호 전체조회*/
     @GetMapping("/stock/order")
-    public ResponseEntity<ResponseDTO> selectProductListWithPaging(
+    public ResponseEntity<ResponseDTO> selectOrderListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset){
 
         int total = orderService.selectOrderAll();
@@ -36,6 +36,22 @@ public class OrderController {
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
         pagingResponseDTO.setData(orderService.selectOrderListWithPaging(cri));
+        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
+    }
+
+    /* 주문물품 전체조회*/
+    @GetMapping("/stock/orderlist")
+    public ResponseEntity<ResponseDTO> selectOrderProductListWithPaging(
+            @RequestParam(name = "offset", defaultValue = "1") String offset){
+
+        int total = orderService.selectOrderProductAll();
+
+        Criteria cri = new Criteria(Integer.valueOf(offset), 10);
+
+        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+        pagingResponseDTO.setData(orderService.selectOrderProductListWithPaging(cri));
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));

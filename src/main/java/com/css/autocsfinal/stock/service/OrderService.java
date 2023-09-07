@@ -2,11 +2,14 @@ package com.css.autocsfinal.stock.service;
 
 import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.stock.dto.OrderDTO;
+import com.css.autocsfinal.stock.dto.OrderDetailDTO;
 import com.css.autocsfinal.stock.dto.OrderProductDTO;
-import com.css.autocsfinal.stock.dto.StandardDTO;
 import com.css.autocsfinal.stock.entity.Order;
+import com.css.autocsfinal.stock.entity.OrderDetail;
 import com.css.autocsfinal.stock.entity.OrderProduct;
-import com.css.autocsfinal.stock.entity.Standard;
+import com.css.autocsfinal.stock.entity.OrderProductDetail;
+import com.css.autocsfinal.stock.repository.OrderDetailRepository;
+import com.css.autocsfinal.stock.repository.OrderProductDetailRepository;
 import com.css.autocsfinal.stock.repository.OrderProductRepository;
 import com.css.autocsfinal.stock.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,36 +31,40 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
+    private final OrderDetailRepository orderDetailRepository;
     private final OrderProductRepository orderProductRepository;
+    private final OrderProductDetailRepository orderProductDetailRepository;
     private final ModelMapper modelMapper;
 
-    public OrderService(OrderRepository orderRepository, OrderProductRepository orderProductRepository, ModelMapper modelMapper) {
+    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, OrderProductRepository orderProductRepository, OrderProductDetailRepository orderProductDetailRepository, ModelMapper modelMapper) {
         this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
         this.orderProductRepository = orderProductRepository;
+        this.orderProductDetailRepository = orderProductDetailRepository;
         this.modelMapper = modelMapper;
     }
 
     /* 주문번호 조회 (페이지사이즈) */
     public int selectOrderAll() {
 
-        List<Order> orderList = orderRepository.findAll();
+        List<OrderDetail> orderList = orderDetailRepository.findByStatus("Y");
 
         return orderList.size();
     }
 
 
     /* 주문번호 조회 페이징*/
-    public List<OrderDTO> selectOrderListWithPaging(Criteria cri) {
+    public List<OrderDetail> selectOrderListWithPaging(Criteria cri) {
 
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count, Sort.by("orderNo").descending());
 
-        Page<Order> result =orderRepository.findAll(paging);
+        Page<OrderDetail> result =orderDetailRepository.findByStatus("Y", paging);
 
-        List<OrderDTO> orderList = result.stream()
+        List<OrderDetail> orderList = result.stream()
                 .map(order -> modelMapper
-                        .map(order, OrderDTO.class)).collect(Collectors.toList());
+                        .map(order, OrderDetail.class)).collect(Collectors.toList());
         return orderList;
     }
 
@@ -69,6 +76,30 @@ public class OrderService {
         System.out.println("------------------");
         System.out.println(lastOrderNo);
         return lastOrderNo;
+    }
+
+    /* 주문물품 조회 (페이지사이즈) */
+    public int selectOrderProductAll() {
+
+        List<OrderProductDetail> orderProdoctList = orderProductDetailRepository.findAll();
+
+        return orderProdoctList.size();
+    }
+
+
+    /* 주문물품 조회 페이징*/
+    public List<OrderProductDetail> selectOrderProductListWithPaging(Criteria cri) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("orderProductNo").descending());
+
+        Page<OrderProductDetail> result =orderProductDetailRepository.findAll(paging);
+
+        List<OrderProductDetail> orderProdoctList = result.stream()
+                .map(orderProduct -> modelMapper
+                        .map(orderProduct, OrderProductDetail.class)).collect(Collectors.toList());
+        return orderProdoctList;
     }
 
 
