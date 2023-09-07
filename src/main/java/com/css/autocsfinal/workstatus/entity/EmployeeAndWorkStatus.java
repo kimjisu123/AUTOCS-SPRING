@@ -53,6 +53,7 @@ public class EmployeeAndWorkStatus {
     @Column(name = "REF_MEMBER_NO")
     private int memberNo;
 
+
     @ManyToOne
     @JoinColumn(name ="REF_DEPARTMENT_CODE")
     private Department department;

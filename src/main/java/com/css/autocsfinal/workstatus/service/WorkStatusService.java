@@ -3,22 +3,19 @@ package com.css.autocsfinal.workstatus.service;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import com.css.autocsfinal.member.repository.MemberRepository;
+import com.css.autocsfinal.workstatus.dto.EmployeeAndWorkStatusDTO;
 import com.css.autocsfinal.workstatus.dto.EmployeeByWorkStatusDTO;
 import com.css.autocsfinal.workstatus.dto.WorkStatusResult;
-import com.css.autocsfinal.workstatus.entity.EmployeeByWorkStatus;
-import com.css.autocsfinal.workstatus.entity.WorkStatus;
-import com.css.autocsfinal.workstatus.entity.WorkStatusAndEmployeeAndDepartmentAndPostion;
-import com.css.autocsfinal.workstatus.entity.WorkStatusList;
-import com.css.autocsfinal.workstatus.repository.EmployeeByWorkStatusRepository;
-import com.css.autocsfinal.workstatus.repository.WorkStatusAndEmployeeAndDepartmentRepository;
-import com.css.autocsfinal.workstatus.repository.WorkStatusListRepository;
-import com.css.autocsfinal.workstatus.repository.WorkStatusRepsitory;
+import com.css.autocsfinal.workstatus.entity.*;
+import com.css.autocsfinal.workstatus.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,7 +27,8 @@ public class WorkStatusService {
     private final WorkStatusRepsitory workStatusRepsitory;
     private final WorkStatusListRepository workStatusListRepository;
     private final WorkStatusAndEmployeeAndDepartmentRepository workStatusAndEmployeeAndDepartmentRepository;
-    private final EmployeeByWorkStatusRepository employeeByWorkStatusRepository;
+    // Employee Start
+    private final EmployeeAndWorkStatusRepository employeeAndWorkStatusRepository;
 
 
     private final ModelMapper modelMapper;
@@ -120,6 +118,7 @@ public class WorkStatusService {
         return workStatusAndEmployeeAndDepartments;
     }
 
+    // 출근
     @Transactional
     public Object saveAttendance(int employeeNo) {
 
@@ -140,6 +139,7 @@ public class WorkStatusService {
         return null;
     }
 
+    // 퇴근
     @Transactional
     public Object saveQuitting() {
 
@@ -169,5 +169,17 @@ public class WorkStatusService {
     }
 
 
+    // 본사 근태관리 조회
+    public Object findByHeadOffice() {
 
+        List<EmployeeAndWorkStatus> data = employeeAndWorkStatusRepository.findByOrderByName();
+
+        // HashSet을 사용하여 중복 제거
+        HashSet<EmployeeAndWorkStatus> dateSet = new HashSet<>(data);
+        List<EmployeeAndWorkStatus> dataFromDatabase = new ArrayList<>(dateSet);
+
+        List<EmployeeAndWorkStatusDTO> employeeByWorkStatusDTOList = dataFromDatabase.stream().map(employeeByWorkStatus->modelMapper.map(employeeByWorkStatus, EmployeeAndWorkStatusDTO.class)).collect(Collectors.toList());
+
+        return employeeByWorkStatusDTOList;
+    }
 }

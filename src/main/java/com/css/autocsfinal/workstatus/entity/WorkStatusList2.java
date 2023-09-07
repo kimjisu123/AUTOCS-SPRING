@@ -24,7 +24,7 @@ public class WorkStatusList2 {
 
     @ManyToOne
     @JoinColumn(name="WORK_STATUS_CODE", insertable = false, updatable = false)
-    private WorkStatus workStatus;
+    private WorkStatus2 workStatus;
 
     public WorkStatusList2(int employeeNo, int workStatusCode) {
         this.employeeNo = employeeNo;

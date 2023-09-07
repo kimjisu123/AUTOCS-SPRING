@@ -11,9 +11,11 @@ import java.util.List;
 public interface WorkStatusListRepository extends JpaRepository<WorkStatusList, Integer> {
 
 
-    List<WorkStatusList> findByEmployeeNo(int employeeNo);
 
     List<WorkStatusList> findByEmployeeNoOrderByEmployeeNo(int employeeNo);
 
     List<WorkStatusList> findByEmployeeNoOrderByWorkStatusCode(int employeeNo);
+
+
+
 }

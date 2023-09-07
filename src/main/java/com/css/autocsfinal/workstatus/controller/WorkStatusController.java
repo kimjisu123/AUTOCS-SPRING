@@ -105,4 +105,36 @@ public class WorkStatusController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "퇴근 성공", workStatusService.saveQuitting()));
     }
+
+    // 본사 근태 현황
+
+    @GetMapping("/headOffice")
+    public ResponseEntity<ResponseDTO> findByHeadOffice(){
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "본사 근태관리 조회 성공", workStatusService.findByHeadOffice()));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
