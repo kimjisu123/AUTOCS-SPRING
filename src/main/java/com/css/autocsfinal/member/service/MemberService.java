@@ -11,11 +11,13 @@ import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import com.css.autocsfinal.member.repository.PositionRepository;
+import com.css.autocsfinal.mypage.entity.MemberFile;
 import com.css.autocsfinal.mypage.repository.MemberFileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.css.autocsfinal.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,6 +46,11 @@ public class MemberService {
     private final EmailService emailService;
 
     private final MemberFileRepository memberFileRepository;
+
+
+    @Value("${image.image-url2}")
+    private String IMAGE_URL;
+
 
     @Autowired
     public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, EmailService emailService, MemberFileRepository memberFileRepository) {
@@ -184,7 +191,15 @@ public class MemberService {
         log.info("[MemberService] 마이페이지에 띄울 한명의 사원 조회 Start ===================");
 
         EmployeeAndDepartmentAndPosition employeeList = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
+
+        int fileNo = 0;
+        Integer maxImgNo = memberFileRepository.findMaxMemberFileNo(memberNo);
+        fileNo = maxImgNo;
+        log.info("[TodoService] maxImgNo ===================", maxImgNo);
+        MemberFile memberImg = memberFileRepository.findById(fileNo);
+
         log.info("employeeList : " + employeeList);
+
 
         // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
                     EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
@@ -199,6 +214,7 @@ public class MemberService {
                     employeeAndDepartmentAndPositionDTO.setMemberId(employeeList.getMember().getId());
                     employeeAndDepartmentAndPositionDTO.setPw(employeeList.getMember().getPwd());
                     employeeAndDepartmentAndPositionDTO.setMemberNo(employeeList.getMember().getNo());
+                    employeeAndDepartmentAndPositionDTO.setMemberFile(IMAGE_URL+ memberImg.getOriginName());
 
 
 

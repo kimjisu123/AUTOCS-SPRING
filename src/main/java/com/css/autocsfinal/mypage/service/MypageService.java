@@ -204,7 +204,9 @@ public class MypageService {
         MemberFileDTO memberFileDTO = new MemberFileDTO();
         memberFileDTO.setMemberNo(memberImg.getMember().getNo());
         memberFileDTO.setMemberFileNo(fileNo);
-        memberFileDTO.setOriginName(memberImg.getOriginName());
+        memberFileDTO.setOriginName(IMAGE_URL+ memberImg.getOriginName());
+        Date date = java.sql.Date.valueOf(memberImg.getRegDate());  // LocalDate 타입을 Date타입으로 변환
+        memberFileDTO.setRegDate(date);
         log.info("[TodoService] 이미지 이름 ===================", memberFileDTO.getOriginName());
         log.info("[TodoService] 이미지 조회하기 end ===================");
 
