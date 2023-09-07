@@ -6,6 +6,7 @@ import com.css.autocsfinal.board.entity.Board;
 import com.css.autocsfinal.board.entity.BoardFile;
 import com.css.autocsfinal.board.repository.BoardFileRepository;
 import com.css.autocsfinal.board.repository.BoardRepository;
+import com.css.autocsfinal.market.dto.ApplyFormNApplyFileDTO;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.util.FileUploadUtils;
@@ -77,9 +78,6 @@ public class BoardService {
                             boardDTO.setDepartment(employee.getDepartment().getName());
                             boardDTO.setPosition(employee.getPosition().getName());
                         }
-
-                        //이미지 나중에
-                        //boardDTO.setFileUrl(IMAGE_URL + applyFormNApplyFile.getFile().getOrignal());
 
                         return boardDTO;
                     })
@@ -154,6 +152,42 @@ public class BoardService {
             log.error("Error while inserting board: {}", e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    //파일이 있을경우 파일과 게시물 조회
+    public BoardDTO finBoard(int boardNo) {
+        //게시물 조회
+        Board board = boardRepository.findByBoardNo(boardNo);
+        log.info("board : " + board);
+
+        // BoardDTO에 정보를 담아서 반환
+        BoardDTO boardDTO = new BoardDTO();
+        boardDTO.setBoardNo(boardNo);
+        boardDTO.setTitle(board.getTitle());
+        boardDTO.setRefCategoryNo(board.getRefCategoryNo());
+        boardDTO.setRegist(board.getRegist());
+        boardDTO.setContent(board.getContent());
+        boardDTO.setAnonymity(board.getAnonymity());
+
+        int memberNo = board.getRefMemberNo();
+        //ref멤버번호로 직원 조회
+        EmployeeAndDepartmentAndPosition employee = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
+        boardDTO.setEmployeeName(employee.getName());
+        boardDTO.setDepartment(employee.getDepartment().getName());
+        boardDTO.setPosition(employee.getPosition().getName());
+
+        // 파일 조회
+        int refBoardNo = boardNo;
+        List<BoardFile> fileList = boardFileRepository.findByRefBoardNo(refBoardNo);
+        List<String> fileUrls = new ArrayList<>();
+
+        for (BoardFile file : fileList) {
+            fileUrls.add(IMAGE_URL + file.getOriginal());
+        }
+
+        boardDTO.setFileUrls(fileUrls);
+
+        return boardDTO;
     }
 }
 

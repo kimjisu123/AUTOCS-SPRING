@@ -1,9 +1,11 @@
 package com.css.autocsfinal.board.controller;
 
 import com.css.autocsfinal.board.dto.BoardDTO;
+import com.css.autocsfinal.board.dto.BoardFileDTO;
 import com.css.autocsfinal.board.service.BoardService;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.market.dto.ApplyFormDTO;
+import com.css.autocsfinal.market.dto.StoreInfoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -66,5 +68,20 @@ public class BoardController {
                     .status(httpStatus)
                     .body(new ResponseDTO(httpStatus, resultMessage, null));
         }
+    }
+
+    //게시물 찾기
+    @GetMapping("/getBoardNum")
+    public ResponseEntity<ResponseDTO> getBoardNum(@RequestParam int boardNo) {
+        log.info("[BoardDTO] boardNo {} =======> " + boardNo);
+
+        BoardDTO board = boardService.finBoard(boardNo);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "게시물 조회 성공", board);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+
     }
 }
