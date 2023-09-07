@@ -50,8 +50,12 @@ public class Employee {
     @Column(name = "UP_CODE")
     private String upCode;
 
+
     @Column(name = "REF_MEMBER_NO")
     private int memberNo;
+
+    @Column(name="REF_M_FILE_NO")
+    private int memberFileNo;
 
     @Column(name = "ANNUAL")
     private int annual;
@@ -65,10 +69,11 @@ public class Employee {
                 ", employeeOut=" + employeeOut +
                 ", employeeEmail='" + employeeEmail + '\'' +
                 ", employeePhone='" + employeePhone + '\'' +
-                ", departmentCode=" + departmentCode +
-                ", upCode=" + upCode +
-                ", position=" + position +
+                ", departmentCode='" + departmentCode + '\'' +
+                ", position='" + position + '\'' +
+                ", upCode='" + upCode + '\'' +
                 ", memberNo=" + memberNo +
+                ", annual=" + annual +
                 '}';
     }
 }

@@ -8,21 +8,21 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
-    public class MailConfig {
-        @Bean
-        public JavaMailSender javaMailSender(){
-            JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+public class MailConfig {
+    @Bean
+    public JavaMailSender javaMailSender(){
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
-            javaMailSender.setHost("smtp.naver.com");
-            javaMailSender.setUsername("eun06151@naver.com");
-            javaMailSender.setPassword("rlagoems024371");
+        javaMailSender.setHost("smtp.naver.com");
+        javaMailSender.setUsername("eun06151@naver.com");
+        javaMailSender.setPassword("rlagoems024371");
 
-            javaMailSender.setPort(465);
+        javaMailSender.setPort(465);
 
-            javaMailSender.setJavaMailProperties(getMailProperties());
+        javaMailSender.setJavaMailProperties(getMailProperties());
 
-            return javaMailSender;
-        }
+        return javaMailSender;
+    }
 
     private Properties getMailProperties() {
         Properties properties = new Properties();

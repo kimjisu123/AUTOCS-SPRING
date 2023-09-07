@@ -11,10 +11,13 @@ import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import com.css.autocsfinal.member.repository.PositionRepository;
+import com.css.autocsfinal.mypage.entity.MemberFile;
+import com.css.autocsfinal.mypage.repository.MemberFileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.css.autocsfinal.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,8 +45,15 @@ public class MemberService {
 
     private final EmailService emailService;
 
+    private final MemberFileRepository memberFileRepository;
+
+
+    @Value("${image.image-url2}")
+    private String IMAGE_URL;
+
+
     @Autowired
-    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, EmailService emailService) {
+    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, EmailService emailService, MemberFileRepository memberFileRepository) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
@@ -52,6 +62,7 @@ public class MemberService {
         this.positionRepository = positionRepository;
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository;
         this.emailService = emailService;
+        this.memberFileRepository = memberFileRepository;
     }
 
     @Transactional
@@ -175,29 +186,41 @@ public class MemberService {
         return employeeDTOList;
     }
 
-    //사원조회
-    public List<EmployeeAndDepartmentAndPositionDTO> findEmployeeId() {
-        log.info("[MemberService] 아이디 찾기 Start ===================");
+    //한명의 사원조회
+    public EmployeeAndDepartmentAndPositionDTO findEmployeeId(int memberNo) {
+        log.info("[MemberService] 마이페이지에 띄울 한명의 사원 조회 Start ===================");
 
-        List<EmployeeAndDepartmentAndPosition> employeeList = employeeAndDepartmentAndPositionRepository.findAll();
+        EmployeeAndDepartmentAndPosition employeeList = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
+
+        int fileNo = 0;
+        Integer maxImgNo = memberFileRepository.findMaxMemberFileNo(memberNo);
+        fileNo = maxImgNo;
+        log.info("[TodoService] maxImgNo ===================", maxImgNo);
+        MemberFile memberImg = memberFileRepository.findById(fileNo);
+
         log.info("employeeList : " + employeeList);
 
+
         // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
-        List<EmployeeAndDepartmentAndPositionDTO> employeeDTOList = employeeList.stream()
-                .map(employeeAndDepartmentAndPosition -> {
                     EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
 
-                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeAndDepartmentAndPosition.getEmployeeNo());
-                    employeeAndDepartmentAndPositionDTO.setName(employeeAndDepartmentAndPosition.getName());
-                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeAndDepartmentAndPosition.getEmployeeJoin());
-                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeAndDepartmentAndPosition.getDepartment().getName());
-                    employeeAndDepartmentAndPositionDTO.setPosition(employeeAndDepartmentAndPosition.getPosition().getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeList.getEmployeeNo());
+                    employeeAndDepartmentAndPositionDTO.setName(employeeList.getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeList.getEmployeeJoin());
+                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeList.getDepartment().getName());
+                    employeeAndDepartmentAndPositionDTO.setPosition(employeeList.getPosition().getName());
+                    employeeAndDepartmentAndPositionDTO.setEmployeeEmail(employeeList.getEmployeeEmail());
+                    employeeAndDepartmentAndPositionDTO.setEmployeePhone(employeeList.getEmployeePhone());
+                    employeeAndDepartmentAndPositionDTO.setMemberId(employeeList.getMember().getId());
+                    employeeAndDepartmentAndPositionDTO.setPw(employeeList.getMember().getPwd());
+                    employeeAndDepartmentAndPositionDTO.setMemberNo(employeeList.getMember().getNo());
+                    employeeAndDepartmentAndPositionDTO.setMemberFile(IMAGE_URL+ memberImg.getOriginName());
+
+
 
                     return employeeAndDepartmentAndPositionDTO;
-                })
-                .collect(Collectors.toList());
 
-        return employeeDTOList;
+
     }
 
     // Employee 정보 조회(아이디 찾기)
@@ -247,3 +270,4 @@ public class MemberService {
         return employeeAndDepartmentAndPositionRepository.findByEmployeeNo(employeeNo);
     }
 }
+

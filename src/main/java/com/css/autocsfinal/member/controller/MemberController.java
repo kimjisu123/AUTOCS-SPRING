@@ -6,6 +6,9 @@ import com.css.autocsfinal.market.service.EmailService;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
+import com.css.autocsfinal.member.dto.PositionDTO;
+import com.css.autocsfinal.member.entity.Member;
+import com.css.autocsfinal.member.repository.MemberRepository;
 import com.css.autocsfinal.member.dto.RequestBodyTypeDTO;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
@@ -17,7 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -225,6 +230,22 @@ public class MemberController {
 
 
     }
+
+    // 한명회원 정보 조회
+//    @Operation(summary = "사원 조회 요청", description = "사원을 조회합니다.", tags = {"MemberController"})
+    @GetMapping("/{memberNo}")
+    public ResponseEntity<ResponseDTO> getEmployeeOne(@PathVariable int memberNo) {
+        System.out.println("check ==========================");
+        EmployeeAndDepartmentAndPositionDTO employeeDTOList = memberService.findEmployeeId(memberNo);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사원 조회 성공", employeeDTOList);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+    }
+
+
 
     @GetMapping("/selectEmployee")
     public ResponseEntity<ResponseDTO> findbyAllEmployee(){

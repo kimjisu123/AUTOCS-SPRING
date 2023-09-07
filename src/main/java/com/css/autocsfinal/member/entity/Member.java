@@ -1,8 +1,10 @@
 package com.css.autocsfinal.member.entity;
 
+import com.css.autocsfinal.main.entity.Todo;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 

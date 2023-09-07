@@ -1,12 +1,16 @@
-package com.css.autocsfinal.member.entity;
+package com.css.autocsfinal.mypage.entity;
 
-import com.css.autocsfinal.mypage.entity.MemberFile;
-import lombok.*;
+import com.css.autocsfinal.member.entity.Department;
+import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.entity.Member;
+import com.css.autocsfinal.member.entity.Position;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "TBL_EMPLOYEE")
@@ -14,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EmployeeAndDepartmentAndPosition {
+public class MemberAndEmployeeAndDepartmentAndPositionAndMemberFile {
 
     @Id
     @Column(name = "EMPLOYEE_NO")
@@ -35,12 +39,6 @@ public class EmployeeAndDepartmentAndPosition {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "REASON")
-    private String reason;
-
-    @Column(name = "ANNUAL")
-    private int annual;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REF_MEMBER_NO")
     private Member member;
@@ -53,18 +51,15 @@ public class EmployeeAndDepartmentAndPosition {
     @JoinColumn(name = "REF_POSITION_CODE")
     private Position position;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "REF_M_FILE_NO", referencedColumnName = "REF_MEMBER_NO", insertable = false, updatable = false) // MemberFile과의 연관 관계
+//    private MemberFile memberFile;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "REF_M_FILE_NO") // MemberFile과의 연관 관계
-//    private MemberFile memberFile;
-//
-//    @ElementCollection
-//    @CollectionTable(name = "TBL_MEMBER_FILE", joinColumns = @JoinColumn(name ="REF_MEMBER_NO"))
-//    private List<MemberFile> memberFiles = new ArrayList<>();
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "REF_M_FILE_NO")
-//
+//    @JoinColumn(name = "REF_EMPLOYEE_NO")
+//    private Employee employee;
+
+
 
     @Override
     public String toString() {
@@ -75,9 +70,7 @@ public class EmployeeAndDepartmentAndPosition {
                 ", employeeOut=" + employeeOut +
                 ", employeePhone='" + employeePhone + '\'' +
                 ", name='" + name + '\'' +
-                ", reason='" + reason + '\'' +
-                ", annual=" + annual +
-                ", member=" + member +
+                ", member='" + member + '\'' +
                 ", department=" + department +
                 ", position=" + position +
                 '}';
