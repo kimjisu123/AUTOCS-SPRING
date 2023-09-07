@@ -44,6 +44,9 @@ public class Board {
     @Column(name = "DELETE_DATE")
     private Date delete;
 
+    @Column(name = "ANONYMITY")
+    private char anonymity;
+
     @Column(name = "REF_CATEGORY_NO")
     private int refCategoryNo;
 

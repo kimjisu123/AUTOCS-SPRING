@@ -65,6 +65,7 @@ public class BoardService {
                         boardDTO.setTitle(board.getTitle());
                         boardDTO.setContent(board.getContent());
                         boardDTO.setRefMemberNo(board.getRefMemberNo());
+                        boardDTO.setAnonymity(board.getAnonymity());
 
                         int memberNo = board.getRefMemberNo();
 
@@ -89,7 +90,7 @@ public class BoardService {
 
     //게시물 등록(파일 있을 경우)
     @Transactional
-    public String insertboardFile(BoardDTO boardDTO, List<MultipartFile> fileImages) {
+    public String insertboardFile(BoardDTO boardDTO, MultipartFile[] fileImages) {
         log.info("[BoardService] 게시물 Insert Start ===================");
         log.info("[BoardService] boardDTO {} =======> " + boardDTO);
         log.info("[BoardService] fileImages {} =======> " + fileImages);
@@ -106,7 +107,7 @@ public class BoardService {
                 String imageName = UUID.randomUUID().toString().replace("-", "");
                 String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, fileImage);
 
-                log.info("[ProductService] insert Image Name : {}", replaceFileName);
+                log.info("[BoardService] insert Image Name : {}", replaceFileName);
 
                 BoardFileDTO boardFileDTO = new BoardFileDTO();
 

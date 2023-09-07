@@ -24,6 +24,8 @@ public class BoardDTO {
 
     private Date delete;
 
+    private char anonymity;
+
     private int refCategoryNo;
 
     private int refMemberNo;

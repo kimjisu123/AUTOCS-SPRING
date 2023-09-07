@@ -41,15 +41,15 @@ public class BoardController {
     //게시물 등록
     @Operation(summary = "게시물 등록 요청", description = "게시물을 등록합니다.", tags = {"BoardController"})
     @PostMapping(value = "/writingGo")
-    public ResponseEntity<ResponseDTO> writingGo(@ModelAttribute BoardDTO boardDTO, List<MultipartFile> fileImage) {
+    public ResponseEntity<ResponseDTO> writingGo(@ModelAttribute BoardDTO boardDTO, MultipartFile[] fileImages) {
 
         log.info("[BoardDTO] boardDTO {} =======> " + boardDTO);
-        log.info("[MultipartFile] fileImage {} =======> " + fileImage);
+        log.info("[BoardDTO] fileImages {} =======> " + fileImages);
 
         // 파일이 있는 경우와 없는 경우를 분리
-        if (fileImage != null && !fileImage.isEmpty()) {
+        if (fileImages != null) {
             // 파일이 존재하는 경우, 게시물 등록 및 파일 업로드 처리
-            String resultMessage = boardService.insertboardFile(boardDTO, fileImage);
+            String resultMessage = boardService.insertboardFile(boardDTO, fileImages);
 
             HttpStatus httpStatus = (resultMessage.contains("성공")) ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
 

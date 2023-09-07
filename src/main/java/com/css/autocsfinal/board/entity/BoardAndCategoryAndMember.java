@@ -43,6 +43,9 @@ public class BoardAndCategoryAndMember {
     @Column(name = "DELETE_DATE")
     private Date delete;
 
+    @Column(name = "ANONYMITY")
+    private char anonymity;
+
     @ManyToOne()
     @JoinColumn(name = "REF_CATEGORY_NO")
     private BoardCategory Category;
