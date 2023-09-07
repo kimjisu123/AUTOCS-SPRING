@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,9 @@ public class ApprovalService {
     private final PayRepository payRepository;
     private final ApprovalAndDocumentRepository approvalAndDocumentRepository;
     private final ReceiverAndDocumentRepository receiverAndDocumentRepository;
+    private final BusinessDocRepository businessDocRepository;
+    private final TrafficDocRepository trafficDocRepository;
+    private final PurchaseDocRepository purchaseDocRepository;
 
     /* 결재선 가져오기 */
     public List<AppDeptResult> findDept() {
@@ -313,8 +318,8 @@ public class ApprovalService {
 
         /* 업무보고 테이블 */
         BusinessEntity businessEntity = new BusinessEntity();
-        businessEntity.setBusinessContent(business.getBusiness());
-        businessEntity.setRemarks(business.getBusinessNote());
+        businessEntity.setBusinessContent(business.getBusinessContent());
+        businessEntity.setBusinessNote(business.getBusinessNote());
         businessEntity.setDocumentCode(documentCode);
 
         businessRepository.save(businessEntity);
@@ -379,7 +384,7 @@ public class ApprovalService {
 
     /* 휴가 신청 */
     @Transactional
-    public void registVacation(VacationListDTO vacation, List<MultipartFile> files) {
+    public void registVacation(VacationListDTO vacation, List<MultipartFile> files) throws ParseException {
 
         Date date = new Date();
 
@@ -393,15 +398,12 @@ public class ApprovalService {
         documentRepository.save(documentEntity);
 
         int documentCode = documentEntity.getDocumentCode();
-
+        log.info("vacation ================ {}", vacation);
         /* 휴가 신청 테이블 */
         VacationEntity vacationEntity = new VacationEntity();
 
-        Date startDate = new Date(vacation.getStartDate());
-        Date endDate = new Date(vacation.getEndDate());
-
-        vacationEntity.setStartDate(startDate);
-        vacationEntity.setEndDate(endDate);
+        vacationEntity.setStartDate(new SimpleDateFormat("yyyy-MM-dd").parse(vacation.getStartDate()));
+        vacationEntity.setEndDate(new SimpleDateFormat("yyyy-MM-dd").parse(vacation.getEndDate()));
         vacationEntity.setVacationReason(vacation.getVacationReason());
         vacationEntity.setVacationType(vacation.getVacationType());
         vacationEntity.setHalfDayOff(vacation.getHalf());
@@ -751,6 +753,7 @@ public class ApprovalService {
         return receive.size();
     }
 
+    /* 참조/열람 문서함 */
     public Object mySeePaging(Criteria cri, int employeeNo) {
 
         int index = cri.getPageNum() - 1;
@@ -766,5 +769,122 @@ public class ApprovalService {
                         .map(receiver, ReceiverAndDocumentDTO.class)).collect(Collectors.toList());
 
         return receiverList;
+    }
+
+    /* 업무보고 문서 불러오기 */
+    public BusinessDocDTO getBusinessDoc(int documentCode) {
+
+        BusinessDocEntity businessDoc = businessDocRepository.findByDocumentCode(documentCode);
+
+        BusinessEntity result = businessRepository.findByDocumentCode(documentCode);
+
+        List<DocumentFileEntity> fileEntity = documentFileRepository.findByDocumentCode(documentCode);
+
+        BusinessDocDTO business = modelMapper.map(businessDoc, BusinessDocDTO.class);
+
+        BusinessDTO resultDTO = modelMapper.map(result, BusinessDTO.class);
+
+        List<DocumentFileDTO> files = fileEntity.stream()
+                        .map(file -> modelMapper
+                                .map(file, DocumentFileDTO.class)).collect(Collectors.toList());
+
+        business.setBusiness(resultDTO);
+        business.setFiles(files);
+
+        return business;
+    }
+
+    /* 여비정산 문서 불러오기*/
+    public TrafficDocDTO getTrafficDoc(int documentCode) {
+
+        BusinessDocEntity trafficDocEntity = businessDocRepository.findByDocumentCode(documentCode);
+
+        List<TrafficEntity> trafficEntity = trafficRepository.findByDocumentCode(documentCode);
+
+        List<DocumentFileEntity> fileEntity = documentFileRepository.findByDocumentCode(documentCode);
+
+        TrafficDocDTO traffic = modelMapper.map(trafficDocEntity, TrafficDocDTO.class);
+
+        List<TrafficDocListDTO> trafficDTO = trafficEntity.stream().map(trafficData -> modelMapper.map(trafficData, TrafficDocListDTO.class)).collect(Collectors.toList());
+
+        List<DocumentFileDTO> files = fileEntity.stream()
+                .map(file -> modelMapper
+                        .map(file, DocumentFileDTO.class)).collect(Collectors.toList());
+
+        traffic.setTraffic(trafficDTO);
+        traffic.setFiles(files);
+
+        return traffic;
+    }
+
+    /* 구매요청 문서 불러오기 */
+    public PurchaseDocDTO getPurchaseDoc(int documentCode) {
+
+        BusinessDocEntity purchaseDocEntity = businessDocRepository.findByDocumentCode(documentCode);
+
+        List<PurchaseEntity> purchaseEntity = purchaseRepository.findByDocumentCode(documentCode);
+
+        List<DocumentFileEntity> fileEntity = documentFileRepository.findByDocumentCode(documentCode);
+
+        PurchaseDocDTO purchase = modelMapper.map(purchaseDocEntity, PurchaseDocDTO.class);
+
+        List<PurchaseDTO> purchaseDTO = purchaseEntity.stream()
+                .map(pur -> modelMapper
+                        .map(pur, PurchaseDTO.class)).collect(Collectors.toList());
+
+        List<DocumentFileDTO> files = fileEntity.stream()
+                .map(file -> modelMapper
+                        .map(file, DocumentFileDTO.class)).collect(Collectors.toList());
+
+        purchase.setPurchase(purchaseDTO);
+        purchase.setFiles(files);
+
+        return purchase;
+    }
+
+    /* 휴가신청 문서 불러오기 */
+    public VacationDocDTO getVacationDoc(int documentCode) {
+
+        BusinessDocEntity vacationEntity = businessDocRepository.findByDocumentCode(documentCode);
+
+        VacationEntity vacation = vacationRepository.findByDocumentCode(documentCode);
+
+        List<DocumentFileEntity> fileEntity = documentFileRepository.findByDocumentCode(documentCode);
+
+        VacationDocDTO vacationDoc = modelMapper.map(vacationEntity, VacationDocDTO.class);
+
+        VacationListDTO vacationDTO = modelMapper.map(vacation, VacationListDTO.class);
+
+        List<DocumentFileDTO> files = fileEntity.stream()
+                .map(file -> modelMapper
+                        .map(file, DocumentFileDTO.class)).collect(Collectors.toList());
+
+        vacationDoc.setVacation(vacationDTO);
+        vacationDoc.setFiles(files);
+
+        return vacationDoc;
+    }
+
+    /* 비용청구 문서 불러오기 */
+    public PayDocDTO getPayDoc(int documentCode) {
+
+        BusinessDocEntity payDocEntity = businessDocRepository.findByDocumentCode(documentCode);
+
+        List<PayEntity> pay = payRepository.findByDocumentCode(documentCode);
+
+        List<DocumentFileEntity> fileEntity = documentFileRepository.findByDocumentCode(documentCode);
+
+        PayDocDTO payDoc = modelMapper.map(payDocEntity, PayDocDTO.class);
+
+        List<PayDTO> payDTO = pay.stream().map(payData -> modelMapper.map(payData, PayDTO.class)).collect(Collectors.toList());
+
+        List<DocumentFileDTO> files = fileEntity.stream()
+                .map(file -> modelMapper
+                        .map(file, DocumentFileDTO.class)).collect(Collectors.toList());
+
+        payDoc.setPay(payDTO);
+        payDoc.setFiles(files);
+
+        return payDoc;
     }
 }

@@ -14,3 +14,9 @@ GET http://localhost:8080/approval/seeWait/40
 
 ### 참조 대기 문서함 조회
 GET http://localhost:8080/approval/mySee/40
+
+### 업무보고 문서 조회
+GET http://localhost:8080/approval/document/business/81
+
+### 비용청구 문서 조회
+GET http://localhost:8080/approval/document/pay/121

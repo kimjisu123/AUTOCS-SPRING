@@ -29,7 +29,7 @@ public class BusinessEntity {
     private String businessContent;
 
     @Column(name = "REMARKS")
-    private String remarks;
+    private String businessNote;
 
     @Column(name = "DOCUMENT_CODE")
     private int documentCode;

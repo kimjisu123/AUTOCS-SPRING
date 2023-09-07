@@ -17,7 +17,7 @@ public class BusinessDTO {
     private String businessNote;
     private int empNo;
     private String empName;
-    private String business;
+    private String businessContent;
     private List<Integer> allow;
     private List<Integer> receive;
 }

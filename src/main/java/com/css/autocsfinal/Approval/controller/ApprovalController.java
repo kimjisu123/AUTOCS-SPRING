@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -91,10 +92,10 @@ public class ApprovalController {
     }
 
     /* 휴가 테이블 insert */
-    @GetMapping("/vacation")
-    public ResponseEntity<?> vacation(@ModelAttribute VacationListDTO vacation, List<MultipartFile> files) {
+    @PostMapping("/vacation")
+    public ResponseEntity<?> vacation(@ModelAttribute VacationListDTO vacation, List<MultipartFile> files) throws ParseException {
 
-        log.info("[ApprovalController] vacation");
+        log.info("[ApprovalController] vacation : {}", vacation);
 
         approvalService.registVacation(vacation, files);
 
@@ -213,5 +214,52 @@ public class ApprovalController {
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
+    }
+
+    /* 업무보고 문서 정보 */
+    @GetMapping("/document/business/{documentCode}")
+    public ResponseEntity<?> businessDoc(@PathVariable int documentCode) {
+
+        log.info("=========================================== {}", documentCode);
+
+        BusinessDocDTO businessDoc = approvalService.getBusinessDoc(documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", businessDoc));
+    }
+
+    /* 여비정산 문서 정보 */
+    @GetMapping("/document/traffic/{documentCode}")
+    public ResponseEntity<?> trafficDoc(@PathVariable int documentCode) {
+
+        TrafficDocDTO trafficDoc = approvalService.getTrafficDoc(documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", trafficDoc));
+    }
+
+    /* 구매요청 문서 정보 */
+    @GetMapping("/document/purchase/{documentCode}")
+    public ResponseEntity<?> purchaseDoc(@PathVariable int documentCode) {
+
+        PurchaseDocDTO purchaseDoc = approvalService.getPurchaseDoc(documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", purchaseDoc));
+    }
+
+    /* 휴가신청 문서 정보 */
+    @GetMapping("/document/vacation/{documentCode}")
+    public ResponseEntity<?> vacationDoc(@PathVariable int documentCode) {
+
+        VacationDocDTO vacationDoc = approvalService.getVacationDoc(documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", vacationDoc));
+    }
+
+    /* 비용청구 문서 정보 */
+    @GetMapping("/document/pay/{documentCode}")
+    public ResponseEntity<?> payDoc(@PathVariable int documentCode) {
+
+        PayDocDTO payDoc = approvalService.getPayDoc(documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", payDoc));
     }
 }
