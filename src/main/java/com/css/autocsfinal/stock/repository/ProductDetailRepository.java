@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProductDetailRepository extends JpaRepository<ProductDetail, Integer> {
     Page<ProductDetail> findAll(Pageable paging);
-    List<ProductDetail> findByNameContaining(String y);
+    List<ProductDetail> findByNameContainingAndStatus(String name, String useYn);
     Page<ProductDetail> findByNameContaining(String y, Pageable paging);
     Page<ProductDetail> findByNameContainingAndStatus(String name, String useYn, Pageable pageable);
 }

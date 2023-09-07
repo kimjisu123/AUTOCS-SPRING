@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Tuple;
 import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,6 +87,14 @@ public class OrderService {
         return orderProdoctList.size();
     }
 
+    /* 주문물품 조회 - 상태,이름,날짜조회 (페이지사이즈) */
+    public int orderListSize(String status,String search, Date startDate, Date endDate) {
+
+        List<Tuple> orderList = orderProductRepository.orderListSize(status, search, startDate, endDate);
+
+        return orderList.size();
+    }
+
 
     /* 주문물품 조회 페이징*/
     public List<OrderProductDetail> selectOrderProductListWithPaging(Criteria cri) {
@@ -100,6 +109,21 @@ public class OrderService {
                 .map(orderProduct -> modelMapper
                         .map(orderProduct, OrderProductDetail.class)).collect(Collectors.toList());
         return orderProdoctList;
+    }
+
+    /* 주문물품 조회 - 상태, 이름, 날짜 검색, 페이징 */
+    public List<Tuple> orderList(Criteria cri, String status, String search, Date startDate, Date endDate) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        Page<Tuple> result =orderProductRepository.orderList(status, search, startDate, endDate, paging);
+
+        List<Tuple> orderList = result.stream()
+                .map(tuple -> modelMapper
+                        .map(tuple, Tuple.class)).collect(Collectors.toList());
+        return orderList;
     }
 
 
