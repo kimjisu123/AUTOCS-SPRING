@@ -26,6 +26,16 @@ public class StoreInfoDTO {
 
     private int refMemberNo;
 
+    private String storeFile;
+
+    private String pwd;
+
+    private String id;
+
+    private String role;
+
+
+
     //나중에 에러 날 수 있음
     private MemberDTO member;
 }

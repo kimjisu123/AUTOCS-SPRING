@@ -1,6 +1,9 @@
 package com.css.autocsfinal.member.service;
 
 import com.css.autocsfinal.jwt.TokenProvider;
+import com.css.autocsfinal.market.dto.StoreInfoDTO;
+import com.css.autocsfinal.market.entity.StoreInfo;
+import com.css.autocsfinal.market.repository.StoreInfoRepository;
 import com.css.autocsfinal.market.service.EmailService;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
@@ -24,11 +27,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
 public class MemberService {
+//    private static final String DEFAULT_IMAGE_URL
     private final ModelMapper modelMapper;
 
     private final PasswordEncoder passwordEncoder;
@@ -47,13 +53,15 @@ public class MemberService {
 
     private final MemberFileRepository memberFileRepository;
 
+    private final StoreInfoRepository storeInfoRepository;
+
 
     @Value("${image.image-url2}")
     private String IMAGE_URL;
 
 
     @Autowired
-    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, EmailService emailService, MemberFileRepository memberFileRepository) {
+    public MemberService(ModelMapper modelMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider, EmployeeRepository employeeRepository, MemberRepository memberRepository, PositionRepository positionRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, EmailService emailService, MemberFileRepository memberFileRepository, StoreInfoRepository storeInfoRepository) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
@@ -63,6 +71,7 @@ public class MemberService {
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository;
         this.emailService = emailService;
         this.memberFileRepository = memberFileRepository;
+        this.storeInfoRepository = storeInfoRepository;
     }
 
     @Transactional
@@ -191,37 +200,40 @@ public class MemberService {
         log.info("[MemberService] 마이페이지에 띄울 한명의 사원 조회 Start ===================");
 
         EmployeeAndDepartmentAndPosition employeeList = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
+        // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
+        EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
 
         int fileNo = 0;
         Integer maxImgNo = memberFileRepository.findMaxMemberFileNo(memberNo);
-        fileNo = maxImgNo;
-        log.info("[TodoService] maxImgNo ===================", maxImgNo);
-        MemberFile memberImg = memberFileRepository.findById(fileNo);
+        log.info("[MemberService] maxImgNo ===================", maxImgNo);
+
+        if(maxImgNo != null ) {
+            fileNo = maxImgNo;
+            MemberFile memberImg = memberFileRepository.findById(fileNo);
+            String img = IMAGE_URL + memberImg.getOriginName();
+            employeeAndDepartmentAndPositionDTO.setMemberFile(img);
+            log.info("[MemberService] 이미지 가지고 오기성공");
+        } else {
+            employeeAndDepartmentAndPositionDTO.setMemberFile(null);
+        }
 
         log.info("employeeList : " + employeeList);
+        employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeList.getEmployeeNo());
+        employeeAndDepartmentAndPositionDTO.setName(employeeList.getName());
+        employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeList.getEmployeeJoin());
+        employeeAndDepartmentAndPositionDTO.setDepartment(employeeList.getDepartment().getName());
+        employeeAndDepartmentAndPositionDTO.setPosition(employeeList.getPosition().getName());
+        employeeAndDepartmentAndPositionDTO.setEmployeeEmail(employeeList.getEmployeeEmail());
+        employeeAndDepartmentAndPositionDTO.setEmployeePhone(employeeList.getEmployeePhone());
+        employeeAndDepartmentAndPositionDTO.setMemberId(employeeList.getMember().getId());
+        employeeAndDepartmentAndPositionDTO.setPw(employeeList.getMember().getPwd());
+        employeeAndDepartmentAndPositionDTO.setMemberNo(employeeList.getMember().getNo());
 
-
-        // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
-                    EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
-
-                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeList.getEmployeeNo());
-                    employeeAndDepartmentAndPositionDTO.setName(employeeList.getName());
-                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeList.getEmployeeJoin());
-                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeList.getDepartment().getName());
-                    employeeAndDepartmentAndPositionDTO.setPosition(employeeList.getPosition().getName());
-                    employeeAndDepartmentAndPositionDTO.setEmployeeEmail(employeeList.getEmployeeEmail());
-                    employeeAndDepartmentAndPositionDTO.setEmployeePhone(employeeList.getEmployeePhone());
-                    employeeAndDepartmentAndPositionDTO.setMemberId(employeeList.getMember().getId());
-                    employeeAndDepartmentAndPositionDTO.setPw(employeeList.getMember().getPwd());
-                    employeeAndDepartmentAndPositionDTO.setMemberNo(employeeList.getMember().getNo());
-                    employeeAndDepartmentAndPositionDTO.setMemberFile(IMAGE_URL+ memberImg.getOriginName());
-
-
-
-                    return employeeAndDepartmentAndPositionDTO;
+        return employeeAndDepartmentAndPositionDTO;
 
 
     }
+
 
     // Employee 정보 조회(아이디 찾기)
     public EmployeeAndDepartmentAndPositionDTO findEmployeeByNameAndEmail(String name, String employeeEmail) {
@@ -269,5 +281,38 @@ public class MemberService {
     public EmployeeAndDepartmentAndPosition findEmployeeByNo(int employeeNo) {
         return employeeAndDepartmentAndPositionRepository.findByEmployeeNo(employeeNo);
     }
+
+    // 멤버 번호로 매장 정보 불러오기
+    public StoreInfoDTO findStoreId(int memberNo) {
+        System.out.println("[ MemberService ] storeInfo memberFile ====================== start ");
+        StoreInfo storeInfo = storeInfoRepository.findByMemberNo(memberNo);
+        Integer no = memberFileRepository.findMaxMemberFileNo(memberNo);
+        int fileNo = 0;
+        fileNo = no;
+        MemberFile memberFile = memberFileRepository.findById(fileNo);
+        StoreInfoDTO storeInfoDTO = new StoreInfoDTO();
+
+        storeInfoDTO.setStoreFile(memberFile.getOriginName());
+        storeInfoDTO.setStoreNo(storeInfo.getStoreNo());
+        storeInfoDTO.setName(storeInfo.getName());
+        storeInfoDTO.setEmail(storeInfo.getEmail());
+        storeInfoDTO.setAddress(storeInfo.getAddress());
+        storeInfoDTO.setPhone(storeInfo.getPhone());
+        storeInfoDTO.setId(storeInfo.getMember().getId());
+        storeInfoDTO.setPwd(storeInfo.getMember().getPwd());
+        storeInfoDTO.setRole(storeInfo.getMember().getRole());
+        storeInfoDTO.setDetailAddress(storeInfo.getDetailAddress());
+        storeInfoDTO.setRefMemberNo(storeInfo.getMember().getNo());
+        storeInfoDTO.setLicense(storeInfo.getLicense());
+
+        System.out.println("memberFile = " + storeInfoDTO.getStoreFile());
+        System.out.println("storeInfoDTO = " + storeInfoDTO);
+        System.out.println("storeInfo = " + storeInfo);
+
+        System.out.println("[ MemberService ] storeInfo memberFile ====================== end ");
+
+        return storeInfoDTO;
+    }
+
 }
 

@@ -50,6 +50,9 @@ public class MypageController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원 정보 수정", mypageService.updateMemberInfo(employeeAndDepartmentAndPositionDTO, fileImage)));
     }
 
+
+
+
     // 비밀번호 재확인
     @PostMapping("/checkpwd")
     public ResponseEntity<ResponseDTO> checkPwd(@RequestParam("memberNo") int memberNo, @RequestParam("checkpw") String checkPw){
@@ -60,11 +63,10 @@ public class MypageController {
 
     // 비밀 번호 변경하기
     @PutMapping("/changepwd")
-    public ResponseEntity<ResponseDTO> changePwd(@RequestParam("memberNo") int memberNo, @RequestParam("newpw") String newPw){
-        log.info("[ MypageController ]  changePwd newPw {}", newPw);
-        log.info("[ MypageController ]  changePwd memberNo {}", memberNo);
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "비밀번호 확인", mypageService.changePwd(memberNo,newPw)));
+    public ResponseEntity<ResponseDTO> changePwd(@RequestBody MemberDTO member){
+        log.info("[ MypageController ]  changePwd newPw {}", member.getNo());
+        log.info("[ MypageController ]  changePwd memberNo {}", member.getPwd());
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "비밀번호 확인", mypageService.changePwd(member.getNo(),member.getPwd())));
     }
 
 

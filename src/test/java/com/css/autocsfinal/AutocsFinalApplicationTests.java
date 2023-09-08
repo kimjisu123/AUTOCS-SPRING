@@ -1,8 +1,13 @@
 package com.css.autocsfinal;
 
+import com.css.autocsfinal.main.dto.TodoDTO;
 import com.css.autocsfinal.main.repository.TodoRepository;
 import com.css.autocsfinal.main.service.TodoService;
+import com.css.autocsfinal.market.dto.StoreInfoDTO;
+import com.css.autocsfinal.market.entity.StoreInfo;
+import com.css.autocsfinal.market.repository.StoreInfoRepository;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
+import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
@@ -24,8 +29,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -221,7 +228,7 @@ class AutocsFinalApplicationTests {
     @Test
     void insertIMG () {
 
-        int memberNo = 240;
+        int memberNo = 220;
 //        String imgurl = "3695ab85677d4adf80691f6c31474c1a.jpg";
         MemberFile memberfile = new MemberFile();
         Member member = memberRepository.findByNo(memberNo);
@@ -245,6 +252,42 @@ class AutocsFinalApplicationTests {
         System.out.println("EmployeeAndDepartmentAndPosition = " + num);
 
     }
+
+    @Autowired
+    private StoreInfoRepository storeInfoRepository;
+
+    @Test
+    void getStoreInfo() {
+
+
+        int memberNo = 220;
+
+        StoreInfo storeInfo = storeInfoRepository.findByMemberNo(memberNo);
+        Integer fileNo = memberFileRepository.findMaxMemberFileNo(memberNo);
+        Optional<MemberFile> memberFile = memberFileRepository.findById(fileNo);
+        StoreInfoDTO storeInfoDTO = new StoreInfoDTO();
+        storeInfoDTO.setStoreFile(memberFile.get().getOriginName());
+        storeInfoDTO.setStoreNo(storeInfo.getStoreNo());
+        storeInfoDTO.setName(storeInfo.getName());
+        storeInfoDTO.setEmail(storeInfo.getEmail());
+        storeInfoDTO.setAddress(storeInfo.getAddress());
+        storeInfoDTO.setPhone(storeInfo.getPhone());
+        storeInfoDTO.setId(storeInfo.getMember().getId());
+        storeInfoDTO.setPwd(storeInfo.getMember().getPwd());
+        storeInfoDTO.setRole(storeInfo.getMember().getRole());
+        storeInfoDTO.setDetailAddress(storeInfo.getDetailAddress());
+        storeInfoDTO.setRefMemberNo(storeInfo.getMember().getNo());
+        storeInfoDTO.setLicense(storeInfo.getLicense());
+
+        System.out.println("memberFile = " + storeInfoDTO.getStoreFile());
+        System.out.println("storeInfoDTO = " + storeInfoDTO);
+
+        System.out.println("storeInfo = " + storeInfo);
+
+    }
+
+
+
 }
 
 

@@ -7,7 +7,7 @@ Accept: */*
 
 
 ### 회원정보 변경을 위한 불러오기
-GET http://localhost:8080/member/41
+GET http://localhost:8080/member/1
 Content-Type: application/json
 Accept: */*
 
@@ -71,5 +71,10 @@ Accept: */*
 
 ### 회원의 사진파일 가져오기
 GET http://localhost:8080/mypage/img/240
+Content-Type: application/json
+Accept: */*
+
+### 매장 정보 가져오기
+GET http://localhost:8080/member/store/220
 Content-Type: application/json
 Accept: */*
