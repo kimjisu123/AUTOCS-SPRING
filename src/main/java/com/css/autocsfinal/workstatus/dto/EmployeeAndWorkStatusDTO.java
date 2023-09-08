@@ -2,10 +2,10 @@ package com.css.autocsfinal.workstatus.dto;
 
 import com.css.autocsfinal.member.entity.Department;
 import com.css.autocsfinal.member.entity.Position;
+import com.css.autocsfinal.workstatus.entity.WorkStatusList;
 import com.css.autocsfinal.workstatus.entity.WorkStatusList2;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +39,14 @@ public class EmployeeAndWorkStatusDTO {
 
     private List<WorkStatusList2> workStatusLists;
 
-    public void setDate(Date date) {
-    }
+    private String totalWeekDate;
+
+    private String defaultDate;
+
+    private String overDate;
+
+    private Long defaultTime;
+
+    private Long overTime;
+
 }

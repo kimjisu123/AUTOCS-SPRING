@@ -1,6 +1,6 @@
 package com.css.autocsfinal.workstatus.controller;
 
-import com.css.autocsfinal.common.ResponseDTO;
+import com.css.autocsfinal.common.*;
 import com.css.autocsfinal.workstatus.dto.WorkStatusDTO;
 import com.css.autocsfinal.workstatus.repository.WorkStatusListRepository;
 import com.css.autocsfinal.workstatus.service.WorkStatusService;
@@ -109,9 +109,17 @@ public class WorkStatusController {
     // 본사 근태 현황
 
     @GetMapping("/headOffice")
-    public ResponseEntity<ResponseDTO> findByHeadOffice(){
+    public ResponseEntity<ResponseDTO> findByHeadOffice( @RequestParam(name = "offset", defaultValue = "1") String offset){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "본사 근태관리 조회 성공", workStatusService.findByHeadOffice()));
+        int total = workStatusService.findByHeadOfficeTotal();
+
+        Criteria cri = new Criteria(Integer.valueOf(offset), 7);
+
+        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+        pagingResponseDTO.setData(workStatusService.findByHeadOffice(cri));
+        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "본사 근태관리 조회 성공", pagingResponseDTO));
     }
 }
 

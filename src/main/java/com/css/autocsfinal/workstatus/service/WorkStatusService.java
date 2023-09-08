@@ -1,21 +1,21 @@
 package com.css.autocsfinal.workstatus.service;
 
-import com.css.autocsfinal.member.entity.Member;
-import com.css.autocsfinal.member.repository.EmployeeRepository;
-import com.css.autocsfinal.member.repository.MemberRepository;
+import com.css.autocsfinal.common.Criteria;
+import com.css.autocsfinal.stock.entity.Category;
 import com.css.autocsfinal.workstatus.dto.EmployeeAndWorkStatusDTO;
-import com.css.autocsfinal.workstatus.dto.EmployeeByWorkStatusDTO;
 import com.css.autocsfinal.workstatus.dto.WorkStatusResult;
 import com.css.autocsfinal.workstatus.entity.*;
 import com.css.autocsfinal.workstatus.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -170,16 +170,30 @@ public class WorkStatusService {
 
 
     // 본사 근태관리 조회
-    public Object findByHeadOffice() {
+    public Object findByHeadOffice(Criteria cri) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        Page<EmployeeAndWorkStatus> result = employeeAndWorkStatusRepository.findByOrderByName(paging);
+
+        // 값을 전송하기 위해 DTO로 변경
+//        List<EmployeeAndWorkStatusDTO> resultArray =  result.stream().map(employeeAndWorkStatus -> modelMapper.map(employeeAndWorkStatus, EmployeeAndWorkStatusDTO.class)).collect(Collectors.toList());
+
+        // HashSet을 사용하여 중복 제거
+//        HashSet<EmployeeAndWorkStatusDTO> dateSet = new HashSet<>(resultArray);
+//        List<EmployeeAndWorkStatusDTO> dataFromDatabase = new ArrayList<>(dateSet);
+
+
+        return result;
+    }
+
+
+    public int findByHeadOfficeTotal() {
 
         List<EmployeeAndWorkStatus> data = employeeAndWorkStatusRepository.findByOrderByName();
 
-        // HashSet을 사용하여 중복 제거
-        HashSet<EmployeeAndWorkStatus> dateSet = new HashSet<>(data);
-        List<EmployeeAndWorkStatus> dataFromDatabase = new ArrayList<>(dateSet);
-
-        List<EmployeeAndWorkStatusDTO> employeeByWorkStatusDTOList = dataFromDatabase.stream().map(employeeByWorkStatus->modelMapper.map(employeeByWorkStatus, EmployeeAndWorkStatusDTO.class)).collect(Collectors.toList());
-
-        return employeeByWorkStatusDTOList;
+        return data.size();
     }
 }

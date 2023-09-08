@@ -30,6 +30,8 @@ public class WorkStatusDTO {
 
     private Date workingDate;
 
-    public WorkStatusDTO(HttpStatus httpStatus, String 조회_성공, Object o) {
-    }
+
+    private Long defaultTime;
+
+    private Long overTime;
 }
