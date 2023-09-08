@@ -4,6 +4,7 @@ import com.css.autocsfinal.member.dto.MemberDTO;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,9 +25,13 @@ public class BoardDTO {
 
     private Date delete;
 
+    private char anonymity;
+
     private int refCategoryNo;
 
     private int refMemberNo;
+
+    private List<String> fileUrls;
 
     //게시판에서 직원 직급과 부서와 이름 담을거
     private String employeeName;

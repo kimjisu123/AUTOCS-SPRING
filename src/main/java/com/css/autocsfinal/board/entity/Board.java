@@ -12,7 +12,7 @@ import java.sql.Date;
 @SequenceGenerator(
         name = "BOARD_SEQ_GENERATOR",
         sequenceName = "SEQ_BOARD_NO",
-        initialValue = 1, allocationSize = 1
+        initialValue = 50, allocationSize = 1
 )
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,6 +43,9 @@ public class Board {
 
     @Column(name = "DELETE_DATE")
     private Date delete;
+
+    @Column(name = "ANONYMITY")
+    private char anonymity;
 
     @Column(name = "REF_CATEGORY_NO")
     private int refCategoryNo;
