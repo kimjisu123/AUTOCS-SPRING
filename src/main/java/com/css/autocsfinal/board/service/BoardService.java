@@ -190,5 +190,21 @@ public class BoardService {
 
         return boardDTO;
     }
+
+    //게시물 삭제
+    @Transactional
+    public String deleteBoard(int boardNo) {
+        log.info("[BoardService] 게시물 Delete Start ===================");
+        try {
+            Board board = boardRepository.deleteByBoardNo(boardNo);
+            int refBoardNo = boardNo;
+            BoardFile boardFile = boardFileRepository.deleteByRefBoardNo(refBoardNo);
+            log.info("[BoardService] 게시물 Delete End ===================");
+            return (board == null && boardFile == null) ? "게시물 삭제 성공" : "게시물 삭제 실패";
+        } catch (Exception e) {
+            log.error("Error while deleting board: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 }
 

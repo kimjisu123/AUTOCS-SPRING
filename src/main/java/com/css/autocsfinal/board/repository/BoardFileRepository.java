@@ -10,4 +10,7 @@ public interface BoardFileRepository extends JpaRepository<BoardFile, Integer> {
 
 
     List<BoardFile> findByRefBoardNo(int refBoardNo);
+
+    //게시판 번호로 파일 삭제
+    BoardFile deleteByRefBoardNo(int refBoardNo);
 }
