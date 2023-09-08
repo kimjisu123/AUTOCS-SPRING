@@ -175,6 +175,7 @@ public class BoardService {
         boardDTO.setEmployeeName(employee.getName());
         boardDTO.setDepartment(employee.getDepartment().getName());
         boardDTO.setPosition(employee.getPosition().getName());
+        boardDTO.setRefMemberNo(memberNo);
 
         // 파일 조회
         int refBoardNo = boardNo;
