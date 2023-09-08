@@ -1,9 +1,6 @@
 package com.css.autocsfinal.market.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -20,6 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ApplyFile {
 
     @Id

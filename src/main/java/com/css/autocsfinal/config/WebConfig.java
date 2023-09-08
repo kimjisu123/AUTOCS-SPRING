@@ -14,6 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${image.add-resource-handler}")
     private String ADD_RESOURCE_HANDLER;
 
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         registry.addResourceHandler(ADD_RESOURCE_HANDLER)

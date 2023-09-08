@@ -1,6 +1,7 @@
 package com.css.autocsfinal.jwt;
 
 import com.css.autocsfinal.exception.TokenException;
+import com.css.autocsfinal.market.entity.StoreInfo;
 import com.css.autocsfinal.member.dto.TokenDTO;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
@@ -30,7 +31,7 @@ public class TokenProvider {
 
     private static final String BEARER_TYPE = "Bearer";  // Bearer 토큰 사용시 앞에 붙이는 prefix문자열
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분(ms단위)
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 8 * 60 * 60; // 8시간으로 설정
 
     private final Key key;   // java.security.Key로 imort
 
@@ -57,13 +58,14 @@ public class TokenProvider {
         /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
         claims.put(AUTHORITIES_KEY, role);
 
+        log.info("state ====> {} ", member.getState());
+
         claims.put("EmployeeNo", employee.getEmployeeNo());
         claims.put("MemberNo", member.getNo());
         claims.put("Name", employee.getName());
         claims.put("JoinDate", employee.getEmployeeJoin());
         claims.put("Email", employee.getEmployeeEmail());
-        claims.put("Phone", employee.getEmployeePhone());
-        //claims.put("Manager", employee.getEmployeeManager());
+        claims.put("state", member.getState());
         claims.put("Department", employee.getDepartment().getName());
         claims.put("Position", employee.getPosition().getName());
 
@@ -142,5 +144,43 @@ public class TokenProvider {
         }catch (ExpiredJwtException e){
             return e.getClaims(); // 토큰이 만료되어 예외가 발생하더라도 클레임 값들을 뽑을 수 있다.
         }
+    }
+
+
+
+
+    /* 1. 토큰(xxxxx.yyyyy.zzzzz) 생성 메소드 */
+    public TokenDTO generateTokenDTO2(Member member, StoreInfo store){
+        log.info("[TokenProvider] generateTokenDTO2 Start =============================== ");
+
+        String role = member.getRole();
+
+        log.info("[TokenProvider] 권한 정보 : {}", role);
+
+        /* 1. 회원 아이디를 "sub"이라는 클레임으로 토큰으로 추가 */
+        Claims claims = Jwts.claims().setSubject(member.getId());
+
+        /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
+        claims.put(AUTHORITIES_KEY, role);
+
+        claims.put("StoreNo", store.getStoreNo());
+        claims.put("Name", store.getName());
+        claims.put("MemberNo", member.getNo());
+        claims.put("state", member.getState());
+        claims.put("address", store.getAddress());
+        claims.put("detailAddress", store.getDetailAddress());
+
+        long now = System.currentTimeMillis();   // 현재시간을 밀리세컨드단위로 가져옴
+
+        Date accessTokenExpriesIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME); // java.util.Date로 import
+        String accessToken = Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(accessTokenExpriesIn) // 토큰의 만료기간을 DATE형으로 토큰에 추가(exp라는 클레임으로 long형으로 토큰에 추가)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+        log.info("[TokenProvider] generateTokenDTO End =============================== ");
+
+        return new TokenDTO(BEARER_TYPE, member.getId()
+                , accessToken, accessTokenExpriesIn.getTime());
     }
 }

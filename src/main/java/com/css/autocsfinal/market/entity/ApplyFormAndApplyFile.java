@@ -1,9 +1,6 @@
 package com.css.autocsfinal.market.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ApplyFormAndApplyFile {
 
     @Id
@@ -31,6 +29,9 @@ public class ApplyFormAndApplyFile {
 
     @Column(name = "ADDRESS")
     private String address;
+
+    @Column(name = "DETAIL_ADDRESS")
+    private String detailAddress;
 
     @Column(name = "NAME")
     private String name;
