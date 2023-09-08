@@ -262,4 +262,34 @@ public class ApprovalController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", payDoc));
     }
+
+    /* 승인정보 불러오기 */
+    @GetMapping("/document/appYN/{documentCode}")
+    public ResponseEntity<?> appYN(@PathVariable int documentCode) {
+
+        boolean yn = approvalService.getAppYN(documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", yn));
+    }
+
+    /* 문서 삭제 */
+    @DeleteMapping("/delete/{documentCode}")
+    public ResponseEntity<?> deleteDocument(@PathVariable int documentCode) {
+
+        approvalService.deleteDocument(documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "삭제 성공", null));
+    }
+
+    /* 승인 */
+    @PutMapping("/{documentCode}/{employeeNo}")
+    public ResponseEntity<?> putApproval(@PathVariable int documentCode, @PathVariable int employeeNo) {
+
+        log.info("controller =================================================");
+
+        approvalService.putApproval(documentCode, employeeNo);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "승인 성공", null));
+    }
+
 }

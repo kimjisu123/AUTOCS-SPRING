@@ -4,6 +4,7 @@ import com.css.autocsfinal.Approval.dto.*;
 import com.css.autocsfinal.Approval.entity.*;
 import com.css.autocsfinal.Approval.repository.*;
 import com.css.autocsfinal.common.Criteria;
+import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -886,5 +889,80 @@ public class ApprovalService {
         payDoc.setFiles(files);
 
         return payDoc;
+    }
+
+    /* 수정 가능한지 안한지 */
+    public boolean getAppYN(int documentCode) {
+
+        boolean yn = false;
+        int count = 0;
+
+        List<ApprovalEntity> appList = approverRepository.findByDocumentCode(documentCode);
+        List<ReceiverEntity> receiverList = receiveRepository.findByDocumentCode(documentCode);
+
+        for(int i = 0; i < appList.size(); i++) {
+
+            if(appList.get(i).getStatus().equals("승인됨")) {
+
+                count += 1;
+            }
+        }
+
+        for(int i = 0; i < receiverList.size(); i++) {
+
+            if(receiverList.get(i).getStatus().equals("확인됨")) {
+
+                count += 1;
+            }
+        }
+
+        log.info("count  ====================================== {} ", count);
+
+        if(count > 0) {
+            yn = false;
+        } else {
+            yn = true;
+        }
+
+        return yn;
+    }
+
+    /* 문서 삭제 */
+    @Transactional
+    public void deleteDocument(int documentCode) {
+
+        purchaseRepository.deleteByDocumentCode(documentCode);
+        trafficRepository.deleteByDocumentCode(documentCode);
+        businessRepository.deleteByDocumentCode(documentCode);
+        vacationRepository.deleteByDocumentCode(documentCode);
+        payRepository.deleteByDocumentCode(documentCode);
+        approverRepository.deleteByDocumentCode(documentCode);
+        receiveRepository.deleteByDocumentCode(documentCode);
+        documentFileRepository.deleteByDocumentCode(documentCode);
+        documentRepository.deleteByDocumentCode(documentCode);
+    }
+
+    /* 승인 로직 */
+    @Transactional
+    public void putApproval(int documentCode, int employeeNo) {
+
+        List<ApprovalEntity> appList = approverRepository.findByDocumentCode(documentCode);
+
+        int count = 0;
+
+        ApprovalEntity approval = approverRepository.findByEmployeeNoAndDocumentCode(employeeNo,documentCode);
+        approval.setStatus("승인됨");
+
+        for(int i = 0; i < appList.size(); i++) {
+            if(appList.get(i).getStatus().equals("승인됨")) {
+                count += 1;
+            }
+        }
+
+        if(count == appList.size()) {
+            DocumentEntity document = documentRepository.findByDocumentCode(documentCode);
+            document.setStatus("승인됨");
+        }
+
     }
 }

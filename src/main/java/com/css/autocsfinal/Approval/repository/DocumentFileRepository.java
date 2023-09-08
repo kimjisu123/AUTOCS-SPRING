@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface DocumentFileRepository extends JpaRepository<DocumentFileEntity, Integer> {
     List<DocumentFileEntity> findByDocumentCode(int documentCode);
+
+    void deleteByDocumentCode(int documentCode);
 }

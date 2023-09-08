@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TrafficRepository extends JpaRepository<TrafficEntity, Integer> {
     List<TrafficEntity> findByDocumentCode(int documentCode);
+
+    void deleteByDocumentCode(int documentCode);
 }
