@@ -2,6 +2,7 @@ package com.css.autocsfinal.board.controller;
 
 import com.css.autocsfinal.board.dto.BoardDTO;
 import com.css.autocsfinal.board.dto.BoardFileDTO;
+import com.css.autocsfinal.board.entity.Board;
 import com.css.autocsfinal.board.service.BoardService;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.market.dto.ApplyFormDTO;
@@ -68,6 +69,21 @@ public class BoardController {
                     .status(httpStatus)
                     .body(new ResponseDTO(httpStatus, resultMessage, null));
         }
+    }
+
+    //게시물 삭제
+    @PostMapping("/deleteBoard")
+    public ResponseEntity<ResponseDTO> deleteBoard(@RequestParam int boardNo) {
+        log.info("[BoardDTO] boardNo {} =======> " + boardNo);
+
+        String board = boardService.deleteBoard(boardNo);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "게시물 삭제 성공", board);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+
     }
 
     //게시물 찾기

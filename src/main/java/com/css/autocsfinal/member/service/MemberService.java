@@ -187,41 +187,41 @@ public class MemberService {
     }
 
     //한명의 사원조회
-    public EmployeeAndDepartmentAndPositionDTO findEmployeeId(int memberNo) {
-        log.info("[MemberService] 마이페이지에 띄울 한명의 사원 조회 Start ===================");
-
-        EmployeeAndDepartmentAndPosition employeeList = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
-
-        int fileNo = 0;
-        Integer maxImgNo = memberFileRepository.findMaxMemberFileNo(memberNo);
-        fileNo = maxImgNo;
-        log.info("[TodoService] maxImgNo ===================", maxImgNo);
-        MemberFile memberImg = memberFileRepository.findById(fileNo);
-
-        log.info("employeeList : " + employeeList);
-
-
-        // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
-                    EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
-
-                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeList.getEmployeeNo());
-                    employeeAndDepartmentAndPositionDTO.setName(employeeList.getName());
-                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeList.getEmployeeJoin());
-                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeList.getDepartment().getName());
-                    employeeAndDepartmentAndPositionDTO.setPosition(employeeList.getPosition().getName());
-                    employeeAndDepartmentAndPositionDTO.setEmployeeEmail(employeeList.getEmployeeEmail());
-                    employeeAndDepartmentAndPositionDTO.setEmployeePhone(employeeList.getEmployeePhone());
-                    employeeAndDepartmentAndPositionDTO.setMemberId(employeeList.getMember().getId());
-                    employeeAndDepartmentAndPositionDTO.setPw(employeeList.getMember().getPwd());
-                    employeeAndDepartmentAndPositionDTO.setMemberNo(employeeList.getMember().getNo());
-                    employeeAndDepartmentAndPositionDTO.setMemberFile(IMAGE_URL+ memberImg.getOriginName());
-
-
-
-                    return employeeAndDepartmentAndPositionDTO;
-
-
-    }
+//    public EmployeeAndDepartmentAndPositionDTO findEmployeeId(int memberNo) {
+//        log.info("[MemberService] 마이페이지에 띄울 한명의 사원 조회 Start ===================");
+//
+//        EmployeeAndDepartmentAndPosition employeeList = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
+//
+//        int fileNo = 0;
+//        Integer maxImgNo = memberFileRepository.findMaxMemberFileNo(memberNo);
+//        fileNo = maxImgNo;
+//        log.info("[TodoService] maxImgNo ===================", maxImgNo);
+//        MemberFile memberImg = memberFileRepository.findById(fileNo);
+//
+//        log.info("employeeList : " + employeeList);
+//
+//
+//        // Employee 엔티티 리스트를 EmployeeDTO 리스트로 변환하여 반환
+//                    EmployeeAndDepartmentAndPositionDTO employeeAndDepartmentAndPositionDTO = new EmployeeAndDepartmentAndPositionDTO();
+//
+//                    employeeAndDepartmentAndPositionDTO.setEmployeeNo(employeeList.getEmployeeNo());
+//                    employeeAndDepartmentAndPositionDTO.setName(employeeList.getName());
+//                    employeeAndDepartmentAndPositionDTO.setEmployeeJoin(employeeList.getEmployeeJoin());
+//                    employeeAndDepartmentAndPositionDTO.setDepartment(employeeList.getDepartment().getName());
+//                    employeeAndDepartmentAndPositionDTO.setPosition(employeeList.getPosition().getName());
+//                    employeeAndDepartmentAndPositionDTO.setEmployeeEmail(employeeList.getEmployeeEmail());
+//                    employeeAndDepartmentAndPositionDTO.setEmployeePhone(employeeList.getEmployeePhone());
+//                    employeeAndDepartmentAndPositionDTO.setMemberId(employeeList.getMember().getId());
+//                    employeeAndDepartmentAndPositionDTO.setPw(employeeList.getMember().getPwd());
+//                    employeeAndDepartmentAndPositionDTO.setMemberNo(employeeList.getMember().getNo());
+//                    employeeAndDepartmentAndPositionDTO.setMemberFile(IMAGE_URL+ memberImg.getOriginName());
+//
+//
+//
+//                    return employeeAndDepartmentAndPositionDTO;
+//
+//
+//    }
 
     // Employee 정보 조회(아이디 찾기)
     public EmployeeAndDepartmentAndPositionDTO findEmployeeByNameAndEmail(String name, String employeeEmail) {
