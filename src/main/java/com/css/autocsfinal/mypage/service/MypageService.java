@@ -157,40 +157,42 @@ public class MypageService {
         return result == 1 ? "true" : "false";
     }
 
-    @Transactional
-    public String updateImg(MemberFileDTO memberFileDTO, MultipartFile empImage) {
-        log.info("[MypageService] updateImg Start ======================================");
-        log.info("[MypageService] updateImg memberFileDTO ================================= {}", memberFileDTO );
-        log.info("[MypageService] updateImg empImage ================================= {}", empImage );
-        int memberNo = memberFileDTO.getMemberNo();
-        MemberFile memberFile = new MemberFile();
-        String imageName = UUID.randomUUID().toString().replace("-","");
-        String replaceFileName = null;
-            int result =0;
 
-
-            try {
-
-                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName,empImage);
-                Member member = memberRepository.findByNo(memberNo);
-                System.out.println("member = " + member);
-                memberFile.setMember(member);
-                memberFile.setOriginName(replaceFileName);
-                log.info("[MypageService] memberFile.getOriginName() ================================= {}", memberFile.getOriginName() );
-                memberFile.setRegDate(LocalDate.now());
-                memberFileRepository.save(memberFile);
-                result = 1;
-
-
-            } catch (Exception e){
-
-                FileUploadUtils.deleteFile(IMAGE_DIR,replaceFileName);
-                throw new RuntimeException(e);
-            }
-        log.info("[MypageService] updateImg End ======================================");
-
-        return result == 1 ? "true" : "false";
-    }
+//
+//    @Transactional
+//    public String updateImg(MemberFileDTO memberFileDTO, MultipartFile empImage) {
+//        log.info("[MypageService] updateImg Start ======================================");
+//        log.info("[MypageService] updateImg memberFileDTO ================================= {}", memberFileDTO );
+//        log.info("[MypageService] updateImg empImage ================================= {}", empImage );
+//        int memberNo = memberFileDTO.getMemberNo();
+//        MemberFile memberFile = new MemberFile();
+//        String imageName = UUID.randomUUID().toString().replace("-","");
+//        String replaceFileName = null;
+//            int result =0;
+//
+//
+//            try {
+//
+//                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName,empImage);
+//                Member member = memberRepository.findByNo(memberNo);
+//                System.out.println("member = " + member);
+//                memberFile.setMember(member);
+//                memberFile.setOriginName(replaceFileName);
+//                log.info("[MypageService] memberFile.getOriginName() ================================= {}", memberFile.getOriginName() );
+//                memberFile.setRegDate(LocalDate.now());
+//                memberFileRepository.save(memberFile);
+//                result = 1;
+//
+//
+//            } catch (Exception e){
+//
+//                FileUploadUtils.deleteFile(IMAGE_DIR,replaceFileName);
+//                throw new RuntimeException(e);
+//            }
+//        log.info("[MypageService] updateImg End ======================================");
+//
+//        return result == 1 ? "true" : "false";
+//    }
 
     public MemberFileDTO getMemberImg(int memberNo) {
         log.info("[TodoService] 이미지 조회하기 Start ===================");
