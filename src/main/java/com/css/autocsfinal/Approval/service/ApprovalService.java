@@ -549,7 +549,7 @@ public class ApprovalService {
         for(int p = 0; p < app.size(); p++) {
             String status = app.get(p).getStatus();
 
-            if(status.equals("승인요청")) {
+            if(status.equals("결재요청")) {
                 toMe += 1;
             }
         }
