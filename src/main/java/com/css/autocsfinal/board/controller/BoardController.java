@@ -71,6 +71,36 @@ public class BoardController {
         }
     }
 
+    //게시물 수정
+    @Operation(summary = "게시물 등록 요청", description = "게시물을 등록합니다.", tags = {"BoardController"})
+    @PostMapping(value = "/updateBoard")
+    public ResponseEntity<ResponseDTO> updateBoard(@ModelAttribute BoardDTO boardDTO, MultipartFile[] fileImages) {
+
+        log.info("[BoardDTO] boardDTO {} =======> " + boardDTO);
+        log.info("[BoardDTO] fileImages {} =======> " + fileImages);
+
+        // 파일이 있는 경우와 없는 경우를 분리
+        if (fileImages != null) {
+            // 파일이 존재하는 경우, 게시물 수정 및 파일 모두 지운 후 수정
+            String resultMessage = boardService.updateBoardFile(boardDTO, fileImages);
+
+            HttpStatus httpStatus = (resultMessage.contains("성공")) ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
+
+            return ResponseEntity
+                    .status(httpStatus)
+                    .body(new ResponseDTO(httpStatus, resultMessage, null));
+        } else {
+            // 파일이 없는 경우, 파일을 업로드하지 않고 게시물만 수정
+            String resultMessage = boardService.updateBoardNotFile(boardDTO);
+
+            HttpStatus httpStatus = (resultMessage.contains("성공")) ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
+
+            return ResponseEntity
+                    .status(httpStatus)
+                    .body(new ResponseDTO(httpStatus, resultMessage, null));
+        }
+    }
+
     //게시물 삭제
     @PostMapping("/deleteBoard")
     public ResponseEntity<ResponseDTO> deleteBoard(@RequestParam int boardNo) {
