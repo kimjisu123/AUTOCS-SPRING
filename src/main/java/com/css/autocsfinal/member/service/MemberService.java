@@ -302,7 +302,7 @@ public class MemberService {
         storeInfoDTO.setPwd(storeInfo.getMember().getPwd());
         storeInfoDTO.setRole(storeInfo.getMember().getRole());
         storeInfoDTO.setDetailAddress(storeInfo.getDetailAddress());
-        storeInfoDTO.setRefMemberNo(storeInfo.getMember().getNo());
+        storeInfoDTO.setMemberNo(storeInfo.getMember().getNo());
         storeInfoDTO.setLicense(storeInfo.getLicense());
 
         System.out.println("memberFile = " + storeInfoDTO.getStoreFile());

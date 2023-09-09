@@ -24,7 +24,7 @@ public class StoreInfoDTO {
 
     private String phone;
 
-    private int refMemberNo;
+    private int MemberNo;
 
     private String storeFile;
 
