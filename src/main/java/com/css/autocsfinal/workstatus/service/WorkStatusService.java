@@ -1,6 +1,7 @@
 package com.css.autocsfinal.workstatus.service;
 
 import com.css.autocsfinal.common.Criteria;
+import com.css.autocsfinal.stock.dto.CategoryDTO;
 import com.css.autocsfinal.stock.entity.Category;
 import com.css.autocsfinal.workstatus.dto.EmployeeAndWorkStatusDTO;
 import com.css.autocsfinal.workstatus.dto.WorkStatusResult;
@@ -176,15 +177,9 @@ public class WorkStatusService {
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count);
 
-        Page<EmployeeAndWorkStatus> result = employeeAndWorkStatusRepository.findByOrderByName(paging);
+        List<EmployeeAndWorkStatus> result = employeeAndWorkStatusRepository.findByOrderByName(paging);
 
-        // 값을 전송하기 위해 DTO로 변경
-//        List<EmployeeAndWorkStatusDTO> resultArray =  result.stream().map(employeeAndWorkStatus -> modelMapper.map(employeeAndWorkStatus, EmployeeAndWorkStatusDTO.class)).collect(Collectors.toList());
-
-        // HashSet을 사용하여 중복 제거
-//        HashSet<EmployeeAndWorkStatusDTO> dateSet = new HashSet<>(resultArray);
-//        List<EmployeeAndWorkStatusDTO> dataFromDatabase = new ArrayList<>(dateSet);
-
+        log.info("===========================================>{}",result);
 
         return result;
     }

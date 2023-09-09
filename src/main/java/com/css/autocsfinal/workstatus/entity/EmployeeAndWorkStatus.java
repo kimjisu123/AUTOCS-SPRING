@@ -2,10 +2,7 @@ package com.css.autocsfinal.workstatus.entity;
 
 import com.css.autocsfinal.member.entity.Department;
 import com.css.autocsfinal.member.entity.Position;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class EmployeeAndWorkStatus {
 
     @Id
@@ -55,28 +53,14 @@ public class EmployeeAndWorkStatus {
 
 
     @ManyToOne
-    @JoinColumn(name ="REF_DEPARTMENT_CODE")
+    @JoinColumn(name = "REF_DEPARTMENT_CODE")
     private Department department;
 
     @ManyToOne
-    @JoinColumn(name="REF_POSITION_CODE")
+    @JoinColumn(name = "REF_POSITION_CODE")
     private Position position;
 
     @OneToMany(mappedBy = "employeeNo")
     private List<WorkStatusList2> workStatusLists;
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "employeeNo=" + employeeNo +
-                ", name='" + name + '\'' +
-                ", employeeJoin=" + employeeJoin +
-                ", employeeOut=" + employeeOut +
-                ", employeeEmail='" + employeeEmail + '\'' +
-                ", employeePhone='" + employeePhone + '\'' +
-                ", upCode=" + upCode +
-                ", position=" + position +
-                ", memberNo=" + memberNo +
-                '}';
-    }
 }

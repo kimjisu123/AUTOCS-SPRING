@@ -22,16 +22,9 @@ public class WorkStatusDTO {
 
     private Date quittingTime;
 
-    private Date totalHoursDuty;
-
-    private char vactionStatus;
+    private char vacationStatus;
 
     private char absenceWorkStatus;
 
-    private Date workingDate;
-
-
-    private Long defaultTime;
-
-    private Long overTime;
+    private Date extensionTime;
 }
