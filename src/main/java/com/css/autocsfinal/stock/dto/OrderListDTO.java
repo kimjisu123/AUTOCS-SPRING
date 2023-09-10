@@ -10,6 +10,7 @@ import java.sql.Date;
 @Setter
 @ToString
 public class OrderListDTO {
+    private Integer orderProductNo;
     private Integer orderNo;
     private String storeInfoName;
     private String categoryName;
@@ -19,6 +20,6 @@ public class OrderListDTO {
     private int price;
     private int quantity;
     private String etc;
-    private Date registDate;
+    private String registDate;
     private String status;
 }

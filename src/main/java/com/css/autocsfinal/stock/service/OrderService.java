@@ -4,6 +4,7 @@ import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.stock.dto.OrderDTO;
 import com.css.autocsfinal.stock.dto.OrderDetailDTO;
 import com.css.autocsfinal.stock.dto.OrderProductDTO;
+import com.css.autocsfinal.stock.dto.ProductDetailDTO;
 import com.css.autocsfinal.stock.entity.Order;
 import com.css.autocsfinal.stock.entity.OrderDetail;
 import com.css.autocsfinal.stock.entity.OrderProduct;
@@ -79,7 +80,7 @@ public class OrderService {
         return lastOrderNo;
     }
 
-    /* 주문물품 조회 (페이지사이즈) */
+    /* 주문 조회 (페이지사이즈) */
     public int selectOrderProductAll() {
 
         List<OrderProductDetail> orderProdoctList = orderProductDetailRepository.findAll();
@@ -87,10 +88,28 @@ public class OrderService {
         return orderProdoctList.size();
     }
 
+    /* 주문 조회 - 영업점별 (페이지사이즈) */
+    public int orderSize(String store, Date startDate, Date endDate) {
+
+        List<Tuple> orderList = orderRepository.orderSize(store, startDate, endDate);
+
+        return orderList.size();
+    }
+
+    /* 주문물품 조회 - 주문번호별 (페이지사이즈) */
+    public int myOrderSize(String myOrderNo) {
+
+        List<Tuple> orderList = orderProductRepository.myOrderListSize(myOrderNo);
+
+        return orderList.size();
+    }
+
     /* 주문물품 조회 - 상태,이름,날짜조회 (페이지사이즈) */
     public int orderListSize(String status,String search, Date startDate, Date endDate) {
+//    public int orderListSize(String status,String search) {
 
         List<Tuple> orderList = orderProductRepository.orderListSize(status, search, startDate, endDate);
+//        List<Tuple> orderList = orderProductRepository.orderList(status, search);
 
         return orderList.size();
     }
@@ -113,12 +132,14 @@ public class OrderService {
 
     /* 주문물품 조회 - 상태, 이름, 날짜 검색, 페이징 */
     public List<Tuple> orderList(Criteria cri, String status, String search, Date startDate, Date endDate) {
+//    public List<Tuple> orderList(Criteria cri, String status, String search) {
 
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count);
 
         Page<Tuple> result =orderProductRepository.orderList(status, search, startDate, endDate, paging);
+//        Page<Tuple> result =orderProductRepository.orderList(status, search, paging);
 
         List<Tuple> orderList = result.stream()
                 .map(tuple -> modelMapper
@@ -126,6 +147,43 @@ public class OrderService {
         return orderList;
     }
 
+    /* 주문조회 - 영업점별 페이징 */
+    public List<Tuple> order(Criteria cri, String store, Date startDate, Date endDate) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        Page<Tuple> result =orderRepository.order(store, startDate, endDate, paging);
+
+        List<Tuple> orderList = result.stream()
+                .map(tuple -> modelMapper
+                        .map(tuple, Tuple.class)).collect(Collectors.toList());
+        return orderList;
+    }
+
+    /* 주문물품 조회 - 주문번호별 페이징 */
+    public List<Tuple> myOrderList(Criteria cri, String myOrderNo) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        Page<Tuple> result =orderProductRepository.myOrderList(myOrderNo, paging);
+
+        List<Tuple> orderList = result.stream()
+                .map(tuple -> modelMapper
+                        .map(tuple, Tuple.class)).collect(Collectors.toList());
+        return orderList;
+    }
+
+    /* 주문물품 조회 - 환불용*/
+    public OrderProductDetail selectOrderProduct(int myOrderProductNo) {
+
+        OrderProductDetail result = orderProductDetailRepository.findById(myOrderProductNo);
+
+        return result;
+    }
 
 
     /* 주문번호 입력 */
