@@ -108,12 +108,13 @@ public class WorkStatusController {
 
     // 본사 근태 현황
 
-    @GetMapping("/headOffice")
-    public ResponseEntity<ResponseDTO> findByHeadOffice( @RequestParam(name = "offset", defaultValue = "1") String offset){
+    @GetMapping("/headOffice/{page}")
+    public ResponseEntity<ResponseDTO> findByHeadOffice( @PathVariable(name = "page", required = false) int offset){
+
 
         int total = workStatusService.findByHeadOfficeTotal();
 
-        Criteria cri = new Criteria(Integer.valueOf(offset), 7);
+        Criteria cri = new Criteria(Integer.valueOf(offset), 8);
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
         pagingResponseDTO.setData(workStatusService.findByHeadOffice(cri));

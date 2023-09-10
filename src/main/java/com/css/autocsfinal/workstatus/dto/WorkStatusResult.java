@@ -28,6 +28,7 @@ public class WorkStatusResult {
     private String empName;
     private String deptName;
     private String positionName;
+    private int totalCount;
 
     public WorkStatusResult(WorkStatusAndEmployeeAndDepartmentAndPostion work, String empName, String deptName, String positionName) {
         this.workStatusCode = work.getWorkStatusCode();

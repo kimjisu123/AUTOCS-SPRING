@@ -1,8 +1,10 @@
 package com.css.autocsfinal.mail.service;
 
+import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.mail.dto.MailDTO;
 //import com.css.autocsfinal.mail.entity.MailList;
 //import com.css.autocsfinal.mail.repository.MailListRepository;
+import com.css.autocsfinal.mail.dto.MailSaveDTO;
 import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.entity.MailList;
 import com.css.autocsfinal.mail.repository.MailListRepository;
@@ -15,6 +17,8 @@ import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +33,15 @@ import java.util.stream.Collectors;
 public class MailService {
 
     private final MailRepository mailRepository;
-    private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
     private final MailListRepository mailListRepository;
     private final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
 
-    public List<MailDTO> findMail(int employeeNo) {
+    public List<MailDTO> findMail(int employeeNo, Criteria cri) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
 
         EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
 
@@ -42,7 +49,7 @@ public class MailService {
 
         String name = employeeAndDepartmentAndPosition.getName();
 
-        List<Mail> mailList = mailRepository.findByPositionAndReceiverOrderByMailNoDesc(positionName, name);
+        List<Mail> mailList = mailRepository.findByPositionAndReceiverOrderByMailNoDesc(positionName, name, paging);
 
         List<MailDTO> mailDTOList = mailList.stream().map(Mail -> modelMapper.map(Mail, MailDTO.class) ).collect(Collectors.toList());
 
@@ -50,9 +57,28 @@ public class MailService {
         return mailDTOList;
     }
 
-    public Object mailBookmark() {
 
-        List<Mail> mailList = mailRepository.findByStatus("Y");
+    public Object mailBookmark(Criteria cri) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        List<Mail> mailList = mailRepository.findByStatus("Y", paging);
+
+        List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
+
+        return mailDTOList;
+
+    }
+
+    public Object mailBookmark(Criteria cri, String title) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        List<Mail> mailList = mailRepository.findByStatus("Y", paging, title);
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
 
@@ -68,16 +94,24 @@ public class MailService {
         mailDTO.setContext(mailDTO.getContext().replace("</p>", ""));
 
 
-        Mail mail = modelMapper.map(mailDTO, Mail.class);
+        for(int i=0; i < mailDTO.getReceiver().size(); i++){
 
-        Mail mail2 =  mailRepository.save(mail);
+            MailSaveDTO mailSaveDTO = new MailSaveDTO();
 
+            mailSaveDTO = modelMapper.map(mailDTO, MailSaveDTO.class);
 
-        int mailNo = mail2.getMailNo();
+            Mail mail = modelMapper.map(mailSaveDTO, Mail.class);
 
-        MailList mailList = new MailList(employeeNo, mailNo);
+            mail.setReceiver(mailDTO.getReceiver().get(i));
 
-        mailListRepository.save(mailList);
+            Mail mail2 =  mailRepository.save(mail);
+
+            int mailNo = mail2.getMailNo();
+
+            MailList mailList = new MailList(employeeNo, mailNo);
+
+            mailListRepository.save(mailList);
+        }
 
         return null;
     }
@@ -124,10 +158,14 @@ public class MailService {
         return null;
     }
 
-    @Transactional
-    public Object mailSent(int employeeNo) {
+    public Object mailSent(int employeeNo, Criteria cri) {
 
-        List<MailList> mailLists = mailListRepository.findByEmployeeNo(employeeNo);
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        List<MailList> mailLists = mailListRepository.findByPage(employeeNo, paging);
 
         List<Mail> mailList = new ArrayList<>();
 
@@ -140,5 +178,33 @@ public class MailService {
 
 
         return mailDTOList;
+    }
+
+    public int findByMailTotal() {
+
+        List<Mail> mailList = mailRepository.findByStatus("Y");
+
+        return mailList.size();
+    }
+
+    public int findByMailSentTotal(int employeeNo) {
+
+        List<MailList> mailLists = mailListRepository.findByEmployeeNo  (employeeNo);
+
+        return mailLists.size();
+    }
+
+
+    public int findByMailAllTotal(int employeeNo) {
+
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+        List<Mail> mailList = mailRepository.findByPositionAndReceiverOrderByMailNoDesc(positionName, name);
+
+        return mailList.size();
     }
 }

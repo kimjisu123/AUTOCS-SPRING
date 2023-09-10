@@ -1,9 +1,12 @@
 package com.css.autocsfinal.workstatus.service;
 
 import com.css.autocsfinal.common.Criteria;
+import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.member.repository.EmployeeRepository;
 import com.css.autocsfinal.stock.dto.CategoryDTO;
 import com.css.autocsfinal.stock.entity.Category;
 import com.css.autocsfinal.workstatus.dto.EmployeeAndWorkStatusDTO;
+import com.css.autocsfinal.workstatus.dto.WorkStatusAndEmployeeAndDepartmentAndPostionDTO;
 import com.css.autocsfinal.workstatus.dto.WorkStatusResult;
 import com.css.autocsfinal.workstatus.entity.*;
 import com.css.autocsfinal.workstatus.repository.*;
@@ -30,6 +33,8 @@ public class WorkStatusService {
     private final WorkStatusAndEmployeeAndDepartmentRepository workStatusAndEmployeeAndDepartmentRepository;
     // Employee Start
     private final EmployeeAndWorkStatusRepository employeeAndWorkStatusRepository;
+    private final EmployeeRepository employeeRepository;
+
 
 
     private final ModelMapper modelMapper;
@@ -55,11 +60,17 @@ public class WorkStatusService {
 
     // 본사 근태관리 조회
     public Object findByDepartmentAll() {
-        log.info("=====================11111111111111111111111111111111");
         List<WorkStatusResult> workStatusAndEmployeeAndDepartments =
             workStatusAndEmployeeAndDepartmentRepository.findAllWorkStatusResult();
 
-        log.info("=====================222222222222222222222222222222222222");
+        List<Employee>employeeList = employeeRepository.findAll();
+
+        log.info("total===================================================>{}", employeeList.size());
+
+        for(WorkStatusResult result : workStatusAndEmployeeAndDepartments){
+            result.setTotalCount(employeeList.size());
+        }
+
         return workStatusAndEmployeeAndDepartments;
 
     }
@@ -70,7 +81,15 @@ public class WorkStatusService {
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("인사부");
 
-        return workStatusAndEmployeeAndDepartments;
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("H1");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
     }
 
     //재무/회계부
@@ -79,7 +98,15 @@ public class WorkStatusService {
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("재무/회계부");
 
-        return workStatusAndEmployeeAndDepartments;
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("F1");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
 
     }
 
@@ -89,7 +116,15 @@ public class WorkStatusService {
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("경영부");
 
-        return workStatusAndEmployeeAndDepartments;
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("M1");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
     }
 
     // 마케팅부
@@ -98,7 +133,15 @@ public class WorkStatusService {
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("마케팅부");
 
-        return workStatusAndEmployeeAndDepartments;
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("M2");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
     }
 
     // 영업부
@@ -107,7 +150,15 @@ public class WorkStatusService {
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("영업부");
 
-        return workStatusAndEmployeeAndDepartments;
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("S1");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
     }
 
     // 서비스부
@@ -116,7 +167,15 @@ public class WorkStatusService {
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("서비스부");
 
-        return workStatusAndEmployeeAndDepartments;
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("S2");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
     }
 
     // 출근
@@ -179,7 +238,7 @@ public class WorkStatusService {
 
         List<EmployeeAndWorkStatus> result = employeeAndWorkStatusRepository.findByOrderByName(paging);
 
-        log.info("===========================================>{}",result);
+        log.info("===========================================>{}",result.size());
 
         return result;
     }
