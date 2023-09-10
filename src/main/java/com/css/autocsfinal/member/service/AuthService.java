@@ -80,6 +80,10 @@ public class AuthService {
          * passwordEncoder.matches(평문, 다이제스트)
          * */
         if(!passwordEncoder.matches(memberDTO.getPwd(), member.getPwd())){
+
+            log.info("[AuthService] memberDTO.getPwd()! {}", memberDTO.getPwd());
+            log.info("[AuthService] member.getPwd())! {}", member.getPwd());
+
             log.info("[AuthService] Password Match Fail! ");
             throw new LoginFailedException("잘못된 비밀번호 입니다.");
         }

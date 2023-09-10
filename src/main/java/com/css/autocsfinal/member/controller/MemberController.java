@@ -233,17 +233,17 @@ public class MemberController {
 
     // 한명회원 정보 조회
 //    @Operation(summary = "사원 조회 요청", description = "사원을 조회합니다.", tags = {"MemberController"})
-    @GetMapping("/{memberNo}")
-    public ResponseEntity<ResponseDTO> getEmployeeOne(@PathVariable int memberNo) {
-        System.out.println("check ==========================");
-        EmployeeAndDepartmentAndPositionDTO employeeDTOList = memberService.findEmployeeId(memberNo);
-
-        HttpStatus httpStatus = HttpStatus.OK;
-
-        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사원 조회 성공", employeeDTOList);
-
-        return ResponseEntity.status(httpStatus).body(responseDTO);
-    }
+//    @GetMapping("/{memberNo}")
+//    public ResponseEntity<ResponseDTO> getEmployeeOne(@PathVariable int memberNo) {
+//        System.out.println("check ==========================");
+//        EmployeeAndDepartmentAndPositionDTO employeeDTOList = memberService.findEmployeeId(memberNo);
+//
+//        HttpStatus httpStatus = HttpStatus.OK;
+//
+//        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사원 조회 성공", employeeDTOList);
+//
+//        return ResponseEntity.status(httpStatus).body(responseDTO);
+//    }
 
 
 
