@@ -30,4 +30,7 @@ public class OrderProductDetail {
     @ManyToOne
     @JoinColumn(name = "REF_PRODUCT_NO")
     private ProductDetail refProductNo;
+
+    @Column(name = "ETC")
+    private String etc;
 }

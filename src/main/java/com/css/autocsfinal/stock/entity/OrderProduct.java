@@ -28,4 +28,6 @@ public class OrderProduct {
     private int refOrderNo;
     @Column(name = "REF_PRODUCT_NO")
     private int refProductNo;
+    @Column(name = "ETC")
+    private String etc;
 }

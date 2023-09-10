@@ -21,5 +21,6 @@ public class OrderProductDetailDTO {
 
     private OrderDetail refOrderNo;
     private ProductDetail refProductNo;
+    private String etc;
 
 }

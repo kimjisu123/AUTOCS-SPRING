@@ -14,7 +14,7 @@ import java.util.List;
 public interface OrderProductRepository extends JpaRepository<OrderProduct, Integer> {
 
     @Query(value = "SELECT A.ORDER_PRODUCT_NO, B.ORDER_NO, " +
-            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, D.ETC, " +
+            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, A.ETC, " +
             "TO_CHAR(A.REGIST_DATE, 'YYYY-MM-DD') AS registDate, " +
             "A.STATUS " +
             "FROM TBL_ORDER_PRODUCT A " +
@@ -31,7 +31,7 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
     List<Tuple> orderListSize(@Param("status") String status, @Param("search")String search, @Param("startDate") Date startDate, @Param("endDate")Date endDate);
 
     @Query(value = "SELECT A.ORDER_PRODUCT_NO, B.ORDER_NO, " +
-            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, D.ETC, " +
+            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, A.ETC, " +
             "TO_CHAR(A.REGIST_DATE, 'YYYY-MM-DD') AS registDate, " +
             "A.STATUS " +
             "FROM TBL_ORDER_PRODUCT A " +
@@ -48,7 +48,7 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
     Page<Tuple> orderList(@Param("status") String status, @Param("search")String search, @Param("startDate") Date startDate, @Param("endDate")Date endDate, Pageable paging);
 
     @Query(value = "SELECT A.ORDER_PRODUCT_NO, B.ORDER_NO, " +
-            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, D.ETC, " +
+            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, A.ETC, " +
             "TO_CHAR(A.REGIST_DATE, 'YYYY-MM-DD') AS registDate, " +
             "A.STATUS " +
             "FROM TBL_ORDER_PRODUCT A " +
@@ -62,7 +62,7 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
     List<Tuple> myOrderListSize(@Param("myOrderNo") String myOrderNo);
 
     @Query(value = "SELECT A.ORDER_PRODUCT_NO, B.ORDER_NO, " +
-            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, D.ETC, " +
+            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, A.ETC, " +
             "TO_CHAR(A.REGIST_DATE, 'YYYY-MM-DD') AS registDate, " +
             "A.STATUS " +
             "FROM TBL_ORDER_PRODUCT A " +

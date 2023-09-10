@@ -198,7 +198,6 @@ public class OrderController {
     public ResponseEntity<ResponseDTO> selectOrderProduct(
             @RequestParam(name = "myOrderProductNo", defaultValue = "")int myOrderProductNo){
 
-        log.info("이거이거이거");
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  orderService.selectOrderProduct(myOrderProductNo)));
     }
 

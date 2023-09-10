@@ -16,5 +16,6 @@ public class OrderProductDTO {
     private Date registDate;
     private int refOrderNo;
     private int refProductNo;
+    private String etc;
 
 }
