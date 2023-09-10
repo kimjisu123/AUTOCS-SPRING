@@ -13,4 +13,6 @@ public interface ReceiveRepository extends JpaRepository<ReceiverEntity, Integer
     List<ReceiverEntity> findByDocumentCode(int documentCode);
 
     void deleteByDocumentCode(int documentCode);
+
+    ReceiverEntity findByEmployeeNoAndDocumentCode(int employeeNo, int documentCode);
 }

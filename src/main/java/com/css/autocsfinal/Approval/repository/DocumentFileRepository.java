@@ -9,4 +9,6 @@ public interface DocumentFileRepository extends JpaRepository<DocumentFileEntity
     List<DocumentFileEntity> findByDocumentCode(int documentCode);
 
     void deleteByDocumentCode(int documentCode);
+
+    DocumentFileEntity findByDocumentFileCode(int fileCode);
 }

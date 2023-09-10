@@ -1,6 +1,7 @@
 package com.css.autocsfinal.Approval.controller;
 
 import com.css.autocsfinal.Approval.dto.*;
+import com.css.autocsfinal.Approval.entity.DocumentFileEntity;
 import com.css.autocsfinal.Approval.service.ApprovalService;
 import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.common.PageDTO;
@@ -8,11 +9,26 @@ import com.css.autocsfinal.common.PagingResponseDTO;
 import com.css.autocsfinal.common.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.apache.commons.io.FileUtils;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.*;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.List;
 
@@ -20,6 +36,7 @@ import java.util.List;
 @RequestMapping("/approval")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "http://localhost:3000")
 public class ApprovalController {
 
     private final ApprovalService approvalService;
@@ -290,6 +307,49 @@ public class ApprovalController {
         approvalService.putApproval(documentCode, employeeNo);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "승인 성공", null));
+    }
+
+    /* 반려 */
+    @PutMapping("/back/{documentCode}/{employeeNo}")
+    public ResponseEntity<?> backDocument(@PathVariable int documentCode, @PathVariable int employeeNo, InputStream inputStream) throws IOException {
+
+        String comment = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+
+        log.info("[ApprovalController] =============================== comment {}", comment);
+
+        approvalService.backDocument(comment, documentCode, employeeNo);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "반려 성공", null));
+    }
+
+    /* 휴가 사용 날짜*/
+    @PutMapping("/putVacation/{documentCode}/{useDate}")
+    public ResponseEntity<?> putVacation(@PathVariable int documentCode, @PathVariable int useDate) {
+
+        approvalService.putVacation(documentCode, useDate);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "휴가 사용", null));
+    }
+
+    /* 파일 다운로드*/
+    @GetMapping("/download/{fileCode}")
+    public ResponseEntity<?> downloadFile(@PathVariable int fileCode, HttpServletResponse response) throws IOException {
+
+        log.info("============================================ fileCode : {}", fileCode);
+
+        byte[] file = approvalService.downloadFile(fileCode);
+        return ResponseEntity.status(HttpStatus.OK)
+//                .contentType(MediaType.valueOf("*"))
+                .body(file);
+    }
+
+    /* 참조 확인 */
+    @PutMapping("/putReceiver/{documentCode}/{employeeNo}")
+    public ResponseEntity<?> putReceiver(@PathVariable int employeeNo, @PathVariable int documentCode) {
+
+        approvalService.putReceiver(employeeNo, documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "확인", null));
     }
 
 }

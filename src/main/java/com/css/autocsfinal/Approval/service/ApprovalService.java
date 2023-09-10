@@ -4,24 +4,25 @@ import com.css.autocsfinal.Approval.dto.*;
 import com.css.autocsfinal.Approval.entity.*;
 import com.css.autocsfinal.Approval.repository.*;
 import com.css.autocsfinal.common.Criteria;
-import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -434,7 +435,7 @@ public class ApprovalService {
 
         /* 파일 저장 경로 만들어서 파일 테이블에 insert */
         String root = "C:\\dev\\approvalFile\\";
-        String mainFilePath = root + "business";
+        String mainFilePath = root + "vacation";
 
         File mkdir = new File(mainFilePath);
         if(!mkdir.exists()) {
@@ -513,7 +514,7 @@ public class ApprovalService {
 
         /* 파일 저장 경로 만들어서 파일 테이블에 insert */
         String root = "C:\\dev\\approvalFile\\";
-        String mainFilePath = root + "business";
+        String mainFilePath = root + "pay";
 
         File mkdir = new File(mainFilePath);
         if(!mkdir.exists()) {
@@ -910,7 +911,7 @@ public class ApprovalService {
 
         for(int i = 0; i < receiverList.size(); i++) {
 
-            if(receiverList.get(i).getStatus().equals("확인됨")) {
+            if(receiverList.get(i).getStatus().equals("확인")) {
 
                 count += 1;
             }
@@ -964,5 +965,49 @@ public class ApprovalService {
             document.setStatus("승인됨");
         }
 
+    }
+
+    /* 코멘트 insert */
+    @Transactional
+    public void backDocument(String comment, int documentCode, int employeeNo) {
+
+        ApprovalEntity approval = approverRepository.findByEmployeeNoAndDocumentCode(employeeNo, documentCode);
+        approval.setCMT(comment);
+
+        List<ApprovalEntity> approvalList = approverRepository.findByDocumentCode(documentCode);
+
+        for(int i = 0; i < approvalList.size(); i++) {
+
+            approvalList.get(i).setStatus("반려됨");
+        }
+
+        DocumentEntity document = documentRepository.findByDocumentCode(documentCode);
+        document.setStatus("반려됨");
+    }
+
+    /* 휴가 줄이기 */
+    @Transactional
+    public void putVacation(int documentCode, int useDate) {
+
+        DocumentEntity document = documentRepository.findByDocumentCode(documentCode);
+        int employeeNo = document.getEmployeeNo();
+        Employee employee = employeeRepository.findByEmployeeNo(employeeNo);
+
+        employee.setAnnual(employee.getAnnual() - useDate);
+    }
+
+    public byte[] downloadFile(int fileCode) throws IOException {
+
+        DocumentFileEntity file = documentFileRepository.findByDocumentFileCode(fileCode);
+        String path = file.getFilePath() + "\\" + file.getModifyName();
+
+        return Files.readAllBytes(new File(path).toPath());
+    }
+
+    public void putReceiver(int employeeNo, int documentCode) {
+
+        ReceiverEntity receiver = receiveRepository.findByEmployeeNoAndDocumentCode(employeeNo, documentCode);
+
+        receiver.setStatus("확인");
     }
 }
