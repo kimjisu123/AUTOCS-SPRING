@@ -1,5 +1,6 @@
 package com.css.autocsfinal.schedule.entity;
 
+import com.css.autocsfinal.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,6 +43,10 @@ public class Schedule {
 
     @Column(name = "END_DATE")
     private Date endDate;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "REF_MEMBER_NO")
+    private Member member;
 
     @OneToMany(mappedBy = "schedule")
     private List<Attendee> attendeeList;

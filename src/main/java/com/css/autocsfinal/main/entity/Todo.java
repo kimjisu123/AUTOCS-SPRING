@@ -5,7 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "TBL_TODOLIST")
@@ -38,7 +38,7 @@ public class Todo {
     private char todoStatus = 'N';   // todo리스트 기본 상태값 false
 
     @Column(name = "REG_DATE")
-    private LocalDate regDate = LocalDate.now();
+    private Date regDate;
 
     @Column(name = "REGIST_DATE")
     private LocalDate upDate;

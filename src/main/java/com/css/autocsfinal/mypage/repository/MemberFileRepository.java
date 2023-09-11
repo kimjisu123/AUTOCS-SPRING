@@ -13,7 +13,7 @@ public interface MemberFileRepository extends JpaRepository<MemberFile,Integer> 
     MemberFile findById(int memberFileNo);
 
 
-
+    // 멤버의 가장 최신 이미지 번호 찾기
     @Query("SELECT MAX(m.memberFileNo) FROM MemberFile m WHERE m.member.no = :memberNo")
     Integer findMaxMemberFileNo(@Param("memberNo") int memberNo);
 

@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StoreInfo2Repository extends JpaRepository<StoreInfo2, Integer> {
 
-    //영업점 조회
     StoreInfo2 findByMemberNo(int memberNo);
 }

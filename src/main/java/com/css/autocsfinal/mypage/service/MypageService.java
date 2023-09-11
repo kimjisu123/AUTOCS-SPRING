@@ -1,15 +1,17 @@
 package com.css.autocsfinal.mypage.service;
 
 
+import com.css.autocsfinal.market.dto.StoreInfoDTO;
+import com.css.autocsfinal.market.entity.StoreInfo;
+import com.css.autocsfinal.market.repository.StoreInfo2Repository;
+import com.css.autocsfinal.market.repository.StoreInfoRepository;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
 import com.css.autocsfinal.member.repository.EmployeeRepository;
 import com.css.autocsfinal.member.repository.MemberRepository;
-import com.css.autocsfinal.mypage.dto.MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO;
 import com.css.autocsfinal.mypage.dto.MemberFileDTO;
-import com.css.autocsfinal.mypage.entity.MemberAndEmployeeAndDepartmentAndPositionAndMemberFile;
 import com.css.autocsfinal.mypage.entity.MemberFile;
 import com.css.autocsfinal.mypage.repository.MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository;
 import com.css.autocsfinal.mypage.repository.MemberFileRepository;
@@ -22,13 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
 
 
 @Service
@@ -48,13 +46,17 @@ public class MypageService {
     public final PasswordEncoder passwordEncoder;
     public final MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository;
     public final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
+    public final StoreInfoRepository storeInfoRepository;
+    public final StoreInfo2Repository storeInfo2Repository;
     public final ModelMapper modelMapper;
-    public MypageService(MemberFileRepository memberFileRepository, EmployeeRepository employeeRepository, MemberRepository memberRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, PasswordEncoder passwordEncoder, MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository1, ModelMapper modelMapper) {
+    public MypageService(MemberFileRepository memberFileRepository, EmployeeRepository employeeRepository, MemberRepository memberRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, PasswordEncoder passwordEncoder, MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository1, StoreInfoRepository storeInfoRepository, StoreInfo2Repository storeInfo2Repository, ModelMapper modelMapper) {
         this.memberFileRepository = memberFileRepository;
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository = memberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository;
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository1;
+        this.storeInfoRepository = storeInfoRepository;
+        this.storeInfo2Repository = storeInfo2Repository;
         this.modelMapper = modelMapper;
     }
 
@@ -158,41 +160,41 @@ public class MypageService {
     }
 
 
-//
-//    @Transactional
-//    public String updateImg(MemberFileDTO memberFileDTO, MultipartFile empImage) {
-//        log.info("[MypageService] updateImg Start ======================================");
-//        log.info("[MypageService] updateImg memberFileDTO ================================= {}", memberFileDTO );
-//        log.info("[MypageService] updateImg empImage ================================= {}", empImage );
-//        int memberNo = memberFileDTO.getMemberNo();
-//        MemberFile memberFile = new MemberFile();
-//        String imageName = UUID.randomUUID().toString().replace("-","");
-//        String replaceFileName = null;
-//            int result =0;
-//
-//
-//            try {
-//
-//                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName,empImage);
-//                Member member = memberRepository.findByNo(memberNo);
-//                System.out.println("member = " + member);
-//                memberFile.setMember(member);
-//                memberFile.setOriginName(replaceFileName);
-//                log.info("[MypageService] memberFile.getOriginName() ================================= {}", memberFile.getOriginName() );
-//                memberFile.setRegDate(LocalDate.now());
-//                memberFileRepository.save(memberFile);
-//                result = 1;
-//
-//
-//            } catch (Exception e){
-//
-//                FileUploadUtils.deleteFile(IMAGE_DIR,replaceFileName);
-//                throw new RuntimeException(e);
-//            }
-//        log.info("[MypageService] updateImg End ======================================");
-//
-//        return result == 1 ? "true" : "false";
-//    }
+
+    @Transactional
+    public String updateImg(MemberFileDTO memberFileDTO, MultipartFile empImage) {
+        log.info("[MypageService] updateImg Start ======================================");
+        log.info("[MypageService] updateImg memberFileDTO ================================= {}", memberFileDTO );
+        log.info("[MypageService] updateImg empImage ================================= {}", empImage );
+        int memberNo = memberFileDTO.getMemberNo();
+        MemberFile memberFile = new MemberFile();
+        String imageName = UUID.randomUUID().toString().replace("-","");
+        String replaceFileName = null;
+            int result =0;
+
+
+            try {
+
+                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName,empImage);
+                Member member = memberRepository.findByNo(memberNo);
+                System.out.println("member = " + member);
+                memberFile.setMember(member);
+                memberFile.setOriginName(replaceFileName);
+                log.info("[MypageService] memberFile.getOriginName() ================================= {}", memberFile.getOriginName() );
+                memberFile.setRegDate(LocalDate.now());
+                memberFileRepository.save(memberFile);
+                result = 1;
+
+
+            } catch (Exception e){
+
+                FileUploadUtils.deleteFile(IMAGE_DIR,replaceFileName);
+                throw new RuntimeException(e);
+            }
+        log.info("[MypageService] updateImg End ======================================");
+
+        return result == 1 ? "true" : "false";
+    }
 
     public MemberFileDTO getMemberImg(int memberNo) {
         log.info("[TodoService] 이미지 조회하기 Start ===================");
@@ -214,6 +216,58 @@ public class MypageService {
 
 
         return memberFileDTO;
+    }
+
+
+    // 매장 정보 변경하기
+    @Transactional
+    public String updateStoreInfo(StoreInfoDTO storeInfoDTO) {
+        int result = 0;
+
+        // 멤버 번호 담기
+        int memberNo = storeInfoDTO.getMemberNo();
+        log.info("[MypageService] updateStoreInfo memberNo : {} " , memberNo);
+
+
+        StoreInfo storeInfo = storeInfoRepository.findByMemberNo(memberNo);
+        log.info("[MypageService] updateStoreInfo Start ======================================");
+        log.info("[MypageService] =========================storeInfo : {} " , storeInfo);
+//        try {
+            String email = storeInfoDTO.getEmail();
+            String phone = storeInfoDTO.getPhone();
+            String address = storeInfoDTO.getAddress();
+            String detailAddress = storeInfoDTO.getDetailAddress();
+
+            // 값이 null 또는 빈 문자열이 아닌 경우에만 저장
+            if (email != null && !email.trim().isEmpty()) {
+                storeInfo.setEmail(email);
+                log.info("[MypageService]  getEmployeePhone : {}", storeInfo.getEmail());
+            }
+
+            if (phone != null && !phone.trim().isEmpty()) {
+                storeInfo.setPhone(phone);
+            }
+
+            if (address != null && !address.trim().isEmpty()) {
+                storeInfo.setAddress(address);
+            }
+
+            if (detailAddress != null && !detailAddress.trim().isEmpty()) {
+                storeInfo.setDetailAddress(detailAddress);
+            }
+
+            storeInfoRepository.save(storeInfo);
+
+            // 저장 성공 시 result를 1로 설정
+            result = 1;
+//        } catch (Exception e){
+//
+//            log.info("[MypageService] updateMemberInfo 실패 ");
+//            throw new RuntimeException(e);
+//
+//        }
+
+        return result == 1 ? "true" : "false";
     }
 }
 

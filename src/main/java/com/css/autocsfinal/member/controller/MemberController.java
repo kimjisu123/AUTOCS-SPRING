@@ -2,6 +2,8 @@ package com.css.autocsfinal.member.controller;
 
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.mail.service.MailService;
+import com.css.autocsfinal.market.dto.StoreInfoDTO;
+import com.css.autocsfinal.market.repository.StoreInfoRepository;
 import com.css.autocsfinal.market.service.EmailService;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.EmployeeDTO;
@@ -232,18 +234,30 @@ public class MemberController {
     }
 
     // 한명회원 정보 조회
-//    @Operation(summary = "사원 조회 요청", description = "사원을 조회합니다.", tags = {"MemberController"})
-//    @GetMapping("/{memberNo}")
-//    public ResponseEntity<ResponseDTO> getEmployeeOne(@PathVariable int memberNo) {
-//        System.out.println("check ==========================");
-//        EmployeeAndDepartmentAndPositionDTO employeeDTOList = memberService.findEmployeeId(memberNo);
-//
-//        HttpStatus httpStatus = HttpStatus.OK;
-//
-//        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사원 조회 성공", employeeDTOList);
-//
-//        return ResponseEntity.status(httpStatus).body(responseDTO);
-//    }
+    @GetMapping("/{memberNo}")
+    public ResponseEntity<ResponseDTO> getEmployeeOne(@PathVariable int memberNo) {
+        System.out.println("check ==========================");
+        EmployeeAndDepartmentAndPositionDTO employeeDTOList = memberService.findEmployeeId(memberNo);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사원 조회 성공", employeeDTOList);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+    }
+
+    // 한명 매장 정보 조회
+    @GetMapping("store/{memberNo}")
+    public ResponseEntity<ResponseDTO> getStoreOne(@PathVariable int memberNo) {
+
+        System.out.println("check ==========================");
+        StoreInfoDTO storeInfo = memberService.findStoreId(memberNo);
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "사원 조회 성공", storeInfo);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+    }
 
 
 

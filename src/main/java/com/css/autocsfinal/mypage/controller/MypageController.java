@@ -3,6 +3,8 @@ package com.css.autocsfinal.mypage.controller;
 
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.main.dto.TodoDTO;
+import com.css.autocsfinal.market.dto.StoreInfoDTO;
+import com.css.autocsfinal.market.repository.StoreInfoRepository;
 import com.css.autocsfinal.member.dto.EmployeeAndDepartmentAndPositionDTO;
 import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.mypage.dto.MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO;
@@ -27,19 +29,7 @@ public class MypageController {
         this.mypageService = mypageService;
     }
 
-    // 전체 멤버 정보 불러오기
-//    @GetMapping("/memberInfo")
-//    public ResponseEntity<ResponseDTO> getMemberInfo() {
 
-//        log.info("[MypageController] getMemberInfo start");
-
-//        List<MemberAndEmployeeAndDepartmentAndPositionAndMemberFileDTO> empInfoList = mypageService.getEmployeeFile();
-
-//        HttpStatus httpStatus = HttpStatus.OK;
-//        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "memberDTO 조회", empInfoList);
-//        return ResponseEntity.status(httpStatus).body(responseDTO);
-
-//    }
 
     // 멤버 정보 수정하기
     @PutMapping("/updatememberinfo")
@@ -49,6 +39,18 @@ public class MypageController {
         log.info("[MarketController] fileImage {} =======> " + fileImage);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원 정보 수정", mypageService.updateMemberInfo(employeeAndDepartmentAndPositionDTO, fileImage)));
     }
+
+    // 매장 정보 수정하기
+    @PutMapping("/updatestoreinfo")
+    public ResponseEntity<ResponseDTO> updateStore(@ModelAttribute StoreInfoDTO storeInfoDTO) throws IOException {
+        System.out.println("storeInfoDTO 컨트롤러에 진입은 했나? = " + storeInfoDTO);
+        log.info("[MypageController]storeInfoDTOO {}", storeInfoDTO);
+        System.out.println("storeInfoDTO.getAddress() = " + storeInfoDTO.getAddress());
+        System.out.println("storeInfoDTO.getEmail() = " + storeInfoDTO.getEmail());
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "매장 정보 수정", mypageService.updateStoreInfo(storeInfoDTO)));
+    }
+
+
 
     // 비밀번호 재확인
     @PostMapping("/checkpwd")
@@ -60,11 +62,10 @@ public class MypageController {
 
     // 비밀 번호 변경하기
     @PutMapping("/changepwd")
-    public ResponseEntity<ResponseDTO> changePwd(@RequestParam("memberNo") int memberNo, @RequestParam("newpw") String newPw){
-        log.info("[ MypageController ]  changePwd newPw {}", newPw);
-        log.info("[ MypageController ]  changePwd memberNo {}", memberNo);
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "비밀번호 확인", mypageService.changePwd(memberNo,newPw)));
+    public ResponseEntity<ResponseDTO> changePwd(@RequestBody MemberDTO member){
+        log.info("[ MypageController ]  changePwd member.getNo() {}", member.getNo());
+        log.info("[ MypageController ]  changePwd member.getPwd() {}", member.getPwd());
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "비밀번호 확인", mypageService.changePwd(member.getNo(),member.getPwd())));
     }
 
 
