@@ -38,57 +38,118 @@ public class WorkStatusController {
     }
 
     // 인사부 조회
-    @GetMapping("/personnel")
-    public ResponseEntity<ResponseDTO> findByPersonnel(){
+    @GetMapping("/personnel/{name}")
+    public ResponseEntity<ResponseDTO> findByPersonnel(@PathVariable String name){
+
+        Object object;
+
+        if(name.equals("절대로아무도검색하지않을만한값입니다.")){
+            object = workStatusService.findByPersonnel();
+        } else{
+            object = workStatusService.findByPersonnel(name);
+        }
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "인사부 조회 성공", workStatusService.findByPersonnel()));
+                .body(new ResponseDTO(HttpStatus.OK, "인사부 조회 성공", object));
     }
 
     // 재무/회계부 조회
-    @GetMapping("/accounting")
-    public ResponseEntity<ResponseDTO> findByAccounting(){
+    @GetMapping("/accounting/{name}")
+    public ResponseEntity<ResponseDTO> findByAccounting(@PathVariable String name){
+
+        Object object;
+
+        if(name.equals("절대로아무도검색하지않을만한값입니다.")){
+            object = workStatusService.findByAccounting();
+        } else{
+            log.info("============================>22222222222222222222222222222");
+            object = workStatusService.findByAccounting(name);
+        }
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "재무/회계부 조회 성공", workStatusService.findByAccounting()));
+                .body(new ResponseDTO(HttpStatus.OK, "재무/회계부 조회 성공", object));
     }
 
     // 경영부 조회
-    @GetMapping("/management")
-    public ResponseEntity<ResponseDTO> findByManagement(){
+    @GetMapping("/management/{name}")
+    public ResponseEntity<ResponseDTO> findByManagement(@PathVariable String name){
+
+        Object object;
+
+        if(name.equals("절대로아무도검색하지않을만한값입니다.")){
+            log.info("============================>111111111111111111111111");
+            object = workStatusService.findByManagement();
+        } else{
+            log.info("============================>22222222222222222222222222222");
+            object = workStatusService.findByManagement(name);
+        }
+
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "경영부 조회 성공", workStatusService.findByManagement()));
+                .body(new ResponseDTO(HttpStatus.OK, "경영부 조회 성공", object ));
     }
 
     // 마케팅부 조회
-    @GetMapping("/marketing")
-    public ResponseEntity<ResponseDTO> findByMarketing(){
+    @GetMapping("/marketing/{name}")
+    public ResponseEntity<ResponseDTO> findByMarketing(@PathVariable String name){
+
+        Object object;
+
+        if(name.equals("절대로아무도검색하지않을만한값입니다.")){
+            log.info("============================>111111111111111111111111");
+            object = workStatusService.findByMarketing();
+        } else{
+            log.info("============================>22222222222222222222222222222");
+            object = workStatusService.findByMarketing(name);
+        }
+
+
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "마케팅부 조회 성공", workStatusService.findByMarketing()));
+                .body(new ResponseDTO(HttpStatus.OK, "마케팅부 조회 성공", object ));
     }
 
     // 영업부 조회
-    @GetMapping("/sales")
-    public ResponseEntity<ResponseDTO> findBySales(){
+    @GetMapping("/sales/{name}")
+    public ResponseEntity<ResponseDTO> findBySales(@PathVariable String name){
 
+        Object object;
+
+        if(name.equals("절대로아무도검색하지않을만한값입니다.")){
+            log.info("============================>111111111111111111111111");
+            object = workStatusService.findBySales();
+        } else{
+            log.info("============================>22222222222222222222222222222");
+            object = workStatusService.findBySales(name);
+        }
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "영업부 조회 성공", workStatusService.findBySales()));
+                .body(new ResponseDTO(HttpStatus.OK, "영업부 조회 성공", object));
     }
 
     // 서비스부 조회
-    @GetMapping("/service")
-    public ResponseEntity<ResponseDTO> findByService(){
+    @GetMapping("/service/{name}")
+    public ResponseEntity<ResponseDTO> findByService(@PathVariable String name){
+
+        Object object;
+
+        if(name.equals("절대로아무도검색하지않을만한값입니다.")){
+            log.info("============================>111111111111111111111111");
+            object = workStatusService.findByService();
+        } else{
+            log.info("============================>22222222222222222222222222222");
+            object = workStatusService.findByService(name);
+        }
+
+
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseDTO(HttpStatus.OK, "서비스부 조회 성공", workStatusService.findByService()));
+                .body(new ResponseDTO(HttpStatus.OK, "서비스부 조회 성공", object));
     }
 
     // 출근하기
@@ -108,19 +169,27 @@ public class WorkStatusController {
 
     // 본사 근태 현황
 
-    @GetMapping("/headOffice/{page}")
-    public ResponseEntity<ResponseDTO> findByHeadOffice( @PathVariable(name = "page", required = false) int offset){
+    @GetMapping("/headOffice/{page}/{search}")
+    public ResponseEntity<ResponseDTO> findByHeadOffice( @PathVariable(name = "page", required = false) int offset, @PathVariable(name = "search", required = false) String name){
 
 
-        int total = workStatusService.findByHeadOfficeTotal();
+        int total;
 
-        log.info("============================>{}", total);
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 8);
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
-        pagingResponseDTO.setData(workStatusService.findByHeadOffice(cri));
+
+        if(name.equals("절대로아무도검색하지않을만한값입니다.")){
+            total = workStatusService.findByHeadOfficeTotal();
+            pagingResponseDTO.setData(workStatusService.findByHeadOffice(cri));
+        } else {
+            total = workStatusService.findByHeadOfficeTotal(name);
+            pagingResponseDTO.setData(workStatusService.findByHeadOffice(cri, name));
+        }
+
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "본사 근태관리 조회 성공", pagingResponseDTO));
     }

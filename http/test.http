@@ -58,12 +58,12 @@ Content-Type: application/json
 Accept: */*
 
 ### 인사부 조회
-GET http://localhost:8080/personnel
+GET http://localhost:8080/personnel/지수
 Content-Type: application/json
 Accept: */*
 
 ### 재무/회계부 조회
-GET http://localhost:8080/accounting
+GET http://localhost:8080/accounting/사원
 Content-Type: application/json
 Accept: */*
 
@@ -73,7 +73,7 @@ Content-Type: application/json
 Accept: */*
 
 ### 마케팅부 조회
-GET http://localhost:8080/marketing
+GET http://localhost:8080/marketing/
 Content-Type: application/json
 Accept: */*
 
@@ -83,7 +83,7 @@ Content-Type: application/json
 Accept: */*
 
 ### 서비스부 조회
-GET http://localhost:8080/service
+GET http://localhost:8080/service/수
 Content-Type: application/json
 Accept: */*
 
@@ -103,7 +103,7 @@ Content-Type: application/json
 Accept: */*
 
 ### 본사 조회
-GET http://localhost:8080/headOffice/1
+GET http://localhost:8080/headOffice/1/김지수
 Content-Type: application/json
 Accept: */*
 

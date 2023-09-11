@@ -19,6 +19,15 @@ public interface WorkStatusAndEmployeeAndDepartmentRepository extends JpaReposit
             "where d.name = :name")
     List<WorkStatusAndEmployeeAndDepartmentAndPostion> findByDepartmentName(@Param("name") String departmentName);
 
+    @Query("SELECT w, l, e, d, p FROM WorkStatusAndEmployeeAndDepartmentAndPostion w " +
+            "join w.workStatusLists l " +
+            "join l.employee e " +
+            "join e.department d " +
+            "join e.position p " +
+            "where d.name = :name " +
+            "AND e.name like :emlpName")
+    List<WorkStatusAndEmployeeAndDepartmentAndPostion> findByDepartmentName(@Param("name") String departmentName, String emlpName);
+
     @Query("SELECT new com.css.autocsfinal.workstatus.dto.WorkStatusResult(w, e.name, d.name, p.name) FROM WorkStatusAndEmployeeAndDepartmentAndPostion w " +
             "join w.workStatusLists l " +
             "join l.employee e " +

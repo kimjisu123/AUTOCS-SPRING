@@ -89,6 +89,30 @@ public class WorkStatusService {
             result.setTotalCount(employeeList.size());
         }
 
+        log.info("=====================================>{}", resultDTO.size());
+
+        return resultDTO;
+    }
+
+    // 인사부 검색어
+    public Object findByPersonnel(String name) {
+
+
+        name = '%'+name +'%';
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("인사부", name);
+
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("H1");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        log.info("==========================================>{}", resultDTO.size());
+
         return resultDTO;
     }
 
@@ -109,12 +133,50 @@ public class WorkStatusService {
         return resultDTO;
 
     }
+    // 재무 회계 검색용
+    public Object findByAccounting(String name) {
 
+        name = '%'+name +'%';
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("재무/회계부", name);
+
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("F1");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
+
+    }
     // 경영부
     public Object findByManagement() {
 
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("경영부");
+
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("M1");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
+
+    }
+
+    // 경영부 검색
+    public Object findByManagement(String name) {
+
+        name = '%'+name +'%';
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("경영부", name);
 
         List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("M1");
 
@@ -148,11 +210,52 @@ public class WorkStatusService {
         return resultDTO;
     }
 
+    // 마케팅부 검색어
+    public Object findByMarketing(String name) {
+
+        name = '%'+name +'%';
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("마케팅부", name);
+
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("M2");
+
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        log.info("============Test===========>{}", resultDTO);
+
+        return resultDTO;
+    }
+
     // 영업부
     public Object findBySales() {
 
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("영업부");
+
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("S1");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        return resultDTO;
+    }
+
+    // 영업부 검색
+    public Object findBySales(String name) {
+
+        name = '%'+name +'%';
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("영업부", name);
 
         List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("S1");
 
@@ -171,6 +274,8 @@ public class WorkStatusService {
         List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
                 workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("서비스부");
 
+
+
         List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("S2");
 
         List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
@@ -178,6 +283,31 @@ public class WorkStatusService {
         for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
             result.setTotalCount(employeeList.size());
         }
+
+        log.info("=============================>{}",resultDTO);
+
+        return resultDTO;
+    }
+
+    // 서비스부 검색
+    public Object findByService(String name) {
+
+        name = '%'+name +'%';
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostion> workStatusAndEmployeeAndDepartments =
+                workStatusAndEmployeeAndDepartmentRepository.findByDepartmentName("서비스부", name);
+
+
+
+        List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("S2");
+
+        List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
+
+        for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
+            result.setTotalCount(employeeList.size());
+        }
+
+        log.info("=============================>{}",resultDTO);
 
         return resultDTO;
     }
@@ -247,15 +377,34 @@ public class WorkStatusService {
 
         List<EmployeeAndWorkStatusDTO> employeeAndWorkStatusDTOS =  result.stream().map(employeeAndWorkStatus -> modelMapper.map(employeeAndWorkStatus, EmployeeAndWorkStatusDTO.class)).collect(Collectors.toList());
 
-        log.info("===========================================>{}", employeeAndWorkStatusDTOS);
+        return employeeAndWorkStatusDTOS;
+    }
 
-        return result;
+    // 본사 근태관리 검색
+    public Object findByHeadOffice(Criteria cri, String name) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        List<EmployeeAndWorkStatus> result = employeeAndWorkStatusRepository.findByOrderByName(paging, name);
+
+        List<EmployeeAndWorkStatusDTO> employeeAndWorkStatusDTOS =  result.stream().map(employeeAndWorkStatus -> modelMapper.map(employeeAndWorkStatus, EmployeeAndWorkStatusDTO.class)).collect(Collectors.toList());
+
+        return employeeAndWorkStatusDTOS;
     }
 
 
     public int findByHeadOfficeTotal() {
 
         List<EmployeeAndWorkStatus> data = employeeAndWorkStatusRepository.findByOrderByName();
+
+        return data.size();
+    }
+
+    public int findByHeadOfficeTotal(String name) {
+
+        List<EmployeeAndWorkStatus> data = employeeAndWorkStatusRepository.findByOrderByName(name);
 
         return data.size();
     }

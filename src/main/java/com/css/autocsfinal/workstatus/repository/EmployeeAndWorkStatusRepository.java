@@ -22,6 +22,16 @@ public interface EmployeeAndWorkStatusRepository extends JpaRepository<EmployeeA
             "ORDER BY e.name")
     List<EmployeeAndWorkStatus> findByOrderByName();
 
+
+    @Query("SELECT distinct e FROM EmployeeAndWorkStatus e " +
+            "LEFT JOIN fetch e.department d " +
+            "LEFT JOIN fetch e.position p " +
+            "LEFT JOIN fetch e.workStatusLists l " +
+            "LEFT JOIN fetch l.workStatus w " +
+            "WHERE e.name = :name " +
+            "ORDER BY e.name")
+    List<EmployeeAndWorkStatus> findByOrderByName(String name);
+
     @Query("SELECT distinct e FROM EmployeeAndWorkStatus e " +
             "LEFT JOIN fetch e.department d " +
             "LEFT JOIN fetch e.position p " +
@@ -29,5 +39,14 @@ public interface EmployeeAndWorkStatusRepository extends JpaRepository<EmployeeA
             "LEFT JOIN fetch l.workStatus w " +
             "ORDER BY e.name")
     List<EmployeeAndWorkStatus> findByOrderByName(Pageable paging);
+
+    @Query("SELECT distinct e FROM EmployeeAndWorkStatus e " +
+            "LEFT JOIN fetch e.department d " +
+            "LEFT JOIN fetch e.position p " +
+            "LEFT JOIN fetch e.workStatusLists l " +
+            "LEFT JOIN fetch l.workStatus w " +
+            "WHERE e.name = :name " +
+            "ORDER BY e.name")
+    List<EmployeeAndWorkStatus> findByOrderByName(Pageable paging, String name);
 
 }
