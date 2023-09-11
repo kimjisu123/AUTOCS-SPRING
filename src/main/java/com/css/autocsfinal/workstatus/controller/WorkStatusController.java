@@ -114,6 +114,8 @@ public class WorkStatusController {
 
         int total = workStatusService.findByHeadOfficeTotal();
 
+        log.info("============================>{}", total);
+
         Criteria cri = new Criteria(Integer.valueOf(offset), 8);
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();

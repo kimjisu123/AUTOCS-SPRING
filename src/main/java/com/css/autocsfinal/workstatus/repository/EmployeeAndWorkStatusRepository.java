@@ -14,11 +14,11 @@ import java.util.Date;
 import java.util.List;
 
 public interface EmployeeAndWorkStatusRepository extends JpaRepository<EmployeeAndWorkStatus, Integer> {
-    @Query("SELECT e, d, l, w FROM EmployeeAndWorkStatus e " +
-            "LEFT JOIN e.department d " +
-            "LEFT JOIN e.position p " +
-            "LEFT JOIN e.workStatusLists l " +
-            "LEFT JOIN l.workStatus w " +
+    @Query("SELECT distinct e FROM EmployeeAndWorkStatus e " +
+            "LEFT JOIN fetch e.department d " +
+            "LEFT JOIN fetch e.position p " +
+            "LEFT JOIN fetch e.workStatusLists l " +
+            "LEFT JOIN fetch l.workStatus w " +
             "ORDER BY e.name")
     List<EmployeeAndWorkStatus> findByOrderByName();
 
