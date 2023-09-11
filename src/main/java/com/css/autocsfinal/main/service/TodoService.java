@@ -52,7 +52,7 @@ public class TodoService {
                     todoDTO.setTodoNo(todo.getTodoNo());
                     todoDTO.setContent(todo.getContent());
                     todoDTO.setTodoStatus(todo.getTodoStatus());
-                    todoDTO.setRegDate(new Date(System.currentTimeMillis()));
+                    todoDTO.setRegDate(todo.getRegDate());
                     todoDTO.setMemberNo(todo.getMember().getNo());
 
                     return todoDTO;
@@ -78,7 +78,7 @@ public List<TodoDTO> getTodo() {
                     todoDTO.setTodoNo(todo.getTodoNo());
                     todoDTO.setContent(todo.getContent());
                     todoDTO.setTodoStatus(todo.getTodoStatus());
-                    todoDTO.setRegDate(new Date(System.currentTimeMillis()));
+                    todoDTO.setRegDate(todo.getRegDate());
                     todoDTO.setMemberNo(todo.getMember().getNo());
 
                 return todoDTO;

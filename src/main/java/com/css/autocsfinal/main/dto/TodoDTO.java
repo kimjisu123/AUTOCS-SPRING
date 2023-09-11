@@ -5,7 +5,7 @@ import com.css.autocsfinal.member.entity.Member;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor

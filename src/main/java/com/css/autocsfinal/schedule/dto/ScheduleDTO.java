@@ -1,5 +1,6 @@
 package com.css.autocsfinal.schedule.entity;
 
+import com.css.autocsfinal.member.dto.MemberDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,5 +25,9 @@ public class ScheduleDTO {
     private Date startDate;
 
     private Date endDate;
+
+    private int memberNo;
+
+    private MemberDTO member;
 
 }

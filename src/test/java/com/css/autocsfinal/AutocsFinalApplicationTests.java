@@ -18,6 +18,9 @@ import com.css.autocsfinal.mypage.entity.MemberAndEmployeeAndDepartmentAndPositi
 import com.css.autocsfinal.mypage.entity.MemberFile;
 import com.css.autocsfinal.mypage.repository.MemberAndEmployeeAndDepartmentAndPositionAndMemberFileRepository;
 import com.css.autocsfinal.mypage.repository.MemberFileRepository;
+import com.css.autocsfinal.schedule.entity.Schedule;
+import com.css.autocsfinal.schedule.entity.ScheduleDTO;
+import com.css.autocsfinal.schedule.repository.ScheduleRepository;
 import com.css.autocsfinal.util.FileUploadUtils;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -29,8 +32,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -66,6 +69,8 @@ class AutocsFinalApplicationTests {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    public ScheduleRepository scheduleRepository;
 
     @Test
     void contextLoads() {
@@ -276,7 +281,7 @@ class AutocsFinalApplicationTests {
         storeInfoDTO.setPwd(storeInfo.getMember().getPwd());
         storeInfoDTO.setRole(storeInfo.getMember().getRole());
         storeInfoDTO.setDetailAddress(storeInfo.getDetailAddress());
-        storeInfoDTO.setRefMemberNo(storeInfo.getMember().getNo());
+//        storeInfoDTO.setRefMemberNo(storeInfo.getMember().getNo());
         storeInfoDTO.setLicense(storeInfo.getLicense());
 
         System.out.println("memberFile = " + storeInfoDTO.getStoreFile());
@@ -286,7 +291,45 @@ class AutocsFinalApplicationTests {
 
     }
 
+    @Test
+ void calendertest () {
 
+        int num  = 240;
+        Member member = memberRepository.findByNo(num);
+        Schedule schedule = new Schedule();
+        schedule.setContent("하반기2 매출 보고를 위한 회의입니다.");
+        schedule.setName("상반기 매출 보고 회의2");
+        schedule.setPlace("2층 회의실");
+        schedule.setEndDate(new Date());
+        schedule.setStartDate(new Date());
+        schedule.setMember(member);
+
+        scheduleRepository.save(schedule);
+
+
+    }
+
+
+    // 멤버 일정가지고 오기
+    @Test
+    void getCalender() {
+
+        int num =240;
+        List<Schedule> schedules = scheduleRepository.findByMemberNo(num);
+        List<ScheduleDTO> sclist  = schedules.stream().map(schedule -> {
+                ScheduleDTO sc = new ScheduleDTO();
+        sc.setName(schedule.getName());
+        sc.setScheduleCode(schedule.getScheduleCode());
+        sc.setContent(schedule.getContent());
+        sc.setStartDate(schedule.getStartDate());
+        sc.setMemberNo(schedule.getMember().getNo());
+        return sc;
+        }).collect(Collectors.toList());
+
+
+
+        System.out.println("schedule = " + sclist);
+    }
 
 }
 
