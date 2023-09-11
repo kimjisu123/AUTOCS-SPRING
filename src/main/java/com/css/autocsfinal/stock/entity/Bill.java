@@ -2,10 +2,7 @@ package com.css.autocsfinal.stock.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -18,6 +15,8 @@ import java.sql.Date;
 public class Bill {
 
     @Id
+    @GeneratedValue(generator = "SEQ_BILL_NO") // 시퀀스 이름 지정
+    @SequenceGenerator(name = "SEQ_BILL_NO", sequenceName = "SEQ_BILL_NO", allocationSize = 1)
     @Column(name = "BILL_NO")
     private int billNo;
     @Column(name = "REGIST_DATE")
@@ -26,5 +25,7 @@ public class Bill {
     private int refCompanyNo;
     @Column(name = "REF_STORE_INFO_NO")
     private int refStoreInfoNo;
+    @Column(name = "REF_ORDER_NO")
+    private int refOrderNo;
 
 }

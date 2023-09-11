@@ -30,7 +30,7 @@ public class Test {
         todo.setMember(member);
         todo.setContent("테스트입니다.");
         todo.setTodoStatus('N');
-        todo.setRegDate(LocalDate.now());
+//        todo.setRegDate(LocalDate.now());
 
         //when
         EntityTransaction entityTransaction = entityManager.getTransaction();

@@ -7,7 +7,7 @@ Accept: */*
 
 
 ### 회원정보 변경을 위한 불러오기
-GET http://localhost:8080/member/41
+GET http://localhost:8080/member/1
 Content-Type: application/json
 Accept: */*
 
@@ -71,5 +71,36 @@ Accept: */*
 
 ### 회원의 사진파일 가져오기
 GET http://localhost:8080/mypage/img/240
+Content-Type: application/json
+Accept: */*
+
+### 매장 정보 가져오기
+GET http://localhost:8080/member/store/220
+Content-Type: application/json
+Accept: */*
+
+### 매장 정보 수정하기
+PUT http://localhost:8080/mypage/updatestoreinfo
+Content-Type: application/json
+Accept: */*
+
+{
+  "storeNo": 80,
+  "license": "60032146785",
+  "address": " 서울 중구 ",
+  "detailAddress": "낙원상가 1층",
+  "email": "kim@gmail.com",
+  "name": "김정국",
+  "phone": "010-1234-1234",
+  "storeFile": "3695ab85677d4adf80691f6c31474c1a.jpg",
+  "pwd": "$2a$10$PUMrMmecrs7Iwaywkp4W5e00pAmkfJXAtj3fWkdyYXCOGsefdTOUy",
+  "id": "Store219",
+  "role": "STORE",
+  "memberNo": 220
+}
+
+
+### 멤버 한명의 일정 가지고 오기
+GET http://localhost:8080/mainContent/shortDaily/240
 Content-Type: application/json
 Accept: */*

@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StoreInfo2Repository extends JpaRepository<StoreInfo2, Integer> {
 
-
+    StoreInfo2 findByMemberNo(int memberNo);
 }

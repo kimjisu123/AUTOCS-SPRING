@@ -33,10 +33,6 @@ public class EmployeeAndDepartmentAndPositionDTO {
     private String pw;
     private int memberNo;
     private String memberFile;
-    private int memberFileNo;
-
-
-
 
     private String memberState;
 
