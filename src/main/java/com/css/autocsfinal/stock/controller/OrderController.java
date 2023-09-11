@@ -193,6 +193,39 @@ public class OrderController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
     }
 
+    /* 주문물품조회 - 계산서용 */
+    @GetMapping("/stock/bill/detail/order")
+    public ResponseEntity<ResponseDTO> myOrderListForBill(
+            @RequestParam(name = "myOrderNo", defaultValue = "")int myOrderNo
+    ){
+
+        List<Tuple> tuplePage = orderService.myOrderListForBill(myOrderNo);
+
+        List<OrderListDTO> OrderList = tuplePage.stream()
+                .map(tuple -> {
+                    BigDecimal orderProductNo =  tuple.get(0, BigDecimal.class);
+                    BigDecimal orderNo =  tuple.get(1, BigDecimal.class);
+                    String storeInfoName = tuple.get(2, String.class);
+                    String categoryName = tuple.get(3, String.class);
+                    String productName = tuple.get(4, String.class);
+                    String unitName = tuple.get(5, String.class);
+                    String standardName = tuple.get(6, String.class);
+                    BigDecimal price = tuple.get(7, BigDecimal.class);
+                    BigDecimal quantity = tuple.get(8, BigDecimal.class);
+                    String etc = tuple.get(9, String.class);
+                    String registDate = tuple.get(10, String.class);
+                    String status = tuple.get(11, String.class);
+
+
+                    return new OrderListDTO(orderProductNo.intValue(), orderNo.intValue(), storeInfoName, categoryName, productName, unitName, standardName,
+                            price.intValue(), quantity.intValue(), etc, registDate, status );
+                })
+                .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", OrderList));
+    }
+
     /* 주문물품 조회 - 환불용 */
     @GetMapping("/stock/refund")
     public ResponseEntity<ResponseDTO> selectOrderProduct(
