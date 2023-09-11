@@ -125,6 +125,7 @@ public class WorkStatusService {
         }
 
         return resultDTO;
+
     }
 
     // 마케팅부
@@ -135,11 +136,14 @@ public class WorkStatusService {
 
         List<Employee>employeeList = employeeRepository.findByRefDepartmentCode("M2");
 
+
         List<WorkStatusAndEmployeeAndDepartmentAndPostionDTO> resultDTO =  workStatusAndEmployeeAndDepartments.stream().map(workStatusAndEmployeeAndDepartmentAndPostion -> modelMapper.map(workStatusAndEmployeeAndDepartmentAndPostion, WorkStatusAndEmployeeAndDepartmentAndPostionDTO.class)).collect(Collectors.toList());
 
         for(WorkStatusAndEmployeeAndDepartmentAndPostionDTO result : resultDTO){
             result.setTotalCount(employeeList.size());
         }
+
+        log.info("============Test===========>{}", resultDTO);
 
         return resultDTO;
     }
@@ -187,6 +191,9 @@ public class WorkStatusService {
         workStatus.setAttendanceTime(new Date());
         workStatus.setVacationStatus('N');
         workStatus.setAbsenceWorkStatus('N');
+
+
+
 
         WorkStatus result = workStatusRepsitory.save(workStatus);
 
