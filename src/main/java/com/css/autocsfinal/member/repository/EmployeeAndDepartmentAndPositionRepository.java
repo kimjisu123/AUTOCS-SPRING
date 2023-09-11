@@ -25,4 +25,6 @@ public interface EmployeeAndDepartmentAndPositionRepository extends JpaRepositor
 
     @EntityGraph(attributePaths = {"member", "department", "position"})
     EmployeeAndDepartmentAndPosition findByEmployeeNo(int employeeNo);
+
+
 }

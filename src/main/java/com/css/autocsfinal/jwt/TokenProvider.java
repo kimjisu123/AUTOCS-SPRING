@@ -31,7 +31,7 @@ public class TokenProvider {
 
     private static final String BEARER_TYPE = "Bearer";  // Bearer 토큰 사용시 앞에 붙이는 prefix문자열
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분(ms단위)
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 8 * 60 * 60; // 8시간으로 설정
 
     private final Key key;   // java.security.Key로 imort
 

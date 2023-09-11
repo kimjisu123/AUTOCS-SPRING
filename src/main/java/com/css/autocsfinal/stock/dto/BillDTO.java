@@ -15,6 +15,7 @@ public class BillDTO {
     private Date registDate;
     private int refCompanyNo;
     private int refStoreInfoNo;
+    private int refOrderNo;
 
 
 }

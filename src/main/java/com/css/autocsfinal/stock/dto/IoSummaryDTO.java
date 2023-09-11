@@ -11,9 +11,12 @@ import java.sql.Date;
 @Setter
 @ToString
 public class IoSummaryDTO {
-    private int refProductNo;
-    private long totalQuantityIn;
-    private long totalQuantityOut;
+    private Integer refProductNo;
+    private Integer totalQuantityIn;
+    private Integer totalQuantityOut;
+//    private int refProductNo;
+//    private long totalQuantityIn;
+//    private long totalQuantityOut;
     private String productName;
     private String categoryName;
     private String standardName;

@@ -1,27 +1,30 @@
 package com.css.autocsfinal.member.dto;
 
+import com.css.autocsfinal.main.entity.Todo;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-    @NoArgsConstructor
+
+@NoArgsConstructor
     @AllArgsConstructor
     @Getter
     @Setter
     @ToString
     public class MemberDTO implements UserDetails {
-        private int no;
 
-        private String id;
+    private int no;
 
-        private String pwd;
+    private String id;
 
-        private Character state;
+    private String pwd;
 
-        private String role;
-        
+    private Character state;
+
+    private String role;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,4 +60,5 @@ import java.util.Collection;
     public boolean isEnabled() {
         return false;
     }
+
 }

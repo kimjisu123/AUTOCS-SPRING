@@ -54,7 +54,7 @@ public class ProductService {
     public int selectProductListByName(String search) {
 
         /* 페이징 처리 결과를 Page 타입으로 반환 받는다. */
-        List<ProductDetail> productList = productDetailRepository.findByNameContaining(search);
+        List<ProductDetail> productList = productDetailRepository.findByNameContainingAndStatus(search, "Y");
 
         return productList.size();
     }

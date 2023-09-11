@@ -14,4 +14,5 @@ public class OrderDTO {
     private int refBillNo;
     private int storeInfoNo;
     private Date registDate;
+    private String status;
 }
