@@ -2,6 +2,3 @@
 GET http://localhost:8080/chart
 Accept: */*
 
-### 부서 조회
-GET http://localhost:8080/chart/dept
-Accept: */*

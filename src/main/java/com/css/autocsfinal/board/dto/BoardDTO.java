@@ -37,6 +37,10 @@ public class BoardDTO {
     private String employeeName;
     private String department;
     private String position;
+    private String memnerRole;
+
+    //게시판에서 영업점
+    private String storeName;
 
     //분리
     private BoardCategoryDTO category;
