@@ -9,7 +9,9 @@ import com.css.autocsfinal.board.repository.BoardRepository;
 import com.css.autocsfinal.market.entity.StoreInfo2;
 import com.css.autocsfinal.market.repository.StoreInfo2Repository;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
+import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
+import com.css.autocsfinal.member.repository.MemberRepository;
 import com.css.autocsfinal.util.FileUploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -38,12 +40,15 @@ public class BoardService {
 
     private final StoreInfo2Repository storeInfo2Repository;
 
-    public BoardService(BoardRepository boardRepository, ModelMapper modelMapper, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, BoardFileRepository boardFileRepository, StoreInfo2Repository storeInfo2Repository) {
+    private final MemberRepository memberRepository;
+
+    public BoardService(BoardRepository boardRepository, ModelMapper modelMapper, EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository, BoardFileRepository boardFileRepository, StoreInfo2Repository storeInfo2Repository, MemberRepository memberRepository) {
         this.boardRepository = boardRepository;
         this.modelMapper = modelMapper;
         this.employeeAndDepartmentAndPositionRepository = employeeAndDepartmentAndPositionRepository;
         this.boardFileRepository = boardFileRepository;
         this.storeInfo2Repository = storeInfo2Repository;
+        this.memberRepository = memberRepository;
     }
 
     /* 이미지 저장 할 위치 및 응답 할 이미지 주소 */
@@ -282,6 +287,12 @@ public class BoardService {
         boardDTO.setRegist(board.getRegist());
         boardDTO.setContent(board.getContent());
         boardDTO.setAnonymity(board.getAnonymity());
+
+        int no = board.getRefMemberNo();
+
+        //멤버 번호로 권한 담기
+        Member member = memberRepository.findByNo(no);
+        boardDTO.setMemnerRole(member.getRole());
 
         int memberNo = board.getRefMemberNo();
 

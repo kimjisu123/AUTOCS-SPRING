@@ -40,9 +40,12 @@ public class BoardCommentAndBoardAndMember {
     @Column(name = "ANONYMITY")
     private char anonymity;
 
-    @ManyToOne()
-    @JoinColumn(name = "REF_MEMBER_NO")
-    private Member member;
+    @Column(name = "REF_MEMBER_NO")
+    private int refMemberNo;
+
+//    @ManyToOne()
+//    @JoinColumn(name = "REF_MEMBER_NO")
+//    private Member member;
 
     @ManyToOne()
     @JoinColumn(name = "REF_BOARD_NO")
