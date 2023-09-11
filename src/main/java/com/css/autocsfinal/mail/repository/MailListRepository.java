@@ -14,4 +14,10 @@ public interface MailListRepository extends JpaRepository<MailList, Integer> {
 
     @Query("select l from MailList l WHERE l.employeeNo = :employeeNo")
     List<MailList> findByPage(int employeeNo, Pageable paging);
+
+    @Query("select l, m from MailList l JOIN l.mail m WHERE l.employeeNo = :employeeNo AND m.title LIKE %:title%")
+    List<MailList> findByPage(int employeeNo, Pageable paging, String title);
+
+    @Query("select l, m from MailList l JOIN l.mail m WHERE l.employeeNo = :employeeNo AND m.title LIKE %:title%")
+    List<MailList> findByPage(int employeeNo, String title);
 }

@@ -20,16 +20,26 @@ public class MailController {
 
     private final MailService mailService;
 
-    @GetMapping("/mail/{employeeNo}/{page}")
-    public ResponseEntity<ResponseDTO> findMail(@PathVariable int employeeNo,@PathVariable(name = "page", required = false ) int offset){
 
-        int total = mailService.findByMailAllTotal(employeeNo);
+    // 메일 조회
+    @GetMapping("/mail/{employeeNo}/{page}/{search}")
+    public ResponseEntity<ResponseDTO> findMail(@PathVariable int employeeNo,@PathVariable(name = "page", required = false ) int offset, @PathVariable(name = "search", required = false ) String title){
+
+        log.info("=========================================>{}", title);
+        int total;
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 8);
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
-        pagingResponseDTO.setData(mailService.findMail(employeeNo, cri));
 
+        // 검색 유무 확인
+        if(title.equals("절대로아무도검색하지않을만한값입니다.")){
+            total =  mailService.findByMailAllTotal(employeeNo);
+            pagingResponseDTO.setData(mailService.findMail(employeeNo, cri));
+        } else{
+            total =  mailService.findByMailSelectTotal(employeeNo, title);
+            pagingResponseDTO.setData(mailService.findMail(employeeNo, cri, title));
+        }
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
         return ResponseEntity
@@ -38,44 +48,57 @@ public class MailController {
     }
 
 
-    @GetMapping("/mailBookmark/{page}/{search}")
-    public ResponseEntity<ResponseDTO> findMailbookmark(@PathVariable(name = "page", required = false ) int offset, @PathVariable(name = "search", required = false ) String title){
+    // 보낸 메일 조회
+    @GetMapping("/mailSent/{employeeNo}/{page}/{search}")
+    public ResponseEntity<ResponseDTO> findMailSent(@PathVariable int employeeNo, @PathVariable(name = "page", required = false ) int offset, @PathVariable(name = "search", required = false ) String title){
+
+        log.info("test===================================>{}", title);
 
 
-        int total = mailService.findByMailTotal();
+
+        int total;
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 8);
+        // 검색 유무 확인
+        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+        if(title.equals("절대로아무도검색하지않을만한값입니다.")){
+            total = mailService.findByMailSentTotal(employeeNo);
+            pagingResponseDTO.setData(mailService.mailSent(employeeNo, cri));
+        } else{
+            total = mailService.findBySelectMailSentTotal(employeeNo, title);
+            pagingResponseDTO.setData(mailService.mailSent(employeeNo, cri, title));
+        }
 
+        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "보낸 메일 조회 성공", pagingResponseDTO));
+    }
+
+    @GetMapping("/mailBookmark/{employeeNo}/{page}/{search}")
+    public ResponseEntity<ResponseDTO> findMailbookmark(@PathVariable int employeeNo, @PathVariable(name = "page", required = false ) int offset, @PathVariable(name = "search", required = false ) String title){
+        log.info("1111111111111111111111111111111111");
+
+        int total;
+
+        Criteria cri = new Criteria(Integer.valueOf(offset), 8);
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 
+        // 검색 유무 확인
         if(title.equals("절대로아무도검색하지않을만한값입니다.")){
-            pagingResponseDTO.setData(mailService.mailBookmark(cri));
+            total = mailService.findByMailTotal(employeeNo);
+            pagingResponseDTO.setData(mailService.mailBookmark(employeeNo, cri));
         } else{
-            pagingResponseDTO.setData(mailService.mailBookmark(cri, title));
+
+            log.info("titl===============================================>{}", title);
+            total = mailService.findByBookmarkMailTotal(employeeNo, title);
+            pagingResponseDTO.setData(mailService.mailBookmark(employeeNo, cri, title));
         }
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "북마크 조회 성공", pagingResponseDTO));
     }
 
-
-
-    @GetMapping("/mailSent/{employeeNo}/{page}")
-    public ResponseEntity<ResponseDTO> findMailSent(@PathVariable int employeeNo, @PathVariable(name = "page", required = false ) int offset){
-
-        log.info("test===================================>{}", offset);
-
-        int total = mailService.findByMailSentTotal(employeeNo);
-
-        Criteria cri = new Criteria(Integer.valueOf(offset), 8);
-
-        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
-        pagingResponseDTO.setData(mailService.mailSent(employeeNo, cri));
-        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
-
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "보낸 메일 조회 성공", pagingResponseDTO));
-    }
 
 
 

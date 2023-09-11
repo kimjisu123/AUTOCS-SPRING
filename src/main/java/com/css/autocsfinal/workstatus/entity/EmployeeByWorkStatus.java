@@ -3,10 +3,7 @@ package com.css.autocsfinal.workstatus.entity;
 import com.css.autocsfinal.mail.entity.MailList;
 import com.css.autocsfinal.member.entity.Department;
 import com.css.autocsfinal.member.entity.Position;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
@@ -24,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class EmployeeByWorkStatus {
 
     @Id
@@ -63,18 +61,4 @@ public class EmployeeByWorkStatus {
     @JoinColumn(name="REF_POSITION_CODE")
     private Position position;
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "employeeNo=" + employeeNo +
-                ", name='" + name + '\'' +
-                ", employeeJoin=" + employeeJoin +
-                ", employeeOut=" + employeeOut +
-                ", employeeEmail='" + employeeEmail + '\'' +
-                ", employeePhone='" + employeePhone + '\'' +
-                ", upCode=" + upCode +
-                ", position=" + position +
-                ", memberNo=" + memberNo +
-                '}';
-    }
 }

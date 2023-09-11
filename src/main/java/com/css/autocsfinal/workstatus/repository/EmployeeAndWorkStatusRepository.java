@@ -22,18 +22,11 @@ public interface EmployeeAndWorkStatusRepository extends JpaRepository<EmployeeA
             "ORDER BY e.name")
     List<EmployeeAndWorkStatus> findByOrderByName();
 
-    @Query("SELECT DISTINCT e, d, l, w FROM EmployeeAndWorkStatus e " +
-            "JOIN e.department d " +
-            "JOIN e.position p " +
-            "LEFT JOIN e.workStatusLists l " +
-            "LEFT JOIN l.workStatus w " +
-            "WHERE e.employeeNo IN (" +
-            "   SELECT DISTINCT e2.employeeNo " +
-            "   FROM EmployeeAndWorkStatus e2 " +
-            "   LEFT JOIN e2.department d2 " +
-            "   LEFT JOIN e2.position p2 " +
-            "   WHERE e.employeeNo = e2.employeeNo " +
-            ") " +
+    @Query("SELECT distinct e FROM EmployeeAndWorkStatus e " +
+            "LEFT JOIN fetch e.department d " +
+            "LEFT JOIN fetch e.position p " +
+            "LEFT JOIN fetch e.workStatusLists l " +
+            "LEFT JOIN fetch l.workStatus w " +
             "ORDER BY e.name")
     List<EmployeeAndWorkStatus> findByOrderByName(Pageable paging);
 

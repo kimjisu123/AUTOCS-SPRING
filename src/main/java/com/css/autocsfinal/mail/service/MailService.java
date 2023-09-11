@@ -37,6 +37,7 @@ public class MailService {
     private final MailListRepository mailListRepository;
     private final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
 
+    // 메일 조회
     public List<MailDTO> findMail(int employeeNo, Criteria cri) {
 
         int index = cri.getPageNum() - 1;
@@ -57,32 +58,107 @@ public class MailService {
         return mailDTOList;
     }
 
+    // 메일조회(검색)
+    public List<MailDTO> findMail(int employeeNo, Criteria cri, String title) {
 
-    public Object mailBookmark(Criteria cri) {
+        title = '%'+ title + '%';
 
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count);
 
-        List<Mail> mailList = mailRepository.findByStatus("Y", paging);
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+        List<Mail> mailList = mailRepository.findByPositionAndReceiverAndTitleLikeOrderByMailNoDesc(positionName, name, paging, title);
+
+        List<MailDTO> mailDTOList = mailList.stream().map(Mail -> modelMapper.map(Mail, MailDTO.class) ).collect(Collectors.toList());
+
+
+
+        return mailDTOList;
+    }
+
+    public int findByMailTotal(int employeeNo) {
+
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+        List<Mail> mailList = mailRepository.findByStatus(positionName, name, "Y");
+
+        log.info("test Number =================================>{}", mailList.size());
+        return mailList.size();
+    }
+
+    // 북마크 조회
+    public Object mailBookmark(int employeeNo,Criteria cri) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+
+        List<Mail> mailList = mailRepository.findByStatus(positionName, name, "Y", paging);
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
+
+        log.info("========================================================>{}", mailDTOList);
 
         return mailDTOList;
 
     }
 
-    public Object mailBookmark(Criteria cri, String title) {
+
+    // 북마크 검색 갯수
+    public int findByBookmarkMailTotal(int employeeNo, String title) {
+
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+        title = '%' + title +'%';
+
+        List<Mail> mailList = mailRepository.findByStatus(positionName, name, "Y", title);
+
+        return mailList.size();
+    }
+
+    // 북마크 검색 결과
+    public Object mailBookmark(int employeeNo, Criteria cri, String title) {
 
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count);
 
-        List<Mail> mailList = mailRepository.findByStatus("Y", paging, title);
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+        title = '%' + title +'%';
+
+        List<Mail> mailList = mailRepository.findByStatus(positionName, name, "Y", title, paging);
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
 
         return mailDTOList;
+
 
     }
     @Transactional
@@ -180,12 +256,29 @@ public class MailService {
         return mailDTOList;
     }
 
-    public int findByMailTotal() {
+    // 검색
+    public Object mailSent(int employeeNo, Criteria cri, String title) {
 
-        List<Mail> mailList = mailRepository.findByStatus("Y");
 
-        return mailList.size();
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count);
+
+        List<MailList> mailLists = mailListRepository.findByPage(employeeNo, paging, title);
+
+        List<Mail> mailList = new ArrayList<>();
+
+
+        for(int i = 0; i< mailLists.size(); i++){
+            mailList.add(mailLists.get(i).getMail());
+        }
+
+        List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
+
+
+        return mailDTOList;
     }
+
 
     public int findByMailSentTotal(int employeeNo) {
 
@@ -207,4 +300,38 @@ public class MailService {
 
         return mailList.size();
     }
+
+
+    public int findByMailSelectTotal(int employeeNo, String title) {
+
+
+        title = '%'+ title + '%';
+
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+        List<Mail> mailList = mailRepository.findByPositionAndReceiverAndTitleLikeOrderByMailNoDesc(positionName, name, title);
+
+        return mailList.size();
+    }
+
+
+    public int findBySelectMailSentTotal(int employeeNo, String title) {
+
+
+        List<MailList> mailLists = mailListRepository.findByPage(employeeNo, title);
+
+        List<Mail> mailList = new ArrayList<>();
+
+
+        for(int i = 0; i< mailLists.size(); i++){
+            mailList.add(mailLists.get(i).getMail());
+        }
+        log.info("test==============================================>{}", mailList.size());
+        return mailList.size();
+    }
+
 }

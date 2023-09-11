@@ -1,5 +1,7 @@
 package com.css.autocsfinal.workstatus.dto;
 
+import com.css.autocsfinal.member.dto.DepartmentDTO;
+import com.css.autocsfinal.member.dto.PositionDTO;
 import com.css.autocsfinal.member.entity.Department;
 import com.css.autocsfinal.member.entity.Position;
 import com.css.autocsfinal.workstatus.entity.WorkStatusList;
@@ -26,8 +28,8 @@ public class EmployeeAndWorkStatusDTO {
     private String employeePhone;
     private String upCode;
     private int memberNo;
-    private Department department;
-    private Position position;
+    private DepartmentDTO department;
+    private PositionDTO position;
     private List<WorkStatusListDTO> workStatusLists;
 
 

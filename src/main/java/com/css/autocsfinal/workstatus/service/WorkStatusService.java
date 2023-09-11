@@ -238,7 +238,9 @@ public class WorkStatusService {
 
         List<EmployeeAndWorkStatus> result = employeeAndWorkStatusRepository.findByOrderByName(paging);
 
-        log.info("===========================================>{}",result.size());
+        List<EmployeeAndWorkStatusDTO> employeeAndWorkStatusDTOS =  result.stream().map(employeeAndWorkStatus -> modelMapper.map(employeeAndWorkStatus, EmployeeAndWorkStatusDTO.class)).collect(Collectors.toList());
+
+        log.info("===========================================>{}", employeeAndWorkStatusDTOS);
 
         return result;
     }

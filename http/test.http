@@ -1,10 +1,10 @@
 ### 메일 조회
-GET http://localhost:8080/mail/41
+GET http://localhost:8080/mail/41/1/김지수
 Content-Type: application/json
 Accept: */*
 
 ### 북마크 메일 조회
-GET http://localhost:8080/mailBookmark
+GET http://localhost:8080/mailBookmark/41/1/1
 Content-Type: application/json
 Accept: */*
 

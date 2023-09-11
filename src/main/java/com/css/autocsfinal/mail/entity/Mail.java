@@ -3,6 +3,7 @@ package com.css.autocsfinal.mail.entity;
 import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "TBL_MAIL")
@@ -14,7 +15,6 @@ import java.util.Date;
 )
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Mail {
@@ -45,5 +45,7 @@ public class Mail {
     @Column(name = "POSITION")
     private String position;
 
+    @OneToMany(mappedBy ="mailNo")
+    private List<MailList> mailList;
 
 }
