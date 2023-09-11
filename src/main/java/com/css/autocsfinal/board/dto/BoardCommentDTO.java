@@ -27,6 +27,14 @@ public class BoardCommentDTO {
 
     private int refBoardNo;
 
+    //댓글에서 직원 직급과 부서와 이름 담을거
+    private String employeeName;
+    private String department;
+    private String position;
+    private String memberRole;
+
+    //댓글에서 영업점
+    private String storeName;
 
     //분리
     private MemberDTO member;
