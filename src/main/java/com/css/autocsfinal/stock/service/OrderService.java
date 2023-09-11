@@ -177,6 +177,15 @@ public class OrderService {
         return orderList;
     }
 
+    /* 주문물품 조회 - 세금계산서용 */
+    public List<Tuple> myOrderListForBill(int myOrderNo) {
+
+
+        List<Tuple> result =orderProductRepository.myOrderListForBill(myOrderNo);
+
+        return result;
+    }
+
     /* 주문물품 조회 - 환불용*/
     public OrderProductDetail selectOrderProduct(int myOrderProductNo) {
 
