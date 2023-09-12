@@ -6,6 +6,7 @@ import com.css.autocsfinal.common.PagingResponseDTO;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.stock.dto.IoDTO;
 import com.css.autocsfinal.stock.dto.IoSummaryDTO;
+import com.css.autocsfinal.stock.dto.StatisticsDTO;
 import com.css.autocsfinal.stock.service.IoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -140,6 +141,36 @@ public class IoController {
                             stock.intValue(), price.intValue(), etc, currentQuantity.intValue(),
                             totalQuantityIn.intValue(), completeQuantity.intValue(), refundQuantity.intValue(),
                             totalQuantityOut.intValue());
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", ioSummaryPage));
+    }
+
+
+    /* 영업점별 매출통계용 - 이름 날짜 검색*/
+    @GetMapping("/stock/mystatistics")
+    public ResponseEntity<ResponseDTO> statistics(
+            @RequestParam(name = "store", defaultValue = "")String store,
+            @RequestParam(name = "s", defaultValue = "")String s,
+            @RequestParam(name = "startDate", defaultValue = "")Date startDate,
+            @RequestParam(name = "endDate", defaultValue = "")Date endDate){
+
+        List<Tuple> tuplePage = ioService.myStatistics(store, s, startDate, endDate);
+
+        List<StatisticsDTO> ioSummaryPage = tuplePage.stream()
+                .map(tuple -> {
+                    BigDecimal productNo =  tuple.get(0, BigDecimal.class);
+                    String categoryName = tuple.get(1, String.class);
+                    String productName = tuple.get(2, String.class);
+                    String standardName = tuple.get(3, String.class);
+                    String unitName = tuple.get(4, String.class);
+                    BigDecimal price = tuple.get(5, BigDecimal.class);
+                    BigDecimal completeQuantity = tuple.get(6, BigDecimal.class);
+                    BigDecimal refundQuantity = tuple.get(7, BigDecimal.class);
+
+                    return new StatisticsDTO(productNo.intValue(), categoryName, productName, standardName, unitName,
+                            price.intValue(), completeQuantity.intValue(), refundQuantity.intValue());
                 })
                 .collect(Collectors.toList());
 
