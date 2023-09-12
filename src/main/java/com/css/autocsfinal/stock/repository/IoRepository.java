@@ -54,13 +54,12 @@ public interface IoRepository extends JpaRepository<Io, Integer> {
             "        GROUP BY z.REF_PRODUCT_NO, z.STATUS " +
             "        ) F " +
             "ON F.REF_PRODUCT_NO = A.PRODUCT_NO " +
-            "WHERE A.NAME LIKE '%'|| :s ||'%' " +
             "GROUP BY A.PRODUCT_NO " +
-            "ORDER BY A.PRODUCT_NO) G " +
+            ") G " +
             "ON G.PRODUCT_NO = A.PRODUCT_NO " +
             "WHERE A.NAME LIKE '%'|| :s ||'%' " +
             "GROUP BY A.PRODUCT_NO, B.NAME, A.NAME, C.NAME, D.NAME, A.STOCK, A.PRICE, A.ETC, G.currentQ " +
-            "ORDER BY A.PRODUCT_NO", nativeQuery = true)
+            "ORDER BY A.PRODUCT_NO ASC", nativeQuery = true)
     List<Tuple> summarizeSize(@Param("s") String s, @Param("startDate")Date startDate, @Param("endDate")Date endDate);
 
     @Query(value = "SELECT A.PRODUCT_NO, B.NAME as categoryName, A.NAME as productName, " +
@@ -102,13 +101,12 @@ public interface IoRepository extends JpaRepository<Io, Integer> {
             "        GROUP BY z.REF_PRODUCT_NO, z.STATUS " +
             "        ) F " +
             "ON F.REF_PRODUCT_NO = A.PRODUCT_NO " +
-            "WHERE A.NAME LIKE '%'|| :s ||'%' " +
             "GROUP BY A.PRODUCT_NO " +
-            "ORDER BY A.PRODUCT_NO) G " +
+            ") G " +
             "ON G.PRODUCT_NO = A.PRODUCT_NO " +
             "WHERE A.NAME LIKE '%'|| :s ||'%' " +
             "GROUP BY A.PRODUCT_NO, B.NAME, A.NAME, C.NAME, D.NAME, A.STOCK, A.PRICE, A.ETC, G.currentQ " +
-            "ORDER BY A.PRODUCT_NO", nativeQuery = true)
+            "ORDER BY A.PRODUCT_NO ASC", nativeQuery = true)
     Page<Tuple> summarize(@Param("s") String s, @Param("startDate")Date startDate, @Param("endDate")Date endDate, Pageable paging);
 
 
