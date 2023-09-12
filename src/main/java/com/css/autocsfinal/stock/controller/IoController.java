@@ -65,42 +65,34 @@ public class IoController {
             @RequestParam(name = "s", defaultValue = "")String s,
             @RequestParam(name = "startDate", defaultValue = "")Date startDate,
             @RequestParam(name = "endDate", defaultValue = "")Date endDate){
-        log.info("check1");
-        log.info("offset  ==============> {} ", offset);
-        log.info("s================={}", s);
-        log.info("startDate =================={},", startDate);
-        log.info("endDate ================={}", endDate);
+
 
         int total = ioService.summarizeSize(s, startDate, endDate);
-        log.info("check1=============> {}", total);
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 10);
-
 
         List<Tuple> tuplePage = ioService.summarize(cri,s, startDate, endDate);
 
         List<IoSummaryDTO> ioSummaryPage = tuplePage.stream()
                 .map(tuple -> {
-                    BigDecimal refProductNo =  tuple.get(0, BigDecimal.class);
-                    BigDecimal totalQuantityIn = tuple.get(1, BigDecimal.class);
-                    BigDecimal totalQuantityOut = tuple.get(2, BigDecimal.class);
-//                    int refProductNo = tuple.get(0, Integer.class);
-//                    long totalQuantityIn = tuple.get(1, Long.class);
-//                    long totalQuantityOut = tuple.get(2, Long.class);
-                    String productName = tuple.get(3, String.class);
-                    String categoryName = tuple.get(4, String.class);
-                    String standardName = tuple.get(5, String.class);
-                    String unitName = tuple.get(6, String.class);
-                    BigDecimal stock = tuple.get(7, BigDecimal.class);
-                    BigDecimal price = tuple.get(8, BigDecimal.class);
-//                    int stock = tuple.get(7, Integer.class);
-//                    int price = tuple.get(8, Integer.class);
-                    String etc = tuple.get(9, String.class);
+                    BigDecimal productNo =  tuple.get(0, BigDecimal.class);
+                    String categoryName = tuple.get(1, String.class);
+                    String productName = tuple.get(2, String.class);
+                    String standardName = tuple.get(3, String.class);
+                    String unitName = tuple.get(4, String.class);
+                    BigDecimal stock = tuple.get(5, BigDecimal.class);
+                    BigDecimal price = tuple.get(6, BigDecimal.class);
+                    String etc = tuple.get(7, String.class);
+                    BigDecimal currentQuantity = tuple.get(8, BigDecimal.class);
+                    BigDecimal totalQuantityIn = tuple.get(9, BigDecimal.class);
+                    BigDecimal completeQuantity = tuple.get(10, BigDecimal.class);
+                    BigDecimal refundQuantity = tuple.get(11, BigDecimal.class);
+                    BigDecimal totalQuantityOut = tuple.get(12, BigDecimal.class);
 
-                    return new IoSummaryDTO(refProductNo.intValue(), totalQuantityIn.intValue(), totalQuantityOut.intValue(), productName, categoryName, standardName,
-                            unitName, stock.intValue(), price.intValue(), etc );
-//                    return new IoSummaryDTO(refProductNo, totalQuantityIn, totalQuantityOut, productName, categoryName, standardName,
-//                            unitName, stock, price, etc );
+                    return new IoSummaryDTO(productNo.intValue(), categoryName, productName, standardName, unitName,
+                            stock.intValue(), price.intValue(), etc, currentQuantity.intValue(),
+                            totalQuantityIn.intValue(), completeQuantity.intValue(), refundQuantity.intValue(),
+                            totalQuantityOut.intValue());
                 })
                 .collect(Collectors.toList());
 
@@ -112,6 +104,59 @@ public class IoController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
     }
+//    @GetMapping("/stock/check")
+//    public ResponseEntity<ResponseDTO> summarizeWithPaging(
+//            @RequestParam(name = "offset", defaultValue = "1") String offset,
+//            @RequestParam(name = "s", defaultValue = "")String s,
+//            @RequestParam(name = "startDate", defaultValue = "")Date startDate,
+//            @RequestParam(name = "endDate", defaultValue = "")Date endDate){
+//        log.info("check1");
+//        log.info("offset  ==============> {} ", offset);
+//        log.info("s================={}", s);
+//        log.info("startDate =================={},", startDate);
+//        log.info("endDate ================={}", endDate);
+//
+//        int total = ioService.summarizeSize(s, startDate, endDate);
+//        log.info("check1=============> {}", total);
+//
+//        Criteria cri = new Criteria(Integer.valueOf(offset), 10);
+//
+//
+//        List<Tuple> tuplePage = ioService.summarize(cri,s, startDate, endDate);
+//
+//        List<IoSummaryDTO> ioSummaryPage = tuplePage.stream()
+//                .map(tuple -> {
+//                    BigDecimal refProductNo =  tuple.get(0, BigDecimal.class);
+//                    BigDecimal totalQuantityIn = tuple.get(1, BigDecimal.class);
+//                    BigDecimal totalQuantityOut = tuple.get(2, BigDecimal.class);
+////                    int refProductNo = tuple.get(0, Integer.class);
+////                    long totalQuantityIn = tuple.get(1, Long.class);
+////                    long totalQuantityOut = tuple.get(2, Long.class);
+//                    String productName = tuple.get(3, String.class);
+//                    String categoryName = tuple.get(4, String.class);
+//                    String standardName = tuple.get(5, String.class);
+//                    String unitName = tuple.get(6, String.class);
+//                    BigDecimal stock = tuple.get(7, BigDecimal.class);
+//                    BigDecimal price = tuple.get(8, BigDecimal.class);
+////                    int stock = tuple.get(7, Integer.class);
+////                    int price = tuple.get(8, Integer.class);
+//                    String etc = tuple.get(9, String.class);
+//
+//                    return new IoSummaryDTO(refProductNo.intValue(), totalQuantityIn.intValue(), totalQuantityOut.intValue(), productName, categoryName, standardName,
+//                            unitName, stock.intValue(), price.intValue(), etc );
+////                    return new IoSummaryDTO(refProductNo, totalQuantityIn, totalQuantityOut, productName, categoryName, standardName,
+////                            unitName, stock, price, etc );
+//                })
+//                .collect(Collectors.toList());
+//
+//
+//        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+//        pagingResponseDTO.setData(ioSummaryPage);
+//        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+//
+//
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
+//    }
 
 
 
