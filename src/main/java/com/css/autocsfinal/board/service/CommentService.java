@@ -2,6 +2,7 @@ package com.css.autocsfinal.board.service;
 
 import com.css.autocsfinal.board.dto.BoardCommentDTO;
 import com.css.autocsfinal.board.entity.BoardComment;
+import com.css.autocsfinal.board.entity.BoardFile;
 import com.css.autocsfinal.board.repository.CommentRepository;
 import com.css.autocsfinal.market.entity.StoreInfo2;
 import com.css.autocsfinal.market.repository.StoreInfo2Repository;
@@ -104,6 +105,50 @@ public class CommentService {
                 .collect(Collectors.toList());
 
         return CommentDTOList;
+    }
+
+    //댓글 수정
+    @Transactional
+    public String updateComment(BoardCommentDTO boardCommentDTO) {
+        log.info("[CommentService] 댓글 Update Start ===================");
+        log.info("[CommentService] boardCommentDTO {} =======> " + boardCommentDTO);
+
+        int commentNo = boardCommentDTO.getCommentNo();
+        log.info("[CommentService] commentNo {} =======> " + commentNo);
+
+        try {
+            BoardComment updateComment = commentRepository.findByCommentNo(commentNo);
+            updateComment.setCommentContent(boardCommentDTO.getCommentContent());
+            updateComment.setModify(Date.valueOf(LocalDate.now()));
+
+            BoardComment commentFrom = commentRepository.save(updateComment);
+
+            log.info("[CommentService] 댓글 Update End ===================");
+            return (commentFrom != null) ? "댓글 수정 성공" : "댓글 수정 실패";
+        } catch (Exception e) {
+            log.error("Error while update comment: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    //댓글 삭제
+    @Transactional
+    public String deleteComment(int commentNo) {
+        log.info("[CommentService] 댓글 Delete Start ===================");
+        try {
+            int deletedRowCount = commentRepository.deleteByCommentNo(commentNo);
+
+            if (deletedRowCount > 0) {
+                log.info("[CommentService] 댓글 Delete End ===================");
+                return "댓글 삭제 성공";
+            } else {
+                return "해당 댓글이 존재하지 않습니다.";
+            }
+
+        } catch (Exception e) {
+            log.error("댓글 삭제 중 오류 발생: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
 
