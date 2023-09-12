@@ -110,6 +110,41 @@ public class IoController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
     }
+
+    /* 매출통계 - 이름검색, 페이징 필요 날짜 인자 받기*/
+    @GetMapping("/stock/statistics")
+    public ResponseEntity<ResponseDTO> statistics(
+            @RequestParam(name = "s", defaultValue = "")String s,
+            @RequestParam(name = "startDate", defaultValue = "")Date startDate,
+            @RequestParam(name = "endDate", defaultValue = "")Date endDate){
+
+        List<Tuple> tuplePage = ioService.statistics(s, startDate, endDate);
+
+        List<IoSummaryDTO> ioSummaryPage = tuplePage.stream()
+                .map(tuple -> {
+                    BigDecimal productNo =  tuple.get(0, BigDecimal.class);
+                    String categoryName = tuple.get(1, String.class);
+                    String productName = tuple.get(2, String.class);
+                    String standardName = tuple.get(3, String.class);
+                    String unitName = tuple.get(4, String.class);
+                    BigDecimal stock = tuple.get(5, BigDecimal.class);
+                    BigDecimal price = tuple.get(6, BigDecimal.class);
+                    String etc = tuple.get(7, String.class);
+                    BigDecimal currentQuantity = tuple.get(8, BigDecimal.class);
+                    BigDecimal totalQuantityIn = tuple.get(9, BigDecimal.class);
+                    BigDecimal completeQuantity = tuple.get(10, BigDecimal.class);
+                    BigDecimal refundQuantity = tuple.get(11, BigDecimal.class);
+                    BigDecimal totalQuantityOut = tuple.get(12, BigDecimal.class);
+
+                    return new IoSummaryDTO(productNo.intValue(), categoryName, productName, standardName, unitName,
+                            stock.intValue(), price.intValue(), etc, currentQuantity.intValue(),
+                            totalQuantityIn.intValue(), completeQuantity.intValue(), refundQuantity.intValue(),
+                            totalQuantityOut.intValue());
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", ioSummaryPage));
+    }
 //    @GetMapping("/stock/check")
 //    public ResponseEntity<ResponseDTO> summarizeWithPaging(
 //            @RequestParam(name = "offset", defaultValue = "1") String offset,

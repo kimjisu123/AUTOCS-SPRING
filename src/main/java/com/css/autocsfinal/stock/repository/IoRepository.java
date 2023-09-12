@@ -110,6 +110,54 @@ public interface IoRepository extends JpaRepository<Io, Integer> {
     Page<Tuple> summarize(@Param("s") String s, @Param("startDate")Date startDate, @Param("endDate")Date endDate, Pageable paging);
 
 
+    @Query(value = "SELECT A.PRODUCT_NO, B.NAME as categoryName, A.NAME as productName, " +
+            "C.NAME as standardName , D.NAME as unitName, A.STOCK, A.PRICE, A.ETC, " +
+            "G.currentQ as currentQuantity, " +
+            "CAST(SUM(CASE WHEN E.IO = 'IN' THEN E.totalQuantity ELSE 0 END) AS INTEGER) as totalQuantityIn, " +
+            "CAST(SUM(CASE WHEN F.STATUS = 'COMPLETE' THEN F.ORDERQUANTITY ELSE 0 END) AS INTEGER) as completeQuantity, " +
+            "CAST(SUM(CASE WHEN F.STATUS = 'REFUND' THEN F.ORDERQUANTITY ELSE 0 END) AS INTEGER) as refundQuantity, " +
+            "CAST(SUM(CASE WHEN E.IO = 'OUT' THEN E.totalQuantity ELSE 0 END) AS INTEGER) as totalQuantityOut " +
+            "FROM TBL_PRODUCT A " +
+            "LEFT JOIN TBL_PRODUCT_CATEGORY B ON B.PRODUCT_CATEGORY_NO = A.REF_PRODUCT_CATEGORY_NO " +
+            "LEFT JOIN TBL_PRODUCT_STANDARD C ON C.PRODUCT_STANDARD_NO = A.REF_PRODUCT_STANDARD_NO " +
+            "LEFT JOIN TBL_PRODUCT_UNIT D ON D.PRODUCT_UNIT_NO = A.REF_PRODUCT_UNIT_NO " +
+            "LEFT JOIN (SELECT x.REF_PRODUCT_NO, x.IO, SUM(x.QUANTITY) as totalQuantity " +
+            "        FROM TBL_PRODUCT_IO x " +
+            "        WHERE x.REGIST_DATE BETWEEN :startDate AND :endDate " +
+            "        GROUP BY x.REF_PRODUCT_NO, x.IO " +
+            "        ) E " +
+            "        ON E.REF_PRODUCT_NO = A.PRODUCT_NO " +
+            "LEFT JOIN (SELECT z.REF_PRODUCT_NO, z.STATUS, SUM(z.QUANTITY) AS ORDERQUANTITY " +
+            "        FROM TBL_ORDER_PRODUCT z " +
+            "        WHERE z.REGIST_DATE BETWEEN :startDate AND :endDate " +
+            "        GROUP BY z.REF_PRODUCT_NO, z.STATUS " +
+            "        ) F " +
+            "ON F.REF_PRODUCT_NO = A.PRODUCT_NO " +
+            "LEFT JOIN(SELECT A.PRODUCT_NO, " +
+            "(CAST(SUM(CASE WHEN E.IO = 'IN' THEN E.totalQuantity ELSE 0 END) AS INTEGER) " +
+            "- CAST(SUM(CASE WHEN E.IO = 'OUT' THEN E.totalQuantity ELSE 0 END) AS INTEGER) " +
+            "- CAST(SUM(CASE WHEN F.STATUS IN ('COMPLETE','REFUND') THEN F.ORDERQUANTITY ELSE 0 END) AS INTEGER) " +
+            ") as currentQ " +
+            "FROM TBL_PRODUCT A " +
+            "LEFT JOIN (SELECT x.REF_PRODUCT_NO, x.IO, SUM(x.QUANTITY) as totalQuantity " +
+            "        FROM TBL_PRODUCT_IO x " +
+            "        GROUP BY x.REF_PRODUCT_NO, x.IO " +
+            "        ) E " +
+            "        ON E.REF_PRODUCT_NO = A.PRODUCT_NO " +
+            "LEFT JOIN (SELECT z.REF_PRODUCT_NO, z.STATUS, SUM(z.QUANTITY) AS ORDERQUANTITY " +
+            "        FROM TBL_ORDER_PRODUCT z " +
+            "        GROUP BY z.REF_PRODUCT_NO, z.STATUS " +
+            "        ) F " +
+            "ON F.REF_PRODUCT_NO = A.PRODUCT_NO " +
+            "GROUP BY A.PRODUCT_NO " +
+            ") G " +
+            "ON G.PRODUCT_NO = A.PRODUCT_NO " +
+            "WHERE A.NAME LIKE '%'|| :s ||'%' " +
+            "GROUP BY A.PRODUCT_NO, B.NAME, A.NAME, C.NAME, D.NAME, A.STOCK, A.PRICE, A.ETC, G.currentQ " +
+            "ORDER BY A.PRODUCT_NO ASC", nativeQuery = true)
+    List<Tuple> statistics(@Param("s") String s, @Param("startDate")Date startDate, @Param("endDate")Date endDate);
+
+
 //    @Query(value = "SELECT a.REF_PRODUCT_NO, " +
 //            "CAST(SUM(CASE WHEN a.IO = 'IN' THEN a.totalQuantity ELSE 0 END) AS INTEGER) as totalQuantityIn, " +
 //            "CAST(SUM(CASE WHEN a.IO = 'OUT' THEN a.totalQuantity ELSE 0 END) AS INTEGER) as totalQuantityOut, " +

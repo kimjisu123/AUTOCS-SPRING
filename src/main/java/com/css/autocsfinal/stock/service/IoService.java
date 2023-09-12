@@ -114,5 +114,16 @@ public class IoService {
         return ioList;
     }
 
+    /* 매출통계용 - 이름 날짜 검색, 페이징 */
+    public List<Tuple> statistics(String s, Date startDate, Date endDate) {
+
+        List<Tuple> result =ioRepository.statistics(s, startDate, endDate);
+
+//        List<Tuple> ioList = result.stream()
+//                .map(tuple -> modelMapper
+//                        .map(tuple, Tuple.class)).collect(Collectors.toList());
+        return result;
+    }
+
 
 }
