@@ -142,6 +142,23 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <!--
+          JSON-based interface description language for specifying
+          RESTful APIs for microservices/spring boot applications
+
+          OpenAPI = Specification
+          라이브러리가 OpenAPI 3.0 스펙에 맞는 JSON을 자동으로 만들어 주면, Swagger UI는 만들어진 JSON을 화면에 표시 해준다.
+          Swagger = Tools for implementing the specification
+
+          확인을 위한 링크
+          http://localhost:8080/swagger-ui/index.html
+      -->
+        <!-- open api3 -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.14</version>
+        </dependency>
     </dependencies>
 
     <build>

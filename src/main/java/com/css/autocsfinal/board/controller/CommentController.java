@@ -55,4 +55,36 @@ public class CommentController {
         return ResponseEntity.status(httpStatus).body(responseDTO);
 
     }
+
+    //댓글 수정
+    @Operation(summary = "댓글 수정 요청", description = "댓글을 수정합니다.", tags = {"CommentController"})
+    @PostMapping("/updateComment")
+    public ResponseEntity<ResponseDTO> updateComment(@ModelAttribute BoardCommentDTO boardCommentDTO) {
+        log.info("[BoardCommentDTO] boardCommentDTO {} =======> " + boardCommentDTO);
+
+        String resultMessage = commentService.updateComment(boardCommentDTO);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "댓글 수정 성공", resultMessage);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+
+    }
+
+    //댓글 삭제
+    @Operation(summary = "댓글 삭제 요청", description = "댓글을 삭제합니다.", tags = {"CommentController"})
+    @PostMapping("/deleteComment")
+    public ResponseEntity<ResponseDTO> deleteComment(@RequestParam int commentNo) {
+        log.info("[BoardCommentDTO] commentNo {} =======> " + commentNo);
+
+        String comment = commentService.deleteComment(commentNo);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "댓글 삭제 성공", comment);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+
+    }
 }
