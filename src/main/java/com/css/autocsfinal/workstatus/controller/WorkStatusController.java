@@ -164,7 +164,7 @@ public class WorkStatusController {
     @PutMapping("/quitting/{employeeNo}")
     public ResponseEntity<ResponseDTO> saveQuitting(@PathVariable int employeeNo){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "퇴근 성공", workStatusService.saveQuitting()));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "퇴근 성공", workStatusService.saveQuitting(employeeNo)));
     }
 
     // 본사 근태 현황

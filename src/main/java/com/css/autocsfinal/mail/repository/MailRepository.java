@@ -70,5 +70,5 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
 
     List<Mail> findByPositionAndReceiverAndTitleLikeOrderByMailNoDesc(String positionName, String name, String title);
 
-
+    void deleteByPositionAndReceiver(String positionName, String name);
 }

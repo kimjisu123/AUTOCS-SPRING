@@ -17,5 +17,5 @@ public interface WorkStatusListRepository extends JpaRepository<WorkStatusList, 
     List<WorkStatusList> findByEmployeeNoOrderByWorkStatusCode(int employeeNo);
 
 
-
+    List<WorkStatusList> findByEmployeeNo(int employeeNo);
 }

@@ -50,6 +50,7 @@ public class MailService {
 
         String name = employeeAndDepartmentAndPosition.getName();
 
+
         List<Mail> mailList = mailRepository.findByPositionAndReceiverOrderByMailNoDesc(positionName, name, paging);
 
         List<MailDTO> mailDTOList = mailList.stream().map(Mail -> modelMapper.map(Mail, MailDTO.class) ).collect(Collectors.toList());
@@ -191,15 +192,20 @@ public class MailService {
 
         return null;
     }
-
+    
+    // 메일 전체 삭제
     @Transactional
-    public Object deleteMail() {
+    public Object deleteMail(int employeeNo) {
 
-        log.info("[deleteMail] mailListRepository.deleteAll() start");
-        mailListRepository.deleteAll();
-        log.info("[deleteMail] mailListRepository.deleteAll() end");
+        EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
 
-        mailRepository.deleteAll();
+        String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+        String name = employeeAndDepartmentAndPosition.getName();
+
+        mailListRepository.deleteByEmployeeNo(employeeNo);
+
+        mailRepository.deleteByPositionAndReceiver(positionName, name);
 
         return null;
     }

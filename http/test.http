@@ -1,5 +1,5 @@
 ### 메일 조회
-GET http://localhost:8080/mail/41/1/김지수
+GET http://localhost:8080/mail/41/1/절대로아무도검색하지않을만한값입니다.
 Content-Type: application/json
 Accept: */*
 

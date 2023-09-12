@@ -1,6 +1,7 @@
 package com.css.autocsfinal.mail.repository;
 
 import com.css.autocsfinal.common.Criteria;
+import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.entity.MailList;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,6 @@ public interface MailListRepository extends JpaRepository<MailList, Integer> {
 
     @Query("select l, m from MailList l JOIN l.mail m WHERE l.employeeNo = :employeeNo AND m.title LIKE %:title%")
     List<MailList> findByPage(int employeeNo, String title);
+
+    void deleteByEmployeeNo(int employeeNo);
 }

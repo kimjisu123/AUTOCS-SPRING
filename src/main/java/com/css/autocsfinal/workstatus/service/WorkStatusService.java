@@ -322,46 +322,84 @@ public class WorkStatusService {
         workStatus.setVacationStatus('N');
         workStatus.setAbsenceWorkStatus('N');
 
+        List<WorkStatusList> workStatusLists = workStatusListRepository.findByEmployeeNo(employeeNo);
 
+        int recentlyResult = 0;
+        WorkStatusList recentlyWorkStatus = null;
 
+        for(int i =0; i < workStatusLists.size(); i++){
+            if (workStatusLists.get(i).getWorkStatusCode() > recentlyResult) {
+                recentlyResult = workStatusLists.get(i).getWorkStatusCode();
+                recentlyWorkStatus = workStatusLists.get(i);
+            }
+        }
 
-        WorkStatus result = workStatusRepsitory.save(workStatus);
+        Date currentDate = new Date();
 
-        int statusCode = result.getWorkStatusCode();
+        Date workDate = new Date(recentlyWorkStatus.getWorkStatus().getAttendanceTime().getTime());
 
-        WorkStatusList workStatusList = new WorkStatusList(employeeNo, statusCode);
+        log.info(" currentDate.getDay() != workDate.getDay()" , currentDate.getDay()+   workDate.getDay());
 
-        WorkStatusList listResult = workStatusListRepository.save(workStatusList);
+        // 오늘 날짜로 출근 기록이 없을 경우 등록
+        if (currentDate.getDay() != workDate.getDay()) {
+
+            log.info("================Test============>{}");
+
+            WorkStatus result = workStatusRepsitory.save(workStatus);
+
+            int statusCode = result.getWorkStatusCode();
+
+            WorkStatusList workStatusList = new WorkStatusList(employeeNo, statusCode);
+
+            workStatusListRepository.save(workStatusList);
+        }
 
         return null;
     }
 
     // 퇴근
     @Transactional
-    public Object saveQuitting() {
+    public Object saveQuitting(int employeeNo) {
 
-        Optional <WorkStatus> workStatus = workStatusRepsitory.findTopByOrderByAttendanceTimeDesc();
+        List<WorkStatusList> workStatusLists = workStatusListRepository.findByEmployeeNo(employeeNo);
 
-        WorkStatus result = new WorkStatus();
+        // 가장 최근의 근태 정보
+        int recentlyResult = 0;
+        WorkStatusList recentlyWorkStatus = null;
 
+        for(int i =0; i < workStatusLists.size(); i++){
+            if (workStatusLists.get(i).getWorkStatusCode() > recentlyResult) {
+                recentlyResult = workStatusLists.get(i).getWorkStatusCode();
+                recentlyWorkStatus = workStatusLists.get(i);
+            }
+        }
 
-        if (workStatus.isPresent()) {
-            WorkStatus  recentlyTime = workStatus.get();
-            recentlyTime.setQuittingTime(new Date());
-            result = workStatusRepsitory.save(recentlyTime);
+        // 근태정보가 1개라도 있을 경우
+        if(recentlyResult != 0){
+
+            // 가져온 근태 정보의 퇴근 시간이 null일 경우
+            if (recentlyWorkStatus.getWorkStatus().getQuittingTime() == null) {
+
+                // 저장할 객체
+                WorkStatus result;
+
+                recentlyWorkStatus.getWorkStatus().setQuittingTime(new Date());
+
+                // 등록이 아닌 저장
+                result = workStatusRepsitory.save(recentlyWorkStatus.getWorkStatus());
+
+                Long resultTime = ( result.getQuittingTime().getTime() - result.getAttendanceTime().getTime() );
+
+                Date extensionTime = new Date(resultTime);
+
+                result.setExtensionTime(extensionTime);
+            }
+
         }
 
 
-        Long resultTime = ( result.getQuittingTime().getTime() - result.getAttendanceTime().getTime() );
 
-
-        Date extensionTime = new Date(resultTime);
-
-
-        result.setExtensionTime(extensionTime);
-
-
-        return result;
+        return null;
 
     }
 

@@ -116,10 +116,10 @@ public class MailController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공", mailService.setMail(paramValue)));
     }
 
-    @DeleteMapping("/mail")
-    public ResponseEntity<ResponseDTO> deleteMail(){
+    @DeleteMapping("/mail/{employeeNo}")
+    public ResponseEntity<ResponseDTO> deleteMail(@PathVariable int employeeNo){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 삭제 성공.", mailService.deleteMail()));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 삭제 성공.", mailService.deleteMail(employeeNo)));
     }
 
     @DeleteMapping("/selectMail")
