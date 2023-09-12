@@ -113,11 +113,12 @@ public class CommentService {
         log.info("[CommentService] 댓글 Update Start ===================");
         log.info("[CommentService] boardCommentDTO {} =======> " + boardCommentDTO);
 
-        //일단 댓글 번호로 댓글을 찾아야함
-        //그리고 찾은 댓글에 내용값이랑 변경일 넣어주면 됨
-        //밑에껀 그냥 새로 insert
+        int commentNo = boardCommentDTO.getCommentNo();
+        log.info("[CommentService] commentNo {} =======> " + commentNo);
+
         try {
-            BoardComment updateComment = modelMapper.map(boardCommentDTO, BoardComment.class);
+            BoardComment updateComment = commentRepository.findByCommentNo(commentNo);
+            updateComment.setCommentContent(boardCommentDTO.getCommentContent());
             updateComment.setModify(Date.valueOf(LocalDate.now()));
 
             BoardComment commentFrom = commentRepository.save(updateComment);

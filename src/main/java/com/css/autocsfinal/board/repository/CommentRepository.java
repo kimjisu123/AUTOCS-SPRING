@@ -8,4 +8,6 @@ public interface CommentRepository extends JpaRepository<BoardComment, Integer> 
 
     //댓글 번호로 삭제
     int deleteByCommentNo(int commentNo);
+
+    BoardComment findByCommentNo(int commentNo);
 }
