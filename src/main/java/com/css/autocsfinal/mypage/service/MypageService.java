@@ -83,23 +83,29 @@ public class MypageService {
 
 
 
-                MemberFile memberFile = new MemberFile();
-                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, fileImage);
-                log.info("[MypageService]  Image Name : {}", replaceFileName);
-                employeeAndDepartmentAndPosition.setEmployeePhone(employeeAndDepartmentAndPositionDTO.getEmployeePhone());
-                log.info("[MypageService]  getEmployeePhone : {}", employeeAndDepartmentAndPosition.getEmployeePhone());
-                employeeAndDepartmentAndPosition.setEmployeeEmail(employeeAndDepartmentAndPositionDTO.getEmployeeEmail());
-                log.info("[MypageService]  getEmployeeEmail : {}", employeeAndDepartmentAndPosition.getEmployeeEmail());
+
+                if(fileImage != null ) {
+                    MemberFile memberFile = new MemberFile();
+                    replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, fileImage);
+                    Member member = memberRepository.findByNo(employeeAndDepartmentAndPositionDTO.getMemberNo());
+                    memberFile.setMember(member);
+                    memberFile.setOriginName(replaceFileName);
+                    memberFile.setRegDate(LocalDate.now());
+                    MemberFile saveFile = memberFileRepository.save(memberFile);
+                }
+
+                // 값이 null 또는 빈 문자열이 아닌 경우에만 저장
+                if (employeeAndDepartmentAndPositionDTO.getEmployeePhone()!= null && !employeeAndDepartmentAndPositionDTO.getEmployeePhone().trim().isEmpty()) {
+                    employeeAndDepartmentAndPosition.setEmployeePhone(employeeAndDepartmentAndPositionDTO.getEmployeePhone());
+                    log.info("[MypageService]  getEmployeePhone : {}", employeeAndDepartmentAndPosition.getEmployeePhone());
+                }
+                if (employeeAndDepartmentAndPositionDTO.getEmployeeEmail()!= null && !employeeAndDepartmentAndPositionDTO.getEmployeeEmail().trim().isEmpty()) {
+                    employeeAndDepartmentAndPosition.setEmployeeEmail(employeeAndDepartmentAndPositionDTO.getEmployeeEmail());
+                    log.info("[MypageService]  getEmployeeEmail : {}", employeeAndDepartmentAndPosition.getEmployeeEmail());
+                }
                 employeeAndDepartmentAndPositionRepository.save(employeeAndDepartmentAndPosition);
 
-                Member member = memberRepository.findByNo(employeeAndDepartmentAndPositionDTO.getMemberNo());
-                memberFile.setMember(member);
 
-                log.info("[MypageService]  Image Name : {}", memberFile);
-                memberFile.setOriginName(replaceFileName);
-                memberFile.setRegDate(LocalDate.now());
-//                memberFile.setOriginName(img);
-                MemberFile saveFile = memberFileRepository.save(memberFile);
                 log.info("[MypageService] updateMemberInfo 성공 ======================================");
                 result =1;
 
@@ -107,7 +113,7 @@ public class MypageService {
 
                 log.info("[MypageService] updateMemberInfo 실패 ");
                 FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
-                throw new RuntimeException(e);
+                throw new NullPointerException();
 
             }
         return (result > 0)? " 회원정보 수정 성공" : "회원정보 수정 실패";
@@ -234,7 +240,7 @@ public class MypageService {
         log.info("[MypageService] =========================storeInfo : {} " , storeInfo);
 //        try {
             String email = storeInfoDTO.getEmail();
-            int phone = storeInfoDTO.getPhone();
+            String phone = storeInfoDTO.getPhone();
             String address = storeInfoDTO.getAddress();
             String detailAddress = storeInfoDTO.getDetailAddress();
 
@@ -244,7 +250,7 @@ public class MypageService {
                 log.info("[MypageService]  getEmployeePhone : {}", storeInfo.getEmail());
             }
 
-            if (phone != 0) {
+            if (phone != null && !phone.trim().isEmpty()) {
                 storeInfo.setPhone(phone);
             }
 
