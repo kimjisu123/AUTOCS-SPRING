@@ -23,4 +23,6 @@ public interface MailListRepository extends JpaRepository<MailList, Integer> {
     List<MailList> findByPage(int employeeNo, String title);
 
     void deleteByEmployeeNo(int employeeNo);
+
+    void deleteByMailNo(int mailNo);
 }

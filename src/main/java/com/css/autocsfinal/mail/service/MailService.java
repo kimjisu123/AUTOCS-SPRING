@@ -234,10 +234,12 @@ public class MailService {
 
         int mailNo = mailDTO.getMailNo();
 
-        mailRepository.deleteById(mailNo);
-        mailListRepository.deleteById(mailNo);
+        log.info("=======================>{}", mailNo);
 
-        return null;
+        mailListRepository.deleteByMailNo(mailNo);
+        mailRepository.deleteByMailNo(mailNo);
+
+        return mailNo;
     }
 
     public Object mailSent(int employeeNo, Criteria cri) {
