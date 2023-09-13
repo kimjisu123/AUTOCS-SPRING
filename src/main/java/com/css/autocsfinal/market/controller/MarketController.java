@@ -94,6 +94,7 @@ public class MarketController {
     }
 
     //영업점 아이디 찾기
+    @Operation(summary = "영업점 아이디 찾기", description = "영업점 아이디를 찾습니다.", tags = {"MarketController"})
     @GetMapping("/findStoreId")
     public ResponseEntity<ResponseDTO> findStoreId(@RequestParam String email, @RequestParam String name) {
         try {
