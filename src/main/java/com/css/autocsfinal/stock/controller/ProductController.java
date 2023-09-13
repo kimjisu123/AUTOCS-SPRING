@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 @Slf4j
-@Tag(name = "Product", description = "물품 API")
+@Tag(name = "Product", description = "물품 관리 API")
 public class ProductController {
     private final ProductService productService;
 

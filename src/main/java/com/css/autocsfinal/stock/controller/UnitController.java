@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 @Slf4j
-@Tag(name = "Unit", description = "단위 API")
+@Tag(name = "Unit", description = "물품 단위 API")
 public class UnitController {
 
     private final UnitService unitService;

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 @Slf4j
-@Tag(name = "Standard", description = "규격 API")
+@Tag(name = "Standard", description = "물품 규격 API")
 public class StandardController {
 
     private final StandardService standardService;
