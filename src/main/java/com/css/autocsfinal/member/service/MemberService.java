@@ -286,13 +286,9 @@ public class MemberService {
     public StoreInfoDTO findStoreId(int memberNo) {
         System.out.println("[ MemberService ] storeInfo memberFile ====================== start ");
         StoreInfo storeInfo = storeInfoRepository.findByMemberNo(memberNo);
-        Integer no = memberFileRepository.findMaxMemberFileNo(memberNo);
-        int fileNo = 0;
-        fileNo = no;
-        MemberFile memberFile = memberFileRepository.findById(fileNo);
+
         StoreInfoDTO storeInfoDTO = new StoreInfoDTO();
 
-        storeInfoDTO.setStoreFile(memberFile.getOriginName());
         storeInfoDTO.setStoreNo(storeInfo.getStoreNo());
         storeInfoDTO.setName(storeInfo.getName());
         storeInfoDTO.setEmail(storeInfo.getEmail());

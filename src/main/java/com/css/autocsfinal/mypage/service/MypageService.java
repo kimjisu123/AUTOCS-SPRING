@@ -106,13 +106,6 @@ public class MypageService {
                 employeeAndDepartmentAndPositionRepository.save(employeeAndDepartmentAndPosition);
 
 
-
-
-//                if (replaceFileName!= null && !replaceFileName.trim().isEmpty()) {
-//
-//                }
-//                memberFile.setOriginName(img);
-
                 log.info("[MypageService] updateMemberInfo 성공 ======================================");
                 result =1;
 
@@ -247,7 +240,7 @@ public class MypageService {
         log.info("[MypageService] =========================storeInfo : {} " , storeInfo);
 //        try {
             String email = storeInfoDTO.getEmail();
-            int phone = storeInfoDTO.getPhone();
+            String phone = storeInfoDTO.getPhone();
             String address = storeInfoDTO.getAddress();
             String detailAddress = storeInfoDTO.getDetailAddress();
 
@@ -257,7 +250,7 @@ public class MypageService {
                 log.info("[MypageService]  getEmployeePhone : {}", storeInfo.getEmail());
             }
 
-            if (phone != 0) {
+            if (phone != null && !phone.trim().isEmpty()) {
                 storeInfo.setPhone(phone);
             }
 

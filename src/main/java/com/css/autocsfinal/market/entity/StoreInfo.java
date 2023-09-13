@@ -43,7 +43,7 @@ public class StoreInfo {
     private String name;
 
     @Column(name = "PHONE")
-    private int phone;
+    private String phone;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REF_MEMBER_NO")
