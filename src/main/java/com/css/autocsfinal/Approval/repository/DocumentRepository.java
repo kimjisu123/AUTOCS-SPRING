@@ -15,4 +15,8 @@ public interface DocumentRepository extends JpaRepository<DocumentEntity, Intege
     Page<DocumentEntity> findByEmployeeNo(int employeeNo, Pageable paging);
     List<DocumentEntity> findByEmployeeNoAndDocumentType(int employeeNo, String documentType);
     Page<DocumentEntity> findByEmployeeNoAndDocumentType(int employeeNo, Pageable paging, String documentType);
+
+    void deleteByDocumentCode(int documentCode);
+
+    DocumentEntity findByDocumentCode(int documentCode);
 }

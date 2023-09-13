@@ -130,4 +130,19 @@ public class BoardController {
         return ResponseEntity.status(httpStatus).body(responseDTO);
 
     }
+
+    //게시물 찾기(내가 쓴 글)
+    @GetMapping("/getMyBoarEmployee")
+    public ResponseEntity<ResponseDTO> getMyBoarEmployee(@RequestParam int refMemberNo) {
+        log.info("[BoardDTO] refMemberNo {} =======> " + refMemberNo);
+
+        List<BoardDTO> board = boardService.findMyBoardEmployee(refMemberNo);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseDTO responseDTO = new ResponseDTO(httpStatus, "게시물 조회 성공", board);
+
+        return ResponseEntity.status(httpStatus).body(responseDTO);
+
+    }
 }
