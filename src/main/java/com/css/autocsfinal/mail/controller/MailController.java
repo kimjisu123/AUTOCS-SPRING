@@ -6,6 +6,7 @@ import com.css.autocsfinal.common.PagingResponseDTO;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.mail.dto.MailDTO;
 import com.css.autocsfinal.mail.service.MailService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class MailController {
 
     // 메일 조회
     @GetMapping("/mail/{employeeNo}/{page}/{search}")
+    @Operation(summary = "쪽지함 화면", description = "로그인된 직원의 정보를 가져와 해당 직원의 받은 쪽지를 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findMail(@PathVariable int employeeNo,@PathVariable(name = "page", required = false ) int offset, @PathVariable(name = "search", required = false ) String title){
 
         log.info("=========================================>{}", title);
@@ -50,6 +52,7 @@ public class MailController {
 
     // 보낸 메일 조회
     @GetMapping("/mailSent/{employeeNo}/{page}/{search}")
+    @Operation(summary = "보낸 쪽지함 화면", description = "로그인된 직원의 정보를 가져와 해당 직원이 보낸 쪽지를 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findMailSent(@PathVariable int employeeNo, @PathVariable(name = "page", required = false ) int offset, @PathVariable(name = "search", required = false ) String title){
 
         log.info("test===================================>{}", title);
@@ -76,6 +79,7 @@ public class MailController {
     }
 
     @GetMapping("/mailBookmark/{employeeNo}/{page}/{search}")
+    @Operation(summary = "북마크 쪽지함 화면", description = "로그인된 직원의 정보를 가져와 해당 직원의 북마크로 지정한 쪽지를 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findMailbookmark(@PathVariable int employeeNo, @PathVariable(name = "page", required = false ) int offset, @PathVariable(name = "search", required = false ) String title){
         log.info("1111111111111111111111111111111111");
 
@@ -103,6 +107,7 @@ public class MailController {
 
 
     @PostMapping("/mail/{employeeNo}")
+    @Operation(summary = "쪽지함 화면", description = "쪽지를 작성하여 상대에게 쪽지를 보냅니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> saveMail(@RequestBody MailDTO mailDTO, @PathVariable int employeeNo){
 
         log.info("Mail===========================================>{}", mailDTO);
@@ -111,18 +116,21 @@ public class MailController {
     }
 
     @PutMapping("/mail")
+    @Operation(summary = "쪽지함 화면", description = "쪽지를 북마크에 등록 합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> putMail(@RequestBody MailDTO paramValue){
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공", mailService.setMail(paramValue)));
     }
 
     @DeleteMapping("/mail/{employeeNo}")
+    @Operation(summary = "쪽지함 화면", description = "직원이 받은 모든 메일을 삭제합니다", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> deleteMail(@PathVariable int employeeNo){
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 삭제 성공.", mailService.deleteMail(employeeNo)));
     }
 
     @DeleteMapping("/selectMail")
+    @Operation(summary = "쪽지함 화면", description = "직원이 받은 메일 중 하나를 지정하여 삭제합니다", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> selectDeleteMail(@RequestBody MailDTO mailDTO){
 
         log.info("===========================>{}", mailDTO);

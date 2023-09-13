@@ -4,6 +4,7 @@ import com.css.autocsfinal.common.*;
 import com.css.autocsfinal.workstatus.dto.WorkStatusDTO;
 import com.css.autocsfinal.workstatus.repository.WorkStatusListRepository;
 import com.css.autocsfinal.workstatus.service.WorkStatusService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,9 @@ public class WorkStatusController {
 
     private final WorkStatusService workStatusService;
 
+
     @GetMapping("/workStatus/{employeeNo}")
+    @Operation(summary = "근태현황 홈 화면", description = "현재 로그인된 직원의 정보를 가져와 근태 현황을 출력 합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByAll(@PathVariable int employeeNo){
 
         return ResponseEntity
@@ -29,6 +32,7 @@ public class WorkStatusController {
     }
 
     @GetMapping("/department")
+    @Operation(summary = "부서별 근태 통계 화면", description = "모든 부서원의 근태관리 현황을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByDepartmentAll(){
 
         log.info("============================?>>");
@@ -39,6 +43,7 @@ public class WorkStatusController {
 
     // 인사부 조회
     @GetMapping("/personnel/{name}")
+    @Operation(summary = "인사부 근태 통계 화면", description = "인사부의 근태 통계 화면을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByPersonnel(@PathVariable String name){
 
         Object object;
@@ -56,6 +61,7 @@ public class WorkStatusController {
 
     // 재무/회계부 조회
     @GetMapping("/accounting/{name}")
+    @Operation(summary = "재무/회계부 근태 통계 화면", description = "재무/회계부의 근태 통계 화면을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByAccounting(@PathVariable String name){
 
         Object object;
@@ -74,6 +80,7 @@ public class WorkStatusController {
 
     // 경영부 조회
     @GetMapping("/management/{name}")
+    @Operation(summary = "경영부 근태 통계 화면", description = "인사부의 근태 통계 화면을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByManagement(@PathVariable String name){
 
         Object object;
@@ -94,6 +101,7 @@ public class WorkStatusController {
 
     // 마케팅부 조회
     @GetMapping("/marketing/{name}")
+    @Operation(summary = "마케팅부 근태 통계 화면", description = "인사부의 근태 통계 화면을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByMarketing(@PathVariable String name){
 
         Object object;
@@ -115,6 +123,7 @@ public class WorkStatusController {
 
     // 영업부 조회
     @GetMapping("/sales/{name}")
+    @Operation(summary = "영업부 근태 통계 화면", description = "인사부의 근태 통계 화면을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findBySales(@PathVariable String name){
 
         Object object;
@@ -133,6 +142,7 @@ public class WorkStatusController {
 
     // 서비스부 조회
     @GetMapping("/service/{name}")
+    @Operation(summary = "서비스부 근태 통계 화면", description = "인사부의 근태 통계 화면을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByService(@PathVariable String name){
 
         Object object;
@@ -154,6 +164,7 @@ public class WorkStatusController {
 
     // 출근하기
     @PostMapping("/attendance/{employeeNo}")
+    @Operation(summary = "메인 페이지 화면", description = "현재 시간을 기점으로 출근을 하여 값을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> saveAttendance(@PathVariable int employeeNo ){
 
 
@@ -162,6 +173,7 @@ public class WorkStatusController {
 
     // 퇴근
     @PutMapping("/quitting/{employeeNo}")
+    @Operation(summary = "메인 페이지 화면", description = "현재 시간을 기점으로 퇴근을 하여 값을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> saveQuitting(@PathVariable int employeeNo){
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "퇴근 성공", workStatusService.saveQuitting(employeeNo)));
@@ -170,6 +182,7 @@ public class WorkStatusController {
 
     // 본사 근태 현황
     @GetMapping("/headOffice/{page}/{search}")
+    @Operation(summary = "본사 근태 통계 현황 화면", description = "모든 직원의 근태 통계를 이번주 월요일을 기준으로 값을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByHeadOffice( @PathVariable(name = "page", required = false) int offset,
                                                          @PathVariable(name = "search", required = false) String name){
 
