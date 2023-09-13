@@ -156,9 +156,6 @@ public class MarketService {
         log.info("[MarketService] 아이디 비밀번호 발급 Start ===================");
         log.info("[AuthService] memberDTO {} =======> " + memberDTO);
 
-        /* check
-         * 값을 받은건 MemberDTO클래스이다. 여기 담긴 값을 repository를 통해서 쿼리를 요청해야한다.
-         * 그래서 현재 MemberDTO객체를 entity 객체인 Member로 변경해주는 작업 필요하다. */
         Member registMember = modelMapper.map(memberDTO, Member.class);
 
         // 아이디 생성
@@ -206,15 +203,10 @@ public class MarketService {
         Integer maxMemberCode = memberRepository.maxMemberCode();
         log.info("maxMemberCode================> {}", maxMemberCode);
 
-        //StoreInfo2.getMember().setNo(maxMemberCode);
         storeInfo2DTO.setMemberNo(maxMemberCode);
 
         StoreInfo2 insertMarket = modelMapper.map(storeInfo2DTO, StoreInfo2.class);
         log.info("================> {}", insertMarket);
-
-//        StoreInfo2 insertMarket= new StoreInfo2();
-//
-//        insertMarket.setMemberNo(maxMemberCode);
 
         StoreInfo2 savedStore = storeInfo2Repository.save(insertMarket);
 

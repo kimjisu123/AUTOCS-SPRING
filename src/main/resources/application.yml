@@ -50,4 +50,18 @@ image:
   image-dir2: C:\dev\empImg
   image-url2: http://localhost:8080/empImg/
 
+## Swagger 설정
+springdoc:
+  packages-to-scan: com.css.autocsfinal.Approval
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: demo-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    groups:
+      enabled: true
+  cache:
+    disabled: true
 
