@@ -297,9 +297,9 @@ class AutocsFinalApplicationTests {
         int num  = 240;
         Member member = memberRepository.findByNo(num);
         Schedule schedule = new Schedule();
-        schedule.setContent("하반기2 매출 보고를 위한 회의입니다.");
-        schedule.setName("상반기 매출 보고 회의2");
-        schedule.setPlace("2층 회의실");
+        schedule.setContent("영업부 전체 회식");
+        schedule.setName("영업부 전체 회식");
+        schedule.setPlace("하남돼지집");
         schedule.setEndDate(new Date());
         schedule.setStartDate(new Date());
         schedule.setMember(member);
