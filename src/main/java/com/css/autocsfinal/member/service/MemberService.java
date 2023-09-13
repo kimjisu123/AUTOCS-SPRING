@@ -81,9 +81,6 @@ public class MemberService {
         log.info("[AuthService] employeeEmail {} =======> " + employeeDTO.getEmployeeEmail());
         log.info("[AuthService] memberDTO {} =======> " + memberDTO);
 
-        /* check
-         * 값을 받은건 MemberDTO클래스이다. 여기 담긴 값을 repository를 통해서 쿼리를 요청해야한다.
-         * 그래서 현재 MemberDTO객체를 entity 객체인 Member로 변경해주는 작업 필요하다. */
         Member registMember = modelMapper.map(memberDTO, Member.class);
 
         // 아이디 생성
