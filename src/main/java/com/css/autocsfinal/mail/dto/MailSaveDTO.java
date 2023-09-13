@@ -10,11 +10,11 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class MailDTO {
+public class MailSaveDTO {
 
     private int mailNo;
-    private List<String> receiver;
     private String title;
+    private String receiver;
     private String context;
     private Date goDate;
     private String status;
