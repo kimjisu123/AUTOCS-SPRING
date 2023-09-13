@@ -5,6 +5,7 @@ import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.main.dto.TodoDTO;
 import com.css.autocsfinal.main.service.MainService;
 import com.css.autocsfinal.schedule.entity.ScheduleDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class MainController {
     }
 
     // 회원별 조회
+    @Operation(summary = "회원별 일정 조회", description = "메인 진입시 개인 일정이 캘린더에 나타납니다.", tags = {"MainController" })
     @GetMapping("/shortDaily/{memberNo}")
     public ResponseEntity<ResponseDTO> getShortDailyList(@PathVariable int memberNo){
 

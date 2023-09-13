@@ -22,7 +22,7 @@ public class StoreInfoDTO {
 
     private String name;
 
-    private String phone;
+    private int phone;
 
     private int MemberNo;
 

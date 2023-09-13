@@ -30,6 +30,7 @@ public class MainService {
             sc.setContent(schedule.getContent());
             sc.setStartDate(schedule.getStartDate());
             sc.setMemberNo(schedule.getMember().getNo());
+            sc.setPlace(schedule.getPlace());
             return sc;
         }).collect(Collectors.toList());
 
