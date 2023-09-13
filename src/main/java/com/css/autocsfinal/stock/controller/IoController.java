@@ -9,6 +9,7 @@ import com.css.autocsfinal.stock.dto.IoSummaryDTO;
 import com.css.autocsfinal.stock.dto.StatisticsDTO;
 import com.css.autocsfinal.stock.service.IoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/")
 @Slf4j
+@Tag(name = " Io", description = "물품 입출고 API")
 public class IoController {
 
     private final IoService ioService;

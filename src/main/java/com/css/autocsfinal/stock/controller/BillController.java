@@ -7,6 +7,7 @@ import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.stock.dto.*;
 import com.css.autocsfinal.stock.service.BillService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/")
 @Slf4j
+@Tag(name = " Bill", description = "세금계선서 API")
 public class BillController {
 
     private final BillService billService;

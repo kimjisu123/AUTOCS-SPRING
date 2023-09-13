@@ -10,6 +10,7 @@ import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.stock.dto.UnitDTO;
 import com.css.autocsfinal.stock.service.UnitService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 @Slf4j
+@Tag(name = "Unit", description = "단위 API")
 public class UnitController {
 
     private final UnitService unitService;

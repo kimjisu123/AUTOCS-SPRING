@@ -10,6 +10,7 @@ import com.css.autocsfinal.stock.entity.StoreInfomation;
 import com.css.autocsfinal.stock.service.OrderService;
 import com.css.autocsfinal.stock.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/")
 @Slf4j
+@Tag(name = " Order", description = "물품 주문 API")
 public class OrderController {
     private final OrderService orderService;
 
