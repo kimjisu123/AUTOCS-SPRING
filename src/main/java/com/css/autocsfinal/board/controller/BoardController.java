@@ -8,6 +8,7 @@ import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.market.dto.ApplyFormDTO;
 import com.css.autocsfinal.market.dto.StoreInfoDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/board")
+@Tag(name = "Board", description = "게시판 API")
 public class BoardController {
 
     private final BoardService boardService;
