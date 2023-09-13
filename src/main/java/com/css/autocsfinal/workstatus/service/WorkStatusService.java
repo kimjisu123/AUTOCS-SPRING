@@ -418,7 +418,7 @@ public class WorkStatusService {
         return employeeAndWorkStatusDTOS;
     }
 
-    // 본사 근태관리 검색
+    // 본사 근태관리 조회, 검색, 페이징 처리
     public Object findByHeadOffice(Criteria cri, String name) {
 
         int index = cri.getPageNum() - 1;
@@ -427,7 +427,9 @@ public class WorkStatusService {
 
         List<EmployeeAndWorkStatus> result = employeeAndWorkStatusRepository.findByOrderByName(paging, name);
 
-        List<EmployeeAndWorkStatusDTO> employeeAndWorkStatusDTOS =  result.stream().map(employeeAndWorkStatus -> modelMapper.map(employeeAndWorkStatus, EmployeeAndWorkStatusDTO.class)).collect(Collectors.toList());
+        List<EmployeeAndWorkStatusDTO> employeeAndWorkStatusDTOS =  result.stream().map(employeeAndWorkStatus ->
+                                                                                            modelMapper.map(employeeAndWorkStatus, EmployeeAndWorkStatusDTO.class))
+                                                                                            .collect(Collectors.toList());
 
         return employeeAndWorkStatusDTOS;
     }

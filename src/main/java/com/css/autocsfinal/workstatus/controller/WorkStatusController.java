@@ -167,14 +167,13 @@ public class WorkStatusController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "퇴근 성공", workStatusService.saveQuitting(employeeNo)));
     }
 
+
     // 본사 근태 현황
-
     @GetMapping("/headOffice/{page}/{search}")
-    public ResponseEntity<ResponseDTO> findByHeadOffice( @PathVariable(name = "page", required = false) int offset, @PathVariable(name = "search", required = false) String name){
-
+    public ResponseEntity<ResponseDTO> findByHeadOffice( @PathVariable(name = "page", required = false) int offset,
+                                                         @PathVariable(name = "search", required = false) String name){
 
         int total;
-
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 8);
 
@@ -189,7 +188,6 @@ public class WorkStatusController {
         }
 
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
-
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "본사 근태관리 조회 성공", pagingResponseDTO));
     }
