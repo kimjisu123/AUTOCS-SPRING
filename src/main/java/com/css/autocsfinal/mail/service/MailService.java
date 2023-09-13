@@ -78,8 +78,6 @@ public class MailService {
 
         List<MailDTO> mailDTOList = mailList.stream().map(Mail -> modelMapper.map(Mail, MailDTO.class) ).collect(Collectors.toList());
 
-
-
         return mailDTOList;
     }
 
