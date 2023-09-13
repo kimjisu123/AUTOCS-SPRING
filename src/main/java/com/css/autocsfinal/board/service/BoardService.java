@@ -275,7 +275,6 @@ public class BoardService {
 
     //게시물 조회
     public BoardDTO finBoard(int boardNo) {
-        //게시물 조회
         Board board = boardRepository.findByBoardNo(boardNo);
         log.info("board : " + board);
 
@@ -356,6 +355,53 @@ public class BoardService {
             log.error("게시물 삭제 중 오류 발생: {}", e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    // 게시물 조회(내가 쓴 글)
+    public List<BoardDTO> findMyBoardEmployee(int refMemberNo) {
+        log.info("[BoardService] refMemberNo {} =======> " + refMemberNo);
+        List<Board> boardList = boardRepository.findByRefMemberNo(refMemberNo);
+        List<BoardDTO> boardDTOList = new ArrayList<>(); // 결과를 담을 리스트 생성
+
+        for (Board board : boardList) {
+            BoardDTO boardDTO = new BoardDTO();
+            boardDTO.setBoardNo(board.getBoardNo());
+            boardDTO.setTitle(board.getTitle());
+            boardDTO.setRefCategoryNo(board.getRefCategoryNo());
+            boardDTO.setRegist(board.getRegist());
+            boardDTO.setContent(board.getContent());
+            boardDTO.setAnonymity(board.getAnonymity());
+
+            int no = board.getRefMemberNo();
+
+            // 멤버 번호로 권한 담기
+            Member member = memberRepository.findByNo(no);
+            boardDTO.setMemnerRole(member.getRole());
+
+            int memberNo = board.getRefMemberNo();
+
+            // 멤버번호로 직원 조회
+            EmployeeAndDepartmentAndPosition employee = employeeAndDepartmentAndPositionRepository.findByMemberNo(memberNo);
+            if (employee != null) {
+                // 직원 정보가 존재하면 추가 정보 설정
+                boardDTO.setEmployeeName(employee.getName());
+                boardDTO.setDepartment(employee.getDepartment().getName());
+                boardDTO.setPosition(employee.getPosition().getName());
+                boardDTO.setRefMemberNo(memberNo);
+            }
+
+            // 멤버번호로 영업점 조회
+            StoreInfo2 store = storeInfo2Repository.findByMemberNo(memberNo);
+            if (store != null) {
+                // 영업점 정보가 존재하면 추가 정보 설정
+                boardDTO.setStoreName(store.getName());
+                boardDTO.setRefMemberNo(memberNo);
+            }
+
+            boardDTOList.add(boardDTO); // 결과 리스트에 추가
+        }
+
+        return boardDTOList;
     }
 }
 

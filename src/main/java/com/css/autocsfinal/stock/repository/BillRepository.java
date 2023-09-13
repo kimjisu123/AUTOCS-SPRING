@@ -19,7 +19,8 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
             "FROM TBL_BILL A " +
             "LEFT JOIN TBL_STORE_INFO B ON B.STORE_NO = A.REF_STORE_INFO_NO " +
             "WHERE A.REGIST_DATE BETWEEN :startDate AND :endDate " +
-            "AND B.NAME LIKE '%'|| :store ||'%' ", nativeQuery = true)
+            "AND B.NAME LIKE '%'|| :store ||'%' " +
+            "ORDER BY A.BILL_NO DESC", nativeQuery = true)
     List<Tuple> billListSize(@Param("store")String store, @Param("startDate") Date startDate, @Param("endDate")Date endDate);
 
     @Query(value ="SELECT A.BILL_NO, A.REF_ORDER_NO as orderNo, B.NAME as storeInfoName, " +
@@ -27,7 +28,8 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
             "FROM TBL_BILL A " +
             "LEFT JOIN TBL_STORE_INFO B ON B.STORE_NO = A.REF_STORE_INFO_NO " +
             "WHERE A.REGIST_DATE BETWEEN :startDate AND :endDate " +
-            "AND B.NAME LIKE '%'|| :store ||'%' ", nativeQuery = true)
+            "AND B.NAME LIKE '%'|| :store ||'%' " +
+            "ORDER BY A.BILL_NO DESC ", nativeQuery = true)
     Page<Tuple> billList(@Param("store")String store, @Param("startDate") Date startDate, @Param("endDate")Date endDate, Pageable paging);
 
 
@@ -36,7 +38,8 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
             "FROM TBL_BILL A " +
             "LEFT JOIN TBL_STORE_INFO B ON B.STORE_NO = A.REF_STORE_INFO_NO " +
             "WHERE A.REGIST_DATE BETWEEN :startDate AND :endDate " +
-            "AND B.STORE_NO = :store ", nativeQuery = true)
+            "AND B.STORE_NO = :store " +
+            "ORDER BY A.BILL_NO DESC ", nativeQuery = true)
     List<Tuple> myBillListSize(@Param("store")int store, @Param("startDate") Date startDate, @Param("endDate")Date endDate);
 
     @Query(value ="SELECT A.BILL_NO, A.REF_ORDER_NO as orderNo, B.NAME as storeInfoName, " +
@@ -44,7 +47,8 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
             "FROM TBL_BILL A " +
             "LEFT JOIN TBL_STORE_INFO B ON B.STORE_NO = A.REF_STORE_INFO_NO " +
             "WHERE A.REGIST_DATE BETWEEN :startDate AND :endDate " +
-            "AND B.STORE_NO = :store ", nativeQuery = true)
+            "AND B.STORE_NO = :store " +
+            "ORDER BY A.BILL_NO DESC", nativeQuery = true)
     Page<Tuple> myBillList(@Param("store")int store, @Param("startDate") Date startDate, @Param("endDate")Date endDate, Pageable paging);
 
 
