@@ -9,6 +9,8 @@ import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -129,15 +133,17 @@ public class ApprovalService {
         Date date = new Date();
 
         /* 문서테이블에 insert */
-        DocumentEntity documentEntity = new DocumentEntity();
-        documentEntity.setEmployeeNo(purchaseList.getEmpNo());
-        documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("구매요청");
-        documentEntity.setDocumentTitle(purchaseList.getDocumentTitle());
-        documentEntity.setStatus("결재요청");
-        documentRepository.save(documentEntity);
 
-        int documentCode = documentEntity.getDocumentCode();;
+        int documentCode = documentInsertMethod(purchaseList.getEmpNo(), date, "구매요청", purchaseList.getDocumentTitle(), "결재요청");
+//        DocumentEntity documentEntity = new DocumentEntity();
+//        documentEntity.setEmployeeNo(purchaseList.getEmpNo());
+//        documentEntity.setApplicationDate(date);
+//        documentEntity.setDocumentType("구매요청");
+//        documentEntity.setDocumentTitle(purchaseList.getDocumentTitle());
+//        documentEntity.setStatus("결재요청");
+//        documentRepository.save(documentEntity);
+
+//        int documentCode = documentEntity.getDocumentCode();;
 
         /* 구매요청 테이블에 값 하나하나 빼서 insert*/
         for(int i = 0; i < purchaseList.getPrice().size(); i++) {
@@ -163,56 +169,64 @@ public class ApprovalService {
 
         /* 파일 저장 경로 만들어서 파일 테이블에 insert */
 
-        String root = "C:\\dev\\approvalFile\\";
-        String mainFilePath = root + "purchase";
+        fileInsertMethod(files, "purchase", documentCode);
 
-        File mkdir = new File(mainFilePath);
-        if(!mkdir.exists()) {
-            mkdir.mkdirs();
-        }
-
-        if(files != null) {
-            for (int i = 0; i < files.size(); i++) {
-                String originName = files.get(i).getOriginalFilename();
-                String ext = originName.substring(originName.lastIndexOf("."));
-                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
-                documentFileEntity.setOriginName(originName);
-                documentFileEntity.setModifyName(modifyName);
-                documentFileEntity.setFilePath(mainFilePath);
-                documentFileEntity.setDocumentCode(documentCode);
-
-                try {
-                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
-                    documentFileRepository.saveAndFlush(documentFileEntity);
-                } catch (IOException e) {
-                    new File(mainFilePath + "\\" + modifyName).delete();
-                    documentFileRepository.delete(documentFileEntity);
-                }
-            }
-        }
+//        String root = "C:\\dev\\approvalFile\\";
+//        String mainFilePath = root + "purchase";
+//
+//        File mkdir = new File(mainFilePath);
+//        if(!mkdir.exists()) {
+//            mkdir.mkdirs();
+//        }
+//
+//        if(files != null) {
+//            for (int i = 0; i < files.size(); i++) {
+//                String originName = files.get(i).getOriginalFilename();
+//                String ext = originName.substring(originName.lastIndexOf("."));
+//                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
+//
+//                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
+//                documentFileEntity.setOriginName(originName);
+//                documentFileEntity.setModifyName(modifyName);
+//                documentFileEntity.setFilePath(mainFilePath);
+//                documentFileEntity.setDocumentCode(documentCode);
+//
+//                try {
+//                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
+//                    documentFileRepository.saveAndFlush(documentFileEntity);
+//                } catch (IOException e) {
+//                    new File(mainFilePath + "\\" + modifyName).delete();
+//                    documentFileRepository.delete(documentFileEntity);
+//                }
+//            }
+//        }
 
         /* 수신자 테이블 insert */
-        if(purchaseList.getReceive() != null) {
-            for (int i = 0; i < purchaseList.getReceive().size(); i++) {
 
-                ReceiverEntity receiverEntity = receiveRepository.save(new ReceiverEntity(
-                        purchaseList.getReceive().get(i), documentCode, "대기중"
+        receiverInsertMethod(purchaseList.getReceive(), documentCode);
 
-                ));
-
-                log.info("[ApprovalService] 수신자 테이블 수신자 : {} ", purchaseList.getReceive().get(i));
-            }
-        }
+//        if(purchaseList.getReceive() != null) {
+//            for (int i = 0; i < purchaseList.getReceive().size(); i++) {
+//
+//                ReceiverEntity receiverEntity = receiveRepository.save(new ReceiverEntity(
+//                        purchaseList.getReceive().get(i), documentCode, "대기중"
+//
+//                ));
+//
+//                log.info("[ApprovalService] 수신자 테이블 수신자 : {} ", purchaseList.getReceive().get(i));
+//            }
+//        }
 
         /* 결재 테이블 insert */
-        for(int i = 0; i < purchaseList.getAllow().size(); i++) {
 
-            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
-                    documentCode, purchaseList.getAllow().get(i), "결재요청", date, ""
-            ));
-        }
+        approvalInsertMethod(purchaseList.getAllow(), documentCode, date);
+
+//        for(int i = 0; i < purchaseList.getAllow().size(); i++) {
+//
+//            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
+//                    documentCode, purchaseList.getAllow().get(i), "결재요청", date, ""
+//            ));
+//        }
     }
 
     /* 여비정산 */
@@ -222,15 +236,18 @@ public class ApprovalService {
         Date date = new Date();
 
         /* 문서테이블에 insert */
-        DocumentEntity documentEntity = new DocumentEntity();
-        documentEntity.setEmployeeNo(trafficList.getEmpNo());
-        documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("여비정산");
-        documentEntity.setStatus("결재요청");
-        documentEntity.setDocumentTitle(trafficList.getDocumentTitle());
-        documentRepository.save(documentEntity);
 
-        int documentCode = documentEntity.getDocumentCode();
+        int documentCode = documentInsertMethod(trafficList.getEmpNo(), date, "여비정산", trafficList.getDocumentTitle(), "결재요청");
+
+//        DocumentEntity documentEntity = new DocumentEntity();
+//        documentEntity.setEmployeeNo(trafficList.getEmpNo());
+//        documentEntity.setApplicationDate(date);
+//        documentEntity.setDocumentType("여비정산");
+//        documentEntity.setStatus("결재요청");
+//        documentEntity.setDocumentTitle(trafficList.getDocumentTitle());
+//        documentRepository.save(documentEntity);
+//
+//        int documentCode = documentEntity.getDocumentCode();
 
         /* 여비정산 테이블 */
         for(int i = 0; i < trafficList.getTrafficDate().size(); i++) {
@@ -250,53 +267,62 @@ public class ApprovalService {
         }
 
         /* 결재 테이블 */
-        for(int i = 0; i < trafficList.getAllow().size(); i++) {
 
-            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
-                    documentCode, trafficList.getAllow().get(i), "결재요청", date, ""
-            ));
-        }
+        approvalInsertMethod(trafficList.getAllow(), documentCode, date);
+
+//        for(int i = 0; i < trafficList.getAllow().size(); i++) {
+//
+//            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
+//                    documentCode, trafficList.getAllow().get(i), "결재요청", date, ""
+//            ));
+//        }
 
         /* 수신자 */
-        if(trafficList.getReceive() != null) {
-            for (int i = 0; i < trafficList.getReceive().size(); i++) {
 
-                receiveRepository.save(new ReceiverEntity(
-                        trafficList.getReceive().get(i), documentCode, "대기중"
-                ));
-            }
-        }
+        receiverInsertMethod(trafficList.getReceive(), documentCode);
+
+//        if(trafficList.getReceive() != null) {
+//            for (int i = 0; i < trafficList.getReceive().size(); i++) {
+//
+//                receiveRepository.save(new ReceiverEntity(
+//                        trafficList.getReceive().get(i), documentCode, "대기중"
+//                ));
+//            }
+//        }
 
         /* 파일 저장 경로 만들어서 파일 테이블에 insert */
-        String root = "C:\\dev\\approvalFile\\";
-        String mainFilePath = root + "traffic";
 
-        File mkdir = new File(mainFilePath);
-        if(!mkdir.exists()) {
-            mkdir.mkdirs();
-        }
+        fileInsertMethod(files, "traffic", documentCode);
 
-        if(files != null) {
-            for (int i = 0; i < files.size(); i++) {
-                String originName = files.get(i).getOriginalFilename();
-                String ext = originName.substring(originName.lastIndexOf("."));
-                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
-                documentFileEntity.setOriginName(originName);
-                documentFileEntity.setModifyName(modifyName);
-                documentFileEntity.setFilePath(mainFilePath);
-                documentFileEntity.setDocumentCode(documentCode);
-
-                try {
-                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
-                    documentFileRepository.saveAndFlush(documentFileEntity);
-                } catch (IOException e) {
-                    new File(mainFilePath + "\\" + modifyName).delete();
-                    documentFileRepository.delete(documentFileEntity);
-                }
-            }
-        }
+//        String root = "C:\\dev\\approvalFile\\";
+//        String mainFilePath = root + "traffic";
+//
+//        File mkdir = new File(mainFilePath);
+//        if(!mkdir.exists()) {
+//            mkdir.mkdirs();
+//        }
+//
+//        if(files != null) {
+//            for (int i = 0; i < files.size(); i++) {
+//                String originName = files.get(i).getOriginalFilename();
+//                String ext = originName.substring(originName.lastIndexOf("."));
+//                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
+//
+//                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
+//                documentFileEntity.setOriginName(originName);
+//                documentFileEntity.setModifyName(modifyName);
+//                documentFileEntity.setFilePath(mainFilePath);
+//                documentFileEntity.setDocumentCode(documentCode);
+//
+//                try {
+//                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
+//                    documentFileRepository.saveAndFlush(documentFileEntity);
+//                } catch (IOException e) {
+//                    new File(mainFilePath + "\\" + modifyName).delete();
+//                    documentFileRepository.delete(documentFileEntity);
+//                }
+//            }
+//        }
     }
 
     /* 업무보고 */
@@ -306,15 +332,18 @@ public class ApprovalService {
         Date date = new Date();
 
         /* 문서테이블에 insert */
-        DocumentEntity documentEntity = new DocumentEntity();
-        documentEntity.setEmployeeNo(business.getEmpNo());
-        documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("업무보고");
-        documentEntity.setDocumentTitle(business.getDocumentTitle());
-        documentEntity.setStatus("결재요청");
-        documentRepository.save(documentEntity);
 
-        int documentCode = documentEntity.getDocumentCode();
+        int documentCode = documentInsertMethod(business.getEmpNo(), date, "업무보고", business.getDocumentTitle(), "결재요청");
+
+//        DocumentEntity documentEntity = new DocumentEntity();
+//        documentEntity.setEmployeeNo(business.getEmpNo());
+//        documentEntity.setApplicationDate(date);
+//        documentEntity.setDocumentType("업무보고");
+//        documentEntity.setDocumentTitle(business.getDocumentTitle());
+//        documentEntity.setStatus("결재요청");
+//        documentRepository.save(documentEntity);
+//
+//        int documentCode = documentEntity.getDocumentCode();
 
         /* 업무보고 테이블 */
         BusinessEntity businessEntity = new BusinessEntity();
@@ -325,53 +354,62 @@ public class ApprovalService {
         businessRepository.save(businessEntity);
 
         /* 결재 테이블 */
-        for(int i = 0; i < business.getAllow().size(); i++) {
 
-            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
-                    documentCode, business.getAllow().get(i), "결재요청", date, ""
-            ));
-        }
+        approvalInsertMethod(business.getAllow(), documentCode, date);
+
+//        for(int i = 0; i < business.getAllow().size(); i++) {
+//
+//            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
+//                    documentCode, business.getAllow().get(i), "결재요청", date, ""
+//            ));
+//        }
 
         /* 수신자 */
-        if(business.getReceive() != null) {
-            for (int i = 0; i < business.getReceive().size(); i++) {
 
-                receiveRepository.save(new ReceiverEntity(
-                        business.getReceive().get(i), documentCode, "대기중"
-                ));
-            }
-        }
+        receiverInsertMethod(business.getReceive(), documentCode);
+
+//        if(business.getReceive() != null) {
+//            for (int i = 0; i < business.getReceive().size(); i++) {
+//
+//                receiveRepository.save(new ReceiverEntity(
+//                        business.getReceive().get(i), documentCode, "대기중"
+//                ));
+//            }
+//        }
 
         /* 파일 저장 경로 만들어서 파일 테이블에 insert */
-        String root = "C:\\dev\\approvalFile\\";
-        String mainFilePath = root + "business";
 
-        File mkdir = new File(mainFilePath);
-        if(!mkdir.exists()) {
-            mkdir.mkdirs();
-        }
+        fileInsertMethod(files, "business", documentCode);
 
-        if(files != null) {
-            for (int i = 0; i < files.size(); i++) {
-                String originName = files.get(i).getOriginalFilename();
-                String ext = originName.substring(originName.lastIndexOf("."));
-                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
-                documentFileEntity.setOriginName(originName);
-                documentFileEntity.setModifyName(modifyName);
-                documentFileEntity.setFilePath(mainFilePath);
-                documentFileEntity.setDocumentCode(documentCode);
-
-                try {
-                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
-                    documentFileRepository.saveAndFlush(documentFileEntity);
-                } catch (IOException e) {
-                    new File(mainFilePath + "\\" + modifyName).delete();
-                    documentFileRepository.delete(documentFileEntity);
-                }
-            }
-        }
+//        String root = "C:\\dev\\approvalFile\\";
+//        String mainFilePath = root + "business";
+//
+//        File mkdir = new File(mainFilePath);
+//        if(!mkdir.exists()) {
+//            mkdir.mkdirs();
+//        }
+//
+//        if(files != null) {
+//            for (int i = 0; i < files.size(); i++) {
+//                String originName = files.get(i).getOriginalFilename();
+//                String ext = originName.substring(originName.lastIndexOf("."));
+//                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
+//
+//                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
+//                documentFileEntity.setOriginName(originName);
+//                documentFileEntity.setModifyName(modifyName);
+//                documentFileEntity.setFilePath(mainFilePath);
+//                documentFileEntity.setDocumentCode(documentCode);
+//
+//                try {
+//                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
+//                    documentFileRepository.saveAndFlush(documentFileEntity);
+//                } catch (IOException e) {
+//                    new File(mainFilePath + "\\" + modifyName).delete();
+//                    documentFileRepository.delete(documentFileEntity);
+//                }
+//            }
+//        }
     }
 
     /* 남은 휴가 가져오기 */
@@ -389,15 +427,18 @@ public class ApprovalService {
         Date date = new Date();
 
         /* 문서테이블에 insert */
-        DocumentEntity documentEntity = new DocumentEntity();
-        documentEntity.setEmployeeNo(vacation.getEmpNo());
-        documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("휴가신청");
-        documentEntity.setStatus("결재요청");
-        documentEntity.setDocumentTitle(vacation.getDocumentTitle());
-        documentRepository.save(documentEntity);
 
-        int documentCode = documentEntity.getDocumentCode();
+        int documentCode = documentInsertMethod(vacation.getEmpNo(), date, "휴가신청", vacation.getDocumentTitle(), "결재요청");
+
+//        DocumentEntity documentEntity = new DocumentEntity();
+//        documentEntity.setEmployeeNo(vacation.getEmpNo());
+//        documentEntity.setApplicationDate(date);
+//        documentEntity.setDocumentType("휴가신청");
+//        documentEntity.setStatus("결재요청");
+//        documentEntity.setDocumentTitle(vacation.getDocumentTitle());
+//        documentRepository.save(documentEntity);
+//
+//        int documentCode = documentEntity.getDocumentCode();
         log.info("vacation ================ {}", vacation);
         /* 휴가 신청 테이블 */
         VacationEntity vacationEntity = new VacationEntity();
@@ -412,53 +453,62 @@ public class ApprovalService {
         vacationRepository.save(vacationEntity);
 
         /* 결재 테이블 */
-        for(int i = 0; i < vacation.getAllow().size(); i++) {
 
-            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
-                    documentCode, vacation.getAllow().get(i), "결재요청", date, ""
-            ));
-        }
+        approvalInsertMethod(vacation.getAllow(), documentCode, date);
+
+//        for(int i = 0; i < vacation.getAllow().size(); i++) {
+//
+//            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
+//                    documentCode, vacation.getAllow().get(i), "결재요청", date, ""
+//            ));
+//        }
 
         /* 수신자 */
-        if(vacation.getReceive() != null) {
-            for (int i = 0; i < vacation.getReceive().size(); i++) {
 
-                receiveRepository.save(new ReceiverEntity(
-                        vacation.getReceive().get(i), documentCode, "대기중"
-                ));
-            }
-        }
+        receiverInsertMethod(vacation.getReceive(), documentCode);
+
+//        if(vacation.getReceive() != null) {
+//            for (int i = 0; i < vacation.getReceive().size(); i++) {
+//
+//                receiveRepository.save(new ReceiverEntity(
+//                        vacation.getReceive().get(i), documentCode, "대기중"
+//                ));
+//            }
+//        }
 
         /* 파일 저장 경로 만들어서 파일 테이블에 insert */
-        String root = "C:\\dev\\approvalFile\\";
-        String mainFilePath = root + "business";
 
-        File mkdir = new File(mainFilePath);
-        if(!mkdir.exists()) {
-            mkdir.mkdirs();
-        }
+        fileInsertMethod(files, "vacation", documentCode);
 
-        if(files != null) {
-            for (int i = 0; i < files.size(); i++) {
-                String originName = files.get(i).getOriginalFilename();
-                String ext = originName.substring(originName.lastIndexOf("."));
-                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
-                documentFileEntity.setOriginName(originName);
-                documentFileEntity.setModifyName(modifyName);
-                documentFileEntity.setFilePath(mainFilePath);
-                documentFileEntity.setDocumentCode(documentCode);
-
-                try {
-                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
-                    documentFileRepository.saveAndFlush(documentFileEntity);
-                } catch (IOException e) {
-                    new File(mainFilePath + "\\" + modifyName).delete();
-                    documentFileRepository.delete(documentFileEntity);
-                }
-            }
-        }
+//        String root = "C:\\dev\\approvalFile\\";
+//        String mainFilePath = root + "vacation";
+//
+//        File mkdir = new File(mainFilePath);
+//        if(!mkdir.exists()) {
+//            mkdir.mkdirs();
+//        }
+//
+//        if(files != null) {
+//            for (int i = 0; i < files.size(); i++) {
+//                String originName = files.get(i).getOriginalFilename();
+//                String ext = originName.substring(originName.lastIndexOf("."));
+//                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
+//
+//                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
+//                documentFileEntity.setOriginName(originName);
+//                documentFileEntity.setModifyName(modifyName);
+//                documentFileEntity.setFilePath(mainFilePath);
+//                documentFileEntity.setDocumentCode(documentCode);
+//
+//                try {
+//                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
+//                    documentFileRepository.saveAndFlush(documentFileEntity);
+//                } catch (IOException e) {
+//                    new File(mainFilePath + "\\" + modifyName).delete();
+//                    documentFileRepository.delete(documentFileEntity);
+//                }
+//            }
+//        }
     }
 
     /* 비용 청구 */
@@ -468,15 +518,8 @@ public class ApprovalService {
         Date date = new Date();
 
         /* 문서테이블에 insert */
-        DocumentEntity documentEntity = new DocumentEntity();
-        documentEntity.setEmployeeNo(pay.getEmpNo());
-        documentEntity.setApplicationDate(date);
-        documentEntity.setDocumentType("비용청구");
-        documentEntity.setStatus("결재요청");
-        documentEntity.setDocumentTitle(pay.getDocumentTitle());
-        documentRepository.save(documentEntity);
 
-        int documentCode = documentEntity.getDocumentCode();
+        int documentCode = documentInsertMethod(pay.getEmpNo(), date, "비용청구", pay.getDocumentTitle(), "결재요청");
 
         /* 비용청구 테이블 */
         for(int i = 0; i < pay.getPayDate().size(); i++) {
@@ -491,53 +534,15 @@ public class ApprovalService {
         }
 
         /* 결재 테이블 */
-        for(int i = 0; i < pay.getAllow().size(); i++) {
 
-            ApprovalEntity approvalEntity = approverRepository.save(new ApprovalEntity(
-                    documentCode, pay.getAllow().get(i), "결재요청", date, ""
-            ));
-        }
+        approvalInsertMethod(pay.getAllow(), documentCode, date);
 
-        if(pay.getReceive() != null) {
-            /* 수신자 */
-            for (int i = 0; i < pay.getReceive().size(); i++) {
-
-                receiveRepository.save(new ReceiverEntity(
-                        pay.getReceive().get(i), documentCode, "대기중"
-                ));
-            }
-        }
+        /* 수신자 */
+        receiverInsertMethod(pay.getReceive(), documentCode);
 
         /* 파일 저장 경로 만들어서 파일 테이블에 insert */
-        String root = "C:\\dev\\approvalFile\\";
-        String mainFilePath = root + "business";
 
-        File mkdir = new File(mainFilePath);
-        if(!mkdir.exists()) {
-            mkdir.mkdirs();
-        }
-
-        if(files != null) {
-            for (int i = 0; i < files.size(); i++) {
-                String originName = files.get(i).getOriginalFilename();
-                String ext = originName.substring(originName.lastIndexOf("."));
-                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-                DocumentFileEntity documentFileEntity = new DocumentFileEntity();
-                documentFileEntity.setOriginName(originName);
-                documentFileEntity.setModifyName(modifyName);
-                documentFileEntity.setFilePath(mainFilePath);
-                documentFileEntity.setDocumentCode(documentCode);
-
-                try {
-                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
-                    documentFileRepository.saveAndFlush(documentFileEntity);
-                } catch (IOException e) {
-                    new File(mainFilePath + "\\" + modifyName).delete();
-                    documentFileRepository.delete(documentFileEntity);
-                }
-            }
-        }
+        fileInsertMethod(files, "pay", documentCode);
     }
 
     /* 전자결재 홈 */
@@ -886,5 +891,197 @@ public class ApprovalService {
         payDoc.setFiles(files);
 
         return payDoc;
+    }
+
+    /* 수정 가능한지 안한지 */
+    public boolean getAppYN(int documentCode) {
+
+        boolean yn = false;
+        int count = 0;
+
+        List<ApprovalEntity> appList = approverRepository.findByDocumentCode(documentCode);
+        List<ReceiverEntity> receiverList = receiveRepository.findByDocumentCode(documentCode);
+
+        for(int i = 0; i < appList.size(); i++) {
+
+            if(appList.get(i).getStatus().equals("승인됨")) {
+
+                count += 1;
+            }
+        }
+
+        for(int i = 0; i < receiverList.size(); i++) {
+
+            if(receiverList.get(i).getStatus().equals("확인")) {
+
+                count += 1;
+            }
+        }
+
+        log.info("count  ====================================== {} ", count);
+
+        if(count > 0) {
+            yn = false;
+        } else {
+            yn = true;
+        }
+
+        return yn;
+    }
+
+    /* 문서 삭제 */
+    @Transactional
+    public void deleteDocument(int documentCode) {
+
+        purchaseRepository.deleteByDocumentCode(documentCode);
+        trafficRepository.deleteByDocumentCode(documentCode);
+        businessRepository.deleteByDocumentCode(documentCode);
+        vacationRepository.deleteByDocumentCode(documentCode);
+        payRepository.deleteByDocumentCode(documentCode);
+        approverRepository.deleteByDocumentCode(documentCode);
+        receiveRepository.deleteByDocumentCode(documentCode);
+        documentFileRepository.deleteByDocumentCode(documentCode);
+        documentRepository.deleteByDocumentCode(documentCode);
+    }
+
+    /* 승인 로직 */
+    @Transactional
+    public void putApproval(int documentCode, int employeeNo) {
+
+        List<ApprovalEntity> appList = approverRepository.findByDocumentCode(documentCode);
+
+        int count = 0;
+
+        ApprovalEntity approval = approverRepository.findByEmployeeNoAndDocumentCode(employeeNo,documentCode);
+        approval.setStatus("승인됨");
+
+        for(int i = 0; i < appList.size(); i++) {
+            if(appList.get(i).getStatus().equals("승인됨")) {
+                count += 1;
+            }
+        }
+
+        if(count == appList.size()) {
+            DocumentEntity document = documentRepository.findByDocumentCode(documentCode);
+            document.setStatus("승인됨");
+        }
+
+    }
+
+    /* 코멘트 insert */
+    @Transactional
+    public void backDocument(String comment, int documentCode, int employeeNo) {
+
+        ApprovalEntity approval = approverRepository.findByEmployeeNoAndDocumentCode(employeeNo, documentCode);
+        approval.setCMT(comment);
+
+        List<ApprovalEntity> approvalList = approverRepository.findByDocumentCode(documentCode);
+
+        for(int i = 0; i < approvalList.size(); i++) {
+
+            approvalList.get(i).setStatus("반려됨");
+        }
+
+        DocumentEntity document = documentRepository.findByDocumentCode(documentCode);
+        document.setStatus("반려됨");
+    }
+
+    /* 휴가 줄이기 */
+    @Transactional
+    public void putVacation(int documentCode, int useDate) {
+
+        DocumentEntity document = documentRepository.findByDocumentCode(documentCode);
+        int employeeNo = document.getEmployeeNo();
+        Employee employee = employeeRepository.findByEmployeeNo(employeeNo);
+
+        employee.setAnnual(employee.getAnnual() - useDate);
+    }
+
+    public byte[] downloadFile(int fileCode) throws IOException {
+
+        DocumentFileEntity file = documentFileRepository.findByDocumentFileCode(fileCode);
+        String path = file.getFilePath() + "\\" + file.getModifyName();
+
+        return Files.readAllBytes(new File(path).toPath());
+    }
+
+    public void putReceiver(int employeeNo, int documentCode) {
+
+        ReceiverEntity receiver = receiveRepository.findByEmployeeNoAndDocumentCode(employeeNo, documentCode);
+
+        receiver.setStatus("확인");
+    }
+
+    /* TBL_DOCUMENT insert */
+    public int documentInsertMethod(int employeeNo, Date applicationDate, String documentType, String documentTitle, String status) {
+
+        DocumentEntity document = new DocumentEntity();
+        document.setEmployeeNo(employeeNo);
+        document.setApplicationDate(applicationDate);
+        document.setDocumentType(documentType);
+        document.setDocumentTitle(documentTitle);
+        document.setStatus(status);
+        documentRepository.save(document);
+
+        return document.getDocumentCode();
+    }
+
+    /* TBL_RECEIVER insert */
+    public void receiverInsertMethod(List<Integer> list, int documentCode) {
+
+        if(list != null) {
+
+            for(int i = 0; i < list.size(); i++) {
+
+                receiveRepository.save(new ReceiverEntity(
+                        list.get(i), documentCode, "대기중"
+                ));
+            }
+        }
+    }
+
+    /* TBL_APPROVAL insert */
+    public void approvalInsertMethod(List<Integer> list, int documentCode, Date date) {
+
+        for (int i = 0; i < list.size(); i++) {
+
+            ApprovalEntity approval = approverRepository.save(new ApprovalEntity(
+
+                    documentCode, list.get(i), "결재요청", date, ""));
+        }
+    }
+
+    /* TBL_DOCUMENT_FILE insert */
+    public void fileInsertMethod(List<MultipartFile> files, String path, int documentCode) {
+
+        String root = "C:\\dev\\approvalFile\\";
+        String mainFilePath = root + path;
+
+        File mkdir = new File(mainFilePath);
+        if(!mkdir.exists()) {
+            mkdir.mkdirs();
+        }
+
+        if(files != null) {
+            for (int i = 0; i < files.size(); i++) {
+                String originName = files.get(i).getOriginalFilename();
+                String ext = originName.substring(originName.lastIndexOf("."));
+                String modifyName = UUID.randomUUID().toString().replace("-", "") + ext;
+
+                DocumentFileEntity file = new DocumentFileEntity();
+                file.setOriginName(originName);
+                file.setModifyName(modifyName);
+                file.setFilePath(mainFilePath);
+                file.setDocumentCode(documentCode);
+
+                try {
+                    files.get(i).transferTo(new File(mainFilePath + "\\" + modifyName));
+                    documentFileRepository.saveAndFlush(file);
+                } catch (IOException e) {
+                    new File(mainFilePath + "\\" + modifyName).delete();
+                    documentFileRepository.delete(file);
+                }
+            }
+        }
     }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PayRepository extends JpaRepository<PayEntity, Integer> {
     List<PayEntity> findByDocumentCode(int documentCode);
+
+    void deleteByDocumentCode(int documentCode);
 }
