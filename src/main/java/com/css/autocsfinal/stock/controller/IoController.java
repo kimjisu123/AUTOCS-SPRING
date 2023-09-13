@@ -8,6 +8,7 @@ import com.css.autocsfinal.stock.dto.IoDTO;
 import com.css.autocsfinal.stock.dto.IoSummaryDTO;
 import com.css.autocsfinal.stock.dto.StatisticsDTO;
 import com.css.autocsfinal.stock.service.IoService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,6 +35,7 @@ public class IoController {
     }
 
     /* 입출고 입력 */
+    @Operation(summary = "입출고 입력 요청", description = "입출고 입력 진행됩니다.", tags = { "IoController" })
     @PostMapping("/stock/stockio")
     public ResponseEntity<ResponseDTO> insertIo(@ModelAttribute IoDTO ioDTO){
 
@@ -43,6 +45,7 @@ public class IoController {
     }
 
     /* 입출고 조회 */
+    @Operation(summary = "입출고 전체조회 요청", description = "입출고 전체조회 진행됩니다.", tags = { "IoController" })
     @GetMapping("/stock/stockio")
     public ResponseEntity<ResponseDTO> selectIoListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset){
@@ -60,6 +63,7 @@ public class IoController {
 
 
     /* 입출고 조회 그룹화 - 이름검색, 페이징 필요 날짜 인자 받기*/
+    @Operation(summary = "입출고 물품이름별 조회 요청", description = "입출고 물품이름별 조회 진행됩니다.", tags = { "IoController" })
     @GetMapping("/stock/check")
     public ResponseEntity<ResponseDTO> summarizeWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
@@ -113,6 +117,7 @@ public class IoController {
     }
 
     /* 매출통계 - 이름검색, 페이징 필요 날짜 인자 받기*/
+    @Operation(summary = "매출통계 물품이름별 조회 요청", description = "매출통계 물품이름별 조회 진행됩니다.", tags = { "IoController" })
     @GetMapping("/stock/statistics")
     public ResponseEntity<ResponseDTO> statistics(
             @RequestParam(name = "s", defaultValue = "")String s,
@@ -149,6 +154,7 @@ public class IoController {
 
 
     /* 영업점별 매출통계용 - 이름 날짜 검색*/
+    @Operation(summary = "매출통계 영업점,물품이름별 조회 요청", description = "매출통계 영업점,물품이름별 조회 진행됩니다.", tags = { "IoController" })
     @GetMapping("/stock/mystatistics")
     public ResponseEntity<ResponseDTO> statistics(
             @RequestParam(name = "store", defaultValue = "")String store,

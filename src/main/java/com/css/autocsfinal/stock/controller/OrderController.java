@@ -9,6 +9,7 @@ import com.css.autocsfinal.stock.entity.OrderProduct;
 import com.css.autocsfinal.stock.entity.StoreInfomation;
 import com.css.autocsfinal.stock.service.OrderService;
 import com.css.autocsfinal.stock.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class OrderController {
     }
 
     /* 주문번호 전체조회*/
+    @Operation(summary = "주문내역 전체 조회 요청", description = "주문내역 전체 조회 진행됩니다.", tags = { "OrderController" })
     @GetMapping("/stock/order")
     public ResponseEntity<ResponseDTO> selectOrderListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset){
@@ -63,6 +65,7 @@ public class OrderController {
 //
 //        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
 //    }
+    @Operation(summary = "주문내역 상태,영업점명별 조회 요청", description = "주문내역 상태,영업점명별 조회 진행됩니다.", tags = { "OrderController" })
     @GetMapping("/stock/orderlist")
     public ResponseEntity<ResponseDTO> orderListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
@@ -113,6 +116,7 @@ public class OrderController {
     }
 
     /* 주문조회 - 영업점별*/
+    @Operation(summary = "주문내역 영업점별 조회 요청", description = "주문내역 영업점별 조회 진행됩니다.", tags = { "OrderController" })
     @GetMapping("/stock/myorderlist")
     public ResponseEntity<ResponseDTO> orderListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
@@ -150,6 +154,7 @@ public class OrderController {
 
 
     /* 주문물품조회 - 주문번호별 */
+    @Operation(summary = "주문내역 주문번호별 조회 요청", description = "주문내역 주문번호별 조회 진행됩니다.", tags = { "OrderController" })
     @GetMapping("/stock/myorderlist/detail")
     public ResponseEntity<ResponseDTO> myOrderListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
@@ -194,6 +199,7 @@ public class OrderController {
     }
 
     /* 주문물품조회 - 계산서용 */
+    @Operation(summary = "주문내역 세금계산서용 조회 요청", description = "주문내역 세금계산서용 조회 진행됩니다.", tags = { "OrderController" })
     @GetMapping("/stock/bill/detail/order")
     public ResponseEntity<ResponseDTO> myOrderListForBill(
             @RequestParam(name = "myOrderNo", defaultValue = "")int myOrderNo
@@ -227,6 +233,7 @@ public class OrderController {
     }
 
     /* 주문물품 조회 - 환불용 */
+    @Operation(summary = "주문내역 환불용 조회 요청", description = "주문내역 환불용 조회 진행됩니다.", tags = { "OrderController" })
     @GetMapping("/stock/refund")
     public ResponseEntity<ResponseDTO> selectOrderProduct(
             @RequestParam(name = "myOrderProductNo", defaultValue = "")int myOrderProductNo){
@@ -235,6 +242,7 @@ public class OrderController {
     }
 
     /* 마지막 주문번호 조회 */
+    @Operation(summary = "마지막 주문번호 조회 요청", description = "마지막 주문번호 조회 진행됩니다.", tags = { "OrderController" })
     @GetMapping("/stock/order/findLast")
     public ResponseEntity<ResponseDTO> selectLastOrder(){
         System.out.println("====================");
@@ -245,6 +253,7 @@ public class OrderController {
 
 
     /* 주문번호 입력 */
+    @Operation(summary = "주문번호 입력 요청", description = "주문번호 입력 진행됩니다.", tags = { "OrderController" })
     @PostMapping("/stock/order")
     public ResponseEntity<ResponseDTO> insertOrder(@ModelAttribute OrderDTO orderDTO){
 
@@ -254,6 +263,7 @@ public class OrderController {
     }
 
     /* 주문번호 수정 */
+    @Operation(summary = "주문번호 수정 요청", description = "주문번호 수정 진행됩니다.", tags = { "OrderController" })
     @PutMapping("/stock/order/update")
     public ResponseEntity<ResponseDTO> updateOrder(@ModelAttribute OrderDTO orderDTO) {
 
@@ -261,6 +271,7 @@ public class OrderController {
     }
 
     /* 주문물품 입력 */
+    @Operation(summary = "주문물품 입력 요청", description = "주문물품 입력 진행됩니다.", tags = { "OrderController" })
     @PostMapping("/stock/order/product")
     public ResponseEntity<ResponseDTO> insertOrderProduct(@ModelAttribute OrderProductDTO orderProductDTO){
 
@@ -270,6 +281,7 @@ public class OrderController {
     }
 
     /* 주문물품 수정 */
+    @Operation(summary = "주문물품 수정 요청", description = "주문물품 수정 진행됩니다.", tags = { "OrderController" })
     @PutMapping("/stock/orderlist")
     public ResponseEntity<ResponseDTO> updateOrderProduct(@ModelAttribute OrderProductDTO orderProductDTO) {
 

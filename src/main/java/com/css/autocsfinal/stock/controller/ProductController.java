@@ -6,6 +6,7 @@ import com.css.autocsfinal.common.PagingResponseDTO;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.stock.dto.ProductDTO;
 import com.css.autocsfinal.stock.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class ProductController {
     }
 
     /* 물품 전체조회 (불용일등록)*/
+    @Operation(summary = "물품 불용일 등록 요청", description = "물품 불용일 등록 진행됩니다.", tags = { "ProductController" })
     @GetMapping("/stock/productdelete")
     public ResponseEntity<ResponseDTO> selectProductListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset){
@@ -44,6 +46,7 @@ public class ProductController {
     }
 
     /* 물품 조회 - 이름검색 (불용일등록_팝업창) */
+    @Operation(summary = "물품이름별 조회 요청", description = "물품이름별 조회 진행됩니다.", tags = { "ProductController" })
     @GetMapping("/ListPopup")
     public ResponseEntity<ResponseDTO> selectProductListByNameWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
@@ -61,6 +64,7 @@ public class ProductController {
     }
 
     /* 물품 입력 */
+    @Operation(summary = "물품 등록 요청", description = "물품 등록 진행됩니다.", tags = { "ProductController" })
     @PostMapping("/stock/productregist")
     public ResponseEntity<ResponseDTO> insertProduct(@ModelAttribute ProductDTO productDTO){
 
@@ -70,6 +74,7 @@ public class ProductController {
     }
 
     /* 물품 수정 */
+    @Operation(summary = "물품 수정 요청", description = "물품 수정 진행됩니다.", tags = { "ProductController" })
     @PutMapping(value = "/stock/productdelete")
     public ResponseEntity<ResponseDTO> updateProduct(@ModelAttribute ProductDTO productDTO) {
 

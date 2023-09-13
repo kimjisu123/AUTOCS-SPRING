@@ -6,6 +6,7 @@ import com.css.autocsfinal.common.PagingResponseDTO;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.stock.dto.*;
 import com.css.autocsfinal.stock.service.BillService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class BillController {
 
 
     /* 계산서 입력 */
+    @Operation(summary = "세금계산서 입력 요청", description = "세금계산서 입력이 진행됩니다.", tags = { "BillController" })
     @PostMapping("/stock/myorderlist")
     public ResponseEntity<ResponseDTO> insertBill(@ModelAttribute BillDTO billDTO){
 
@@ -41,6 +43,7 @@ public class BillController {
 
 
     /* 계산서 조회 페이징*/
+    @Operation(summary = "세금계산서 전체조회 요청", description = "세금계산서 전체조회 진행됩니다.", tags = { "BillController" })
     @GetMapping("/stock/bill")
     public ResponseEntity<ResponseDTO> billListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
@@ -91,7 +94,8 @@ public class BillController {
 //        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
 //    }
 
-    /* 주문물품조회 - 주문번호별 */
+    /* 주문물품조회 - 영업점별 */
+    @Operation(summary = "세금계산서 영업점별 조회 요청", description = "세금계산서 영업점별 조회 진행됩니다.", tags = { "BillController" })
     @GetMapping("/stock/mybill")
     public ResponseEntity<ResponseDTO> myBillListWithPaging(
             @RequestParam(name = "offset", defaultValue = "1") String offset,
@@ -127,6 +131,7 @@ public class BillController {
     }
 
     /* 계산서 조회 - 주문번호별 계산서 조회 */
+    @Operation(summary = "세금계산서 주문번호별 조회 요청", description = "세금계산서 주문번호별 조회 진행됩니다.", tags = { "BillController" })
     @GetMapping("/stock/bill/detail")
     public ResponseEntity<ResponseDTO> selectBill(
             @RequestParam(name = "orderNo", defaultValue = "")int orderNo){
