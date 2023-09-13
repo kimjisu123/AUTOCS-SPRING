@@ -5,6 +5,7 @@ import com.css.autocsfinal.market.service.EmailService;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.service.AuthService;
 import com.css.autocsfinal.member.service.MemberService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Auth", description = "권한 API")
 public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;

@@ -62,7 +62,6 @@ springdoc:
   api-docs:
     groups:
       enabled: true
-    path: /api-docs/json
   cache:
     disabled: true
 

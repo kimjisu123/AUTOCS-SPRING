@@ -1,6 +1,7 @@
 package com.css.autocsfinal.mail.entity;
 
 import com.css.autocsfinal.member.entity.Employee;
+import com.css.autocsfinal.workstatus.entity.EmployeeByWorkStatus;
 import lombok.*;
 import javax.persistence.*;
 
@@ -9,9 +10,9 @@ import javax.persistence.*;
 @IdClass(MailListPK.class)
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+ @ToString
 public class MailList {
 
     @Id
@@ -28,7 +29,7 @@ public class MailList {
 
     @ManyToOne
     @JoinColumn(name = "EMPLOYEE_NO", insertable = false, updatable = false)
-    private Employee employee;
+    private EmployeeByWorkStatus employee;
 
     public MailList(int employeeNo, int mailNo) {
         this.employeeNo = employeeNo;

@@ -12,6 +12,7 @@ import com.css.autocsfinal.member.dto.MemberDTO;
 import com.css.autocsfinal.member.entity.Member;
 import com.css.autocsfinal.member.repository.MemberRepository;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/market")
+@Tag(name = "Market", description = "매장 API")
 public class MarketController {
 
     private final MarketService marketService;
@@ -94,6 +96,7 @@ public class MarketController {
     }
 
     //영업점 아이디 찾기
+    @Operation(summary = "영업점 아이디 찾기", description = "영업점 아이디를 찾습니다.", tags = {"MarketController"})
     @GetMapping("/findStoreId")
     public ResponseEntity<ResponseDTO> findStoreId(@RequestParam String email, @RequestParam String name) {
         try {

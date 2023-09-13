@@ -13,6 +13,9 @@ import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
+    @Query("SELECT e FROM Employee e WHERE e.departmentCode = :departmentName")
+    List<Employee> findByRefDepartmentCode(String departmentName);
+
     Employee findByEmployeeNo(int employeeNo);
 
 
