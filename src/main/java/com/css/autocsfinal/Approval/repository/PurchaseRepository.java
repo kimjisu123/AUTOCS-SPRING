@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PurchaseRepository extends JpaRepository<PurchaseEntity, Integer> {
     List<PurchaseEntity> findByDocumentCode(int documentCode);
+
+    void deleteByDocumentCode(int documentCode);
 }

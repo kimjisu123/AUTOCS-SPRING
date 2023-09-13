@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VacationRepository extends JpaRepository<VacationEntity, Integer> {
     VacationEntity findByDocumentCode(int documentCode);
+
+    void deleteByDocumentCode(int documentCode);
 }

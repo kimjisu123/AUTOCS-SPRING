@@ -11,4 +11,8 @@ public interface ApproverRepository extends JpaRepository<ApprovalEntity, Intege
     List<ApprovalEntity> findByEmployeeNo(int employeeNo);
 
     List<ApprovalEntity> findByEmployeeNoAndStatus(int employeeNo, String status);
+
+    void deleteByDocumentCode(int documentCode);
+
+    ApprovalEntity findByEmployeeNoAndDocumentCode(int employeeNo, int documentCode);
 }

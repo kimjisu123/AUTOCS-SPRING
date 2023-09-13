@@ -75,4 +75,18 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
             "WHERE B.ORDER_NO = :myOrderNo ", nativeQuery = true)
     Page<Tuple> myOrderList(@Param("myOrderNo") String myOrderNo, Pageable paging);
 
+    @Query(value = "SELECT A.ORDER_PRODUCT_NO, B.ORDER_NO, " +
+            "C.NAME as storeInfoName, E.NAME as categoryName, D.NAME as productName, F.NAME as unitName, G.NAME as standardName, D.PRICE, A.QUANTITY, A.ETC, " +
+            "TO_CHAR(A.REGIST_DATE, 'YYYY-MM-DD') AS registDate, " +
+            "A.STATUS " +
+            "FROM TBL_ORDER_PRODUCT A " +
+            "LEFT JOIN TBL_ORDER B ON B.ORDER_NO = A.REF_ORDER_NO " +
+            "LEFT JOIN TBL_STORE_INFO C ON C.STORE_NO = B.STORE_INFO_NO " +
+            "LEFT JOIN TBL_PRODUCT D ON D.PRODUCT_NO = A.REF_PRODUCT_NO " +
+            "LEFT JOIN TBL_PRODUCT_CATEGORY E ON E.PRODUCT_CATEGORY_NO = D.REF_PRODUCT_CATEGORY_NO " +
+            "LEFT JOIN TBL_PRODUCT_UNIT F ON F.PRODUCT_UNIT_NO = D.REF_PRODUCT_UNIT_NO " +
+            "LEFT JOIN TBL_PRODUCT_STANDARD G ON G.PRODUCT_STANDARD_NO = D.REF_PRODUCT_STANDARD_NO " +
+            "WHERE B.ORDER_NO = :myOrderNo ", nativeQuery = true)
+    List<Tuple> myOrderListForBill(@Param("myOrderNo") int myOrderNo);
+
 }

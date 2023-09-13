@@ -16,4 +16,7 @@ public interface BoardRepository  extends JpaRepository<Board, Integer> {
 
     //게시판 번호로 삭제
     int deleteByBoardNo(int boardNo);
+
+    //내가 쓴 글 찾기
+    List<Board> findByRefMemberNo(int refMemberNo);
 }
