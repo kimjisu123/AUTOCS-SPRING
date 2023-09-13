@@ -1,6 +1,7 @@
 package com.css.autocsfinal.workstatus.entity;
 
 import lombok.*;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,7 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class WorkStatus {
+public class WorkStatus2 {
 
     @Id
     @Column(name = "WORK_STATUS_CODE")

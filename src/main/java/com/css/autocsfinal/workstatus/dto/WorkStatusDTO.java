@@ -22,14 +22,9 @@ public class WorkStatusDTO {
 
     private Date quittingTime;
 
-    private Date totalHoursDuty;
-
-    private char vactionStatus;
+    private char vacationStatus;
 
     private char absenceWorkStatus;
 
-    private Date workingDate;
-
-    public WorkStatusDTO(HttpStatus httpStatus, String 조회_성공, Object o) {
-    }
+    private Date extensionTime;
 }

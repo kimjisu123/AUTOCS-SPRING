@@ -1,15 +1,15 @@
 ### 메일 조회
-GET http://localhost:8080/mail/41
+GET http://localhost:8080/mail/41/1/절대로아무도검색하지않을만한값입니다.
 Content-Type: application/json
 Accept: */*
 
 ### 북마크 메일 조회
-GET http://localhost:8080/mailBookmark
+GET http://localhost:8080/mailBookmark/41/1/1
 Content-Type: application/json
 Accept: */*
 
 ### 보낸 메일 조회
-GET http://localhost:8080/mailSent/41
+GET http://localhost:8080/mailSent/41/1
 Content-Type: application/json
 Accept: */*
 
@@ -23,13 +23,23 @@ POST http://localhost:8080/mail
 Content-Type: application/json
 Accept: */*
 
+{
+  "mailNo": "",
+  "receiver": "김지수",
+  "title": "제목4",
+  "context": "내용4",
+  "goDate": "2023-08-25T02:28:27.000+00:00",
+  "status": "N"
+}
+
+
 ### 메일 상태값
 PUT http://localhost:8080/mail
 Content-Type: application/json
 Accept: */*
 
 {
-  "mailNo": 78,
+  "mailNo": "",
   "receiver": "김지수",
   "title": "제목4",
   "context": "내용4",
@@ -42,4 +52,58 @@ GET http://localhost:8080/member/selectEmployee
 Content-Type: application/json
 Accept: */*
 
+### 근태 조회
+GET http://localhost:8080/workStatus/41
+Content-Type: application/json
+Accept: */*
+
+### 인사부 조회
+GET http://localhost:8080/personnel/지수
+Content-Type: application/json
+Accept: */*
+
+### 재무/회계부 조회
+GET http://localhost:8080/accounting/사원
+Content-Type: application/json
+Accept: */*
+
+### 경영부 조회
+GET http://localhost:8080/management
+Content-Type: application/json
+Accept: */*
+
+### 마케팅부 조회
+GET http://localhost:8080/marketing/
+Content-Type: application/json
+Accept: */*
+
+### 영업부 조회
+GET http://localhost:8080/sales
+Content-Type: application/json
+Accept: */*
+
+### 서비스부 조회
+GET http://localhost:8080/service/수
+Content-Type: application/json
+Accept: */*
+
+### 부서 근태 관리
+GET http://localhost:8080/department
+Content-Type: application/json
+Accept: */*
+
+### 출근
+POST http://localhost:8080/attendance/41
+Content-Type: application/json
+Accept: */*
+
+### 퇴근
+PUT http://localhost:8080/quitting/41
+Content-Type: application/json
+Accept: */*
+
+### 본사 조회
+GET http://localhost:8080/headOffice/1/김지수
+Content-Type: application/json
+Accept: */*
 

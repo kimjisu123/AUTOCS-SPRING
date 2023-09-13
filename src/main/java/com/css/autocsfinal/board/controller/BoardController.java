@@ -8,6 +8,7 @@ import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.market.dto.ApplyFormDTO;
 import com.css.autocsfinal.market.dto.StoreInfoDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/board")
+@Tag(name = "Board", description = "게시판 API")
 public class BoardController {
 
     private final BoardService boardService;
@@ -102,6 +104,7 @@ public class BoardController {
     }
 
     //게시물 삭제
+    @Operation(summary = "게시물 삭제 요청", description = "게시물을 삭제합니다.", tags = {"BoardController"})
     @PostMapping("/deleteBoard")
     public ResponseEntity<ResponseDTO> deleteBoard(@RequestParam int boardNo) {
         log.info("[BoardDTO] boardNo {} =======> " + boardNo);
@@ -117,6 +120,7 @@ public class BoardController {
     }
 
     //게시물 찾기
+    @Operation(summary = "특정 게시물 찾기 요청", description = "특정 게시물을 찾습니다.", tags = {"BoardController"})
     @GetMapping("/getBoardNum")
     public ResponseEntity<ResponseDTO> getBoardNum(@RequestParam int boardNo) {
         log.info("[BoardDTO] boardNo {} =======> " + boardNo);
@@ -132,6 +136,7 @@ public class BoardController {
     }
 
     //게시물 찾기(내가 쓴 글)
+    @Operation(summary = "내가 쓴 게시물 찾기 요청", description = "내가 쓴 게시물을 찾습니다.", tags = {"BoardController"})
     @GetMapping("/getMyBoarEmployee")
     public ResponseEntity<ResponseDTO> getMyBoarEmployee(@RequestParam int refMemberNo) {
         log.info("[BoardDTO] refMemberNo {} =======> " + refMemberNo);
