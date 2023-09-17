@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -316,87 +317,58 @@ public class WorkStatusService {
     @Transactional
     public Object saveAttendance(int employeeNo) {
 
-        log.info("test!!!");
         WorkStatus workStatus =new WorkStatus();
 
         workStatus.setAttendanceTime(new Date());
         workStatus.setVacationStatus('N');
         workStatus.setAbsenceWorkStatus('N');
+        // 오늘 출근 기록 조회
+        int check = workStatusListRepository.countByAttendanceTime(employeeNo);
 
-        List<WorkStatusList> workStatusLists = workStatusListRepository.findByEmployeeNo(employeeNo);
+        // 출근 기록이 없을 경우 출근
+        if(check == 0){
 
-        int recentlyResult = 0;
-        WorkStatusList recentlyWorkStatus = null;
+            WorkStatus resultStatus = workStatusRepsitory.save(workStatus);
 
-        for(int i =0; i < workStatusLists.size(); i++){
-            if (workStatusLists.get(i).getWorkStatusCode() > recentlyResult) {
-                recentlyResult = workStatusLists.get(i).getWorkStatusCode();
-                recentlyWorkStatus = workStatusLists.get(i);
-            }
-        }
+            int resultCode = resultStatus.getWorkStatusCode();
 
-        Date currentDate = new Date();
-        Date workDate = new Date(recentlyWorkStatus.getWorkStatus().getAttendanceTime().getTime());
-
-        log.info(" currentDate.getDay() != workDate.getDay()" , currentDate.getDay()+   workDate.getDay());
-
-        // 오늘 날짜로 출근 기록이 없을 경우 등록
-        if (currentDate.getDay() != workDate.getDay()) {
-
-            log.info("================Test============>{}");
-
-            WorkStatus result = workStatusRepsitory.save(workStatus);
-
-            int statusCode = result.getWorkStatusCode();
-
-            WorkStatusList workStatusList = new WorkStatusList(employeeNo, statusCode);
+            WorkStatusList workStatusList = new WorkStatusList(employeeNo, resultCode);
 
             workStatusListRepository.save(workStatusList);
         }
 
         return null;
+
     }
 
     // 퇴근
     @Transactional
     public Object saveQuitting(int employeeNo) {
 
+        // 해당 직원에 대한 출근 리스트 조회
         List<WorkStatusList> workStatusLists = workStatusListRepository.findByEmployeeNo(employeeNo);
 
-        // 가장 최근의 근태 정보
-        int recentlyResult = 0;
-        WorkStatusList recentlyWorkStatus = null;
+        // 오늘 출근 기록 조회
+        int check = workStatusListRepository.countByAttendanceTime(employeeNo);
 
-        for(int i =0; i < workStatusLists.size(); i++){
-            if (workStatusLists.get(i).getWorkStatusCode() > recentlyResult) {
-                recentlyResult = workStatusLists.get(i).getWorkStatusCode();
-                recentlyWorkStatus = workStatusLists.get(i);
-            }
-        }
+        // 오늘 퇴근 기록 조회
+        int check2 = workStatusListRepository.countByquittingTime(employeeNo);
 
-        // 근태정보가 1개라도 있을 경우
-        if(recentlyResult != 0){
-
-            // 가져온 근태 정보의 퇴근 시간이 null일 경우
-            if (recentlyWorkStatus.getWorkStatus().getQuittingTime() == null) {
-
-                // 저장할 객체
-                WorkStatus result;
-
-                recentlyWorkStatus.getWorkStatus().setQuittingTime(new Date());
-
-                // 등록이 아닌 저장
-                result = workStatusRepsitory.save(recentlyWorkStatus.getWorkStatus());
-
-                Long resultTime = ( result.getQuittingTime().getTime() - result.getAttendanceTime().getTime() );
-
-                Date extensionTime = new Date(resultTime);
-
-                result.setExtensionTime(extensionTime);
+        // 오늘 출근 기록이 있고 퇴근 기록이 없을 경우 조회
+        if(check != 0 && check2 ==0){
+            // 시퀀스로 인해 마지막에 있는 출근 코드가 가장 최근의 출근 코드가 됨
+            int temp = 0;
+            for(int i = 0; i < workStatusLists.size(); i++){
+                temp =  workStatusLists.get(i).getWorkStatusCode();
             }
 
-        }
+            log.info("Test!!!!!!!!!!!!!! =>{}", temp);
 
+            WorkStatus workStatus = workStatusRepsitory.findByWorkStatusCode(temp);
+
+            log.info("Test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! =>{}", workStatus);
+            workStatus.setQuittingTime(new Date());
+        }
 
 
         return null;
