@@ -163,21 +163,24 @@ public class MailService {
     }
     @Transactional
     public Object saveMail(MailDTO mailDTO, int employeeNo) {
+        // 에러
+        // 에러 사유 : 받은 사람이 여러명이라 List의 형태로 사람의 이름을 받았지만 직급은 List의 형태로 받지 못함
 
+        // 메일 값 처리
         mailDTO.setGoDate(new Date());
         mailDTO.setStatus("N");
         mailDTO.setContext(mailDTO.getContext().replace("<p>", ""));
         mailDTO.setContext(mailDTO.getContext().replace("</p>", ""));
 
-
+        
         for(int i=0; i < mailDTO.getReceiver().size(); i++){
 
-            MailSaveDTO mailSaveDTO = new MailSaveDTO();
+            MailSaveDTO mailSaveDTO;
 
             mailSaveDTO = modelMapper.map(mailDTO, MailSaveDTO.class);
 
             Mail mail = modelMapper.map(mailSaveDTO, Mail.class);
-
+            
             mail.setReceiver(mailDTO.getReceiver().get(i));
 
             Mail mail2 =  mailRepository.save(mail);
