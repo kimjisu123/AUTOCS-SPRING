@@ -111,32 +111,75 @@ public class MailController {
 
     @PostMapping("/mail/{employeeNo}")
     @Operation(summary = "쪽지함 화면", description = "쪽지를 작성하여 상대에게 쪽지를 보냅니다.", tags = {"WorkStatusController"})
-    public void saveMail(@RequestBody MailDTO mailDTO, @PathVariable int employeeNo){
+    public ResponseEntity<ResponseDTO> saveMail(@RequestBody MailDTO mailDTO, @PathVariable int employeeNo){
 
-        mailService.saveMail(mailDTO, employeeNo);
+        try {
+
+            mailService.saveMail(mailDTO, employeeNo);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(HttpStatus.CREATED, "쪽지 전송 성공", null));
+
+        } catch (RuntimeException e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "쪽지 전송 실패", null));
+        }
     }
 
     @PutMapping("/mail")
     @Operation(summary = "쪽지함 화면", description = "쪽지를 북마크에 등록 합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> putMail(@RequestBody MailDTO paramValue){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공", mailService.setMail(paramValue)));
+        try{
+            mailService.setMail(paramValue);
+
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseDTO(HttpStatus.NO_CONTENT, "북마크 등록 성공", null));
+
+        } catch (RuntimeException e){
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "북마크 등록 실패", null));
+        }
     }
 
     @DeleteMapping("/mail/{employeeNo}")
     @Operation(summary = "쪽지함 화면", description = "직원이 받은 모든 메일을 삭제합니다", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> deleteMail(@PathVariable int employeeNo){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 삭제 성공.", mailService.deleteMail(employeeNo)));
+        try{
+            mailService.deleteMail(employeeNo);
+
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseDTO(HttpStatus.NO_CONTENT, "쪽지 전체 삭제 성공.", null));
+
+        } catch (RuntimeException e){
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "쪽지 전체 삭제 실패.", null));
+        }
     }
 
     @DeleteMapping("/selectMail")
     @Operation(summary = "쪽지함 화면", description = "직원이 받은 메일 중 하나를 지정하여 삭제합니다", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> selectDeleteMail(@RequestBody MailDTO mailDTO){
 
-        log.info("===========================>{}", mailDTO);
+        try{
+            mailService.deleteSelectMail(mailDTO);
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "1개의 메일 삭제 성공", mailService.deleteSelectMail(mailDTO)));
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseDTO(HttpStatus.NO_CONTENT, "1개의 메일 삭제 성공", null));
+
+        } catch (RuntimeException e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "1개의 메일 삭제 실패", null));
+        }
     }
-
 }

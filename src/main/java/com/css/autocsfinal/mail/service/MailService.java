@@ -164,6 +164,9 @@ public class MailService {
     @Transactional
     public void saveMail(MailDTO mailDTO, int employeeNo) {
 
+        // 결과에 따른 예외 처리를 위한 용도의 변수
+        int result = 0;
+
         // 메일 값 처리
         mailDTO.setGoDate(new Date());
         mailDTO.setStatus("N");
@@ -171,6 +174,8 @@ public class MailService {
         mailDTO.setContext(mailDTO.getContext().replace("</p>", ""));
 
         for(int i=0; i < mailDTO.getReceiver().size(); i++){
+
+            result = 0;
 
             MailSaveDTO mailSaveDTO;
 
@@ -188,13 +193,20 @@ public class MailService {
             MailList mailList = new MailList(employeeNo, mailNo);
 
             mailListRepository.save(mailList);
+
+            result = 1;
         }
 
+        if(result == 0){
+            throw new RuntimeException("쪽지 등록 실패");
+        }
     }
     
     // 메일 전체 삭제
     @Transactional
-    public Object deleteMail(int employeeNo) {
+    public void deleteMail(int employeeNo) {
+
+
 
         EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
 
@@ -202,43 +214,54 @@ public class MailService {
 
         String name = employeeAndDepartmentAndPosition.getName();
 
-        mailListRepository.deleteByEmployeeNo(employeeNo);
+        try {
+            mailListRepository.deleteByEmployeeNo(employeeNo);
+            mailRepository.deleteByPositionAndReceiver(positionName, name);
+        } catch (RuntimeException e){
+            throw new RuntimeException("쪽지 전체 삭제 실패");
+        }
 
-        mailRepository.deleteByPositionAndReceiver(positionName, name);
-
-        return null;
     }
 
     @Transactional
-    public Object setMail(MailDTO mailDTO) {
+    public void setMail(MailDTO mailDTO) {
 
         int mailNo = mailDTO.getMailNo();
 
         Mail mail = mailRepository.findById(mailNo).get();
 
-        if(mail.getStatus().equals("N")){
-            mail.setStatus("Y");
-        } else {
-            mail.setStatus("N");
+        try{
+
+            if(mail.getStatus().equals("N")){
+
+                mail.setStatus("Y");
+
+            } else {
+                mail.setStatus("N");
+            }
+
+            MailDTO resultMail = modelMapper.map(mail, MailDTO.class);
+
+        } catch (RuntimeException e){
+            throw new RuntimeException("북마크 등록 실패");
         }
-
-        MailDTO resultMail = modelMapper.map(mail, MailDTO.class);
-
-        return resultMail;
 
     }
 
     @Transactional
-    public Object deleteSelectMail(MailDTO mailDTO) {
+    public void deleteSelectMail(MailDTO mailDTO) {
 
         int mailNo = mailDTO.getMailNo();
 
-        log.info("=======================>{}", mailNo);
+        try{
 
-        mailListRepository.deleteByMailNo(mailNo);
-        mailRepository.deleteByMailNo(mailNo);
+            mailListRepository.deleteByMailNo(mailNo);
+            mailRepository.deleteByMailNo(mailNo);
 
-        return mailNo;
+        } catch (RuntimeException e){
+            throw new RuntimeException("쪽지 한개 삭제 실패");
+        }
+
     }
 
     public Object mailSent(int employeeNo, Criteria cri) {
@@ -260,7 +283,6 @@ public class MailService {
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
 
-        log.info("마지막테스트입니다.{}", mailDTOList);
 
         return mailDTOList;
     }

@@ -319,6 +319,7 @@ public class WorkStatusService {
         workStatus.setVacationStatus('N');
         workStatus.setAbsenceWorkStatus('N');
 
+        // 결과에 따른 예외 처리를 위한 용도의 변수
         int result = 0;
 
         // 오늘 출근 기록 조회
