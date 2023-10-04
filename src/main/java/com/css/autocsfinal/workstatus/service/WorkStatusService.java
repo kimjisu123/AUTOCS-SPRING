@@ -40,10 +40,10 @@ public class WorkStatusService {
 
     private final ModelMapper modelMapper;
 
+    // 근태 현황 조회
     public Object findByEmployeeNo(int employeeNo) {
 
-
-        List<WorkStatusList> workStatusList = workStatusListRepository.findByEmployeeNoOrderByWorkStatusCode(employeeNo);
+        List<WorkStatusList> workStatusList = workStatusListRepository.findByEmployeeNoOrderByWorkStatusCodeDesc(employeeNo);
 
         List<WorkStatus> workStatuses = new ArrayList<>();
 
@@ -51,10 +51,6 @@ public class WorkStatusService {
 
             workStatuses.add(workStatusList.get(i).getWorkStatus()) ;
         }
-
-
-
-
 
         return workStatuses;
     }
@@ -315,13 +311,16 @@ public class WorkStatusService {
 
     // 출근
     @Transactional
-    public Object saveAttendance(int employeeNo) {
+    public void saveAttendance(int employeeNo) {
 
         WorkStatus workStatus =new WorkStatus();
 
         workStatus.setAttendanceTime(new Date());
         workStatus.setVacationStatus('N');
         workStatus.setAbsenceWorkStatus('N');
+
+        int result = 0;
+
         // 오늘 출근 기록 조회
         int check = workStatusListRepository.countByAttendanceTime(employeeNo);
 
@@ -335,15 +334,22 @@ public class WorkStatusService {
             WorkStatusList workStatusList = new WorkStatusList(employeeNo, resultCode);
 
             workStatusListRepository.save(workStatusList);
+
+            result = 1;
         }
 
-        return null;
+        if(result == 0){
+            throw new RuntimeException("출근 등록 실패");
+        }
 
     }
 
     // 퇴근
     @Transactional
-    public Object saveQuitting(int employeeNo) {
+    public void saveQuitting(int employeeNo) {
+
+        // 결과에 따른 예외 처리를 위한 용도의 변수
+        int result = 0;
 
         // 해당 직원에 대한 출근 리스트 조회
         List<WorkStatusList> workStatusLists = workStatusListRepository.findByEmployeeNo(employeeNo);
@@ -356,23 +362,31 @@ public class WorkStatusService {
 
         // 오늘 출근 기록이 있고 퇴근 기록이 없을 경우 조회
         if(check != 0 && check2 ==0){
-            // 시퀀스로 인해 마지막에 있는 출근 코드가 가장 최근의 출근 코드가 됨
-            int temp = 0;
+
+            // 시퀀스로 인해 마지막에 있는 출근 코드가 가장 최근의 근태코드인 오늘의 근태코드를 가져온다.
+            int workStatusCode = 0;
             for(int i = 0; i < workStatusLists.size(); i++){
-                temp =  workStatusLists.get(i).getWorkStatusCode();
+                workStatusCode =  workStatusLists.get(i).getWorkStatusCode();
             }
 
-            log.info("Test!!!!!!!!!!!!!! =>{}", temp);
+            // 오늘의 근태코드로 Entity객체 생성
+            WorkStatus workStatus = workStatusRepsitory.findByWorkStatusCode(workStatusCode);
 
-            WorkStatus workStatus = workStatusRepsitory.findByWorkStatusCode(temp);
-
-            log.info("Test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! =>{}", workStatus);
+            // 퇴근 시간 업데이트
             workStatus.setQuittingTime(new Date());
+
+            Long dateTime = workStatus.getQuittingTime().getTime() - workStatus.getAttendanceTime().getTime();
+
+            workStatus.setExtensionTime(new Date(dateTime));
+
+            // 퇴근 수정 작업이 성공한 경우
+            result = 1;
         }
 
-
-        return null;
-
+        // 퇴근 수정 작업이 실패한 경우 예외 처리
+        if (result == 0) {
+            throw new RuntimeException("퇴근 수정 실패");
+        }
     }
 
 

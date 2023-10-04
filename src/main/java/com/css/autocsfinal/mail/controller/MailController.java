@@ -111,11 +111,9 @@ public class MailController {
 
     @PostMapping("/mail/{employeeNo}")
     @Operation(summary = "쪽지함 화면", description = "쪽지를 작성하여 상대에게 쪽지를 보냅니다.", tags = {"WorkStatusController"})
-    public ResponseEntity<ResponseDTO> saveMail(@RequestBody MailDTO mailDTO, @PathVariable int employeeNo){
+    public void saveMail(@RequestBody MailDTO mailDTO, @PathVariable int employeeNo){
 
-        log.info("Mail===========================================>{}", mailDTO);
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO, employeeNo)));
+        mailService.saveMail(mailDTO, employeeNo);
     }
 
     @PutMapping("/mail")
