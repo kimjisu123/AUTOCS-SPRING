@@ -33,4 +33,6 @@ public interface WorkStatusListRepository extends JpaRepository<WorkStatusList, 
             "where l.employeeNo = :employeeNo " +
             "and TO_CHAR(w.quittingTime, 'YYYYMMDD') = TO_CHAR(current_date, 'YYYYMMDD') ")
     int countByquittingTime(int employeeNo);
+
+    List<WorkStatusList> findByEmployeeNoOrderByWorkStatusCodeDesc(int employeeNo);
 }

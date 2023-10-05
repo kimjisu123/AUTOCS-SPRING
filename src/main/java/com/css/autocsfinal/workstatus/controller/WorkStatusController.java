@@ -169,8 +169,18 @@ public class WorkStatusController {
     @Operation(summary = "메인 페이지 화면", description = "현재 시간을 기점으로 출근을 하여 값을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> saveAttendance(@PathVariable int employeeNo ){
 
+        try {
+            workStatusService.saveAttendance(employeeNo);
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "출근 성공", workStatusService.saveAttendance(employeeNo)));
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(HttpStatus.CREATED, "출근 등록 성공", null));
+        } catch (Exception e){
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "출근 등록 실패", null));
+        }
     }
 
     // 퇴근
@@ -178,7 +188,19 @@ public class WorkStatusController {
     @Operation(summary = "메인 페이지 화면", description = "현재 시간을 기점으로 퇴근을 하여 값을 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> saveQuitting(@PathVariable int employeeNo){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "퇴근 성공", workStatusService.saveQuitting(employeeNo)));
+        try {
+            workStatusService.saveQuitting(employeeNo);
+
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseDTO(HttpStatus.NO_CONTENT, "퇴근 등록 성공", null));
+        } catch (Exception e){
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "퇴근 등록 실패", null));
+        }
+
     }
 
 
