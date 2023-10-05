@@ -135,9 +135,7 @@ public class MailController {
             mailService.setMail(paramValue);
 
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseDTO(HttpStatus.NO_CONTENT, "북마크 등록 성공", null));
-
+                    .status(HttpStatus.NO_CONTENT).build();
         } catch (RuntimeException e){
 
             return ResponseEntity
@@ -154,9 +152,7 @@ public class MailController {
             mailService.deleteMail(employeeNo);
 
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseDTO(HttpStatus.NO_CONTENT, "쪽지 전체 삭제 성공.", null));
-
+                    .status(HttpStatus.NO_CONTENT).build();
         } catch (RuntimeException e){
 
             return ResponseEntity
@@ -173,8 +169,7 @@ public class MailController {
             mailService.deleteSelectMail(mailDTO);
 
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseDTO(HttpStatus.NO_CONTENT, "1개의 메일 삭제 성공", null));
+                    .status(HttpStatus.NO_CONTENT).build();
 
         } catch (RuntimeException e){
             return ResponseEntity

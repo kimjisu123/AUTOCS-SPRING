@@ -192,8 +192,7 @@ public class WorkStatusController {
             workStatusService.saveQuitting(employeeNo);
 
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseDTO(HttpStatus.NO_CONTENT, "퇴근 등록 성공", null));
+                    .status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e){
 
             return ResponseEntity
