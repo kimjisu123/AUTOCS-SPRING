@@ -325,6 +325,8 @@ public class WorkStatusService {
         // 오늘 출근 기록 조회
         int check = workStatusListRepository.countByAttendanceTime(employeeNo);
 
+        int reuslt = 0;
+
         // 출근 기록이 없을 경우 출근
         if(check == 0){
 
@@ -337,8 +339,8 @@ public class WorkStatusService {
             workStatusListRepository.save(workStatusList);
         }
 
-        return null;
 
+        return null;
     }
 
     // 퇴근
