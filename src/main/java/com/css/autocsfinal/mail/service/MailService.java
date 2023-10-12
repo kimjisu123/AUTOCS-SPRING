@@ -198,7 +198,7 @@ public class MailService {
         }
 
         if(result == 0){
-            throw new RuntimeException("쪽지 등록 실패");
+            throw new RuntimeException("쪽지 전송 실패");
         }
     }
     
