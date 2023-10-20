@@ -23,7 +23,6 @@ public class MailController {
 
     private final MailService mailService;
 
-
     // 메일 조회
     @GetMapping("/mail/{employeeNo}/{page}/{search}")
     @Operation(summary = "쪽지함 화면", description = "로그인된 직원의 정보를 가져와 해당 직원의 받은 쪽지를 출력합니다.", tags = {"WorkStatusController"})
@@ -31,20 +30,24 @@ public class MailController {
                                                 @PathVariable(name = "page", required = false ) int offset,
                                                 @PathVariable(name = "search", required = false ) String title){
 
-        log.info("=========================================>{}", title);
         int total;
 
-        Criteria cri = new Criteria(Integer.valueOf(offset), 8);
+        Criteria cri = new Criteria(offset, offset * 16);
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 
         if(title.equals("절대로아무도검색하지않을만한값입니다.")){
+
             total =  mailService.findByMailAllTotal(employeeNo);
+
             pagingResponseDTO.setData(mailService.findMail(employeeNo, cri));
         } else{
+
             total =  mailService.findByMailSelectTotal(employeeNo, title);
+
             pagingResponseDTO.setData(mailService.findMail(employeeNo, cri, title));
         }
+
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
         return ResponseEntity
