@@ -24,7 +24,7 @@ public class MailController {
     private final MailService mailService;
 
 
-    // 메일 조회
+    // 메일 조회 1
     @GetMapping("/mail/{employeeNo}/{page}/{search}")
     @Operation(summary = "쪽지함 화면", description = "로그인된 직원의 정보를 가져와 해당 직원의 받은 쪽지를 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findMail(@PathVariable int employeeNo,
