@@ -24,27 +24,31 @@ public class MailController {
     private final MailService mailService;
 
 
-    // 메일 조회 1
+    // 메일 조회
     @GetMapping("/mail/{employeeNo}/{page}/{search}")
     @Operation(summary = "쪽지함 화면", description = "로그인된 직원의 정보를 가져와 해당 직원의 받은 쪽지를 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findMail(@PathVariable int employeeNo,
                                                 @PathVariable(name = "page", required = false ) int offset,
                                                 @PathVariable(name = "search", required = false ) String title){
 
-        log.info("=========================================>{}", title);
         int total;
 
-        Criteria cri = new Criteria(Integer.valueOf(offset), 8);
+        Criteria cri = new Criteria(offset, offset * 16);
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 
         if(title.equals("절대로아무도검색하지않을만한값입니다.")){
+
             total =  mailService.findByMailAllTotal(employeeNo);
+
             pagingResponseDTO.setData(mailService.findMail(employeeNo, cri));
         } else{
+
             total =  mailService.findByMailSelectTotal(employeeNo, title);
+
             pagingResponseDTO.setData(mailService.findMail(employeeNo, cri, title));
         }
+
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
         return ResponseEntity
@@ -113,32 +117,68 @@ public class MailController {
     @Operation(summary = "쪽지함 화면", description = "쪽지를 작성하여 상대에게 쪽지를 보냅니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> saveMail(@RequestBody MailDTO mailDTO, @PathVariable int employeeNo){
 
-        log.info("Mail===========================================>{}", mailDTO);
+        try {
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "등록 성공", mailService.saveMail(mailDTO, employeeNo)));
+            mailService.saveMail(mailDTO, employeeNo);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(HttpStatus.CREATED, "쪽지 전송 성공", null));
+
+        } catch (RuntimeException e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "쪽지 전송 실패", null));
+        }
     }
 
     @PutMapping("/mail")
     @Operation(summary = "쪽지함 화면", description = "쪽지를 북마크에 등록 합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> putMail(@RequestBody MailDTO paramValue){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공", mailService.setMail(paramValue)));
+        try{
+            mailService.setMail(paramValue);
+
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT).build();
+        } catch (RuntimeException e){
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "북마크 등록 실패", null));
+        }
     }
 
     @DeleteMapping("/mail/{employeeNo}")
     @Operation(summary = "쪽지함 화면", description = "직원이 받은 모든 메일을 삭제합니다", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> deleteMail(@PathVariable int employeeNo){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 삭제 성공.", mailService.deleteMail(employeeNo)));
+        try{
+            mailService.deleteMail(employeeNo);
+
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT).build();
+        } catch (RuntimeException e){
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "쪽지 전체 삭제 실패.", null));
+        }
     }
 
     @DeleteMapping("/selectMail")
     @Operation(summary = "쪽지함 화면", description = "직원이 받은 메일 중 하나를 지정하여 삭제합니다", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> selectDeleteMail(@RequestBody MailDTO mailDTO){
 
-        log.info("===========================>{}", mailDTO);
+        try{
+            mailService.deleteSelectMail(mailDTO);
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "1개의 메일 삭제 성공", mailService.deleteSelectMail(mailDTO)));
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT).build();
+
+        } catch (RuntimeException e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "1개의 메일 삭제 실패", null));
+        }
     }
-
 }

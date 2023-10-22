@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,10 +40,10 @@ public class WorkStatusService {
 
     private final ModelMapper modelMapper;
 
+    // 근태 현황 조회
     public Object findByEmployeeNo(int employeeNo) {
 
-
-        List<WorkStatusList> workStatusList = workStatusListRepository.findByEmployeeNoOrderByWorkStatusCode(employeeNo);
+        List<WorkStatusList> workStatusList = workStatusListRepository.findByEmployeeNoOrderByWorkStatusCodeDesc(employeeNo);
 
         List<WorkStatus> workStatuses = new ArrayList<>();
 
@@ -50,10 +51,6 @@ public class WorkStatusService {
 
             workStatuses.add(workStatusList.get(i).getWorkStatus()) ;
         }
-
-
-
-
 
         return workStatuses;
     }
@@ -314,93 +311,83 @@ public class WorkStatusService {
 
     // 출근
     @Transactional
-    public Object saveAttendance(int employeeNo) {
+    public void saveAttendance(int employeeNo) {
 
-        log.info("test!!!");
         WorkStatus workStatus =new WorkStatus();
 
         workStatus.setAttendanceTime(new Date());
         workStatus.setVacationStatus('N');
         workStatus.setAbsenceWorkStatus('N');
 
-        List<WorkStatusList> workStatusLists = workStatusListRepository.findByEmployeeNo(employeeNo);
+        // 결과에 따른 예외 처리를 위한 용도의 변수
+        int result = 0;
 
-        int recentlyResult = 0;
-        WorkStatusList recentlyWorkStatus = null;
+        // 오늘 출근 기록 조회
+        int check = workStatusListRepository.countByAttendanceTime(employeeNo);
 
-        for(int i =0; i < workStatusLists.size(); i++){
-            if (workStatusLists.get(i).getWorkStatusCode() > recentlyResult) {
-                recentlyResult = workStatusLists.get(i).getWorkStatusCode();
-                recentlyWorkStatus = workStatusLists.get(i);
-            }
-        }
+        // 출근 기록이 없을 경우 출근
+        if(check == 0){
 
-        Date currentDate = new Date();
-        Date workDate = new Date(recentlyWorkStatus.getWorkStatus().getAttendanceTime().getTime());
+            WorkStatus resultStatus = workStatusRepsitory.save(workStatus);
 
-        log.info(" currentDate.getDay() != workDate.getDay()" , currentDate.getDay()+   workDate.getDay());
+            int resultCode = resultStatus.getWorkStatusCode();
 
-        // 오늘 날짜로 출근 기록이 없을 경우 등록
-        if (currentDate.getDay() != workDate.getDay()) {
-
-            log.info("================Test============>{}");
-
-            WorkStatus result = workStatusRepsitory.save(workStatus);
-
-            int statusCode = result.getWorkStatusCode();
-
-            WorkStatusList workStatusList = new WorkStatusList(employeeNo, statusCode);
+            WorkStatusList workStatusList = new WorkStatusList(employeeNo, resultCode);
 
             workStatusListRepository.save(workStatusList);
+
+            result = 1;
         }
 
-        return null;
+        if(result == 0){
+            throw new RuntimeException("출근 등록 실패");
+        }
+
     }
 
     // 퇴근
     @Transactional
-    public Object saveQuitting(int employeeNo) {
+    public void saveQuitting(int employeeNo) {
 
+        // 결과에 따른 예외 처리를 위한 용도의 변수
+        int result = 0;
+
+        // 해당 직원에 대한 출근 리스트 조회
         List<WorkStatusList> workStatusLists = workStatusListRepository.findByEmployeeNo(employeeNo);
 
-        // 가장 최근의 근태 정보
-        int recentlyResult = 0;
-        WorkStatusList recentlyWorkStatus = null;
+        // 오늘 출근 기록 조회
+        int check = workStatusListRepository.countByAttendanceTime(employeeNo);
 
-        for(int i =0; i < workStatusLists.size(); i++){
-            if (workStatusLists.get(i).getWorkStatusCode() > recentlyResult) {
-                recentlyResult = workStatusLists.get(i).getWorkStatusCode();
-                recentlyWorkStatus = workStatusLists.get(i);
-            }
-        }
+        // 오늘 퇴근 기록 조회
+        int check2 = workStatusListRepository.countByquittingTime(employeeNo);
 
-        // 근태정보가 1개라도 있을 경우
-        if(recentlyResult != 0){
+        // 오늘 출근 기록이 있고 퇴근 기록이 없을 경우 조회
+        if(check != 0 && check2 ==0){
 
-            // 가져온 근태 정보의 퇴근 시간이 null일 경우
-            if (recentlyWorkStatus.getWorkStatus().getQuittingTime() == null) {
-
-                // 저장할 객체
-                WorkStatus result;
-
-                recentlyWorkStatus.getWorkStatus().setQuittingTime(new Date());
-
-                // 등록이 아닌 저장
-                result = workStatusRepsitory.save(recentlyWorkStatus.getWorkStatus());
-
-                Long resultTime = ( result.getQuittingTime().getTime() - result.getAttendanceTime().getTime() );
-
-                Date extensionTime = new Date(resultTime);
-
-                result.setExtensionTime(extensionTime);
+            // 시퀀스로 인해 마지막에 있는 출근 코드가 가장 최근의 근태코드인 오늘의 근태코드를 가져온다.
+            int workStatusCode = 0;
+            for(int i = 0; i < workStatusLists.size(); i++){
+                workStatusCode =  workStatusLists.get(i).getWorkStatusCode();
             }
 
+            // 오늘의 근태코드로 Entity객체 생성
+            WorkStatus workStatus = workStatusRepsitory.findByWorkStatusCode(workStatusCode);
+
+            // 퇴근 시간 업데이트
+            workStatus.setQuittingTime(new Date());
+
+            Long dateTime = workStatus.getQuittingTime().getTime() - workStatus.getAttendanceTime().getTime();
+
+            workStatus.setExtensionTime(new Date(dateTime));
+
+            // 퇴근 수정 작업이 성공한 경우
+            result = 1;
         }
 
-
-
-        return null;
-
+        // 퇴근 수정 작업이 실패한 경우 예외 처리
+        if (result == 0) {
+            throw new RuntimeException("퇴근 수정 실패");
+        }
     }
 
 

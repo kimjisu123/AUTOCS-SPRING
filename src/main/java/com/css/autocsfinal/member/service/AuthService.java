@@ -48,7 +48,7 @@ public class AuthService {
         this.storeInfoRepository = storeInfoRepository;
     }
 
-    public TokenDTO login(MemberDTO memberDTO) {
+    public TokenDTO   login(MemberDTO memberDTO) {
 
         log.info("[AuthService] login Start ==================================");
         log.info("[AuthService] {} ================== ", memberDTO);

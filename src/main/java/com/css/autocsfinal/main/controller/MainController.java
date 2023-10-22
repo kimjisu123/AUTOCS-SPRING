@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/mainContent")
 public class MainController {
-
     private final MainService mainService;
 
     public MainController(MainService mainService) {
