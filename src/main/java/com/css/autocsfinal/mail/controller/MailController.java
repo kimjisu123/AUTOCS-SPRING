@@ -32,8 +32,8 @@ public class MailController {
                                                 @PathVariable(name = "search", required = false ) String title){
 
         int total;
-
-        Criteria cri = new Criteria(offset, offset * 16);
+        log.info("============================================>{}", offset);
+        Criteria cri = new Criteria(offset,  16);
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 
