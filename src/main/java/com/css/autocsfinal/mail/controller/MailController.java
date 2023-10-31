@@ -5,13 +5,16 @@ import com.css.autocsfinal.common.PageDTO;
 import com.css.autocsfinal.common.PagingResponseDTO;
 import com.css.autocsfinal.common.ResponseDTO;
 import com.css.autocsfinal.mail.dto.MailDTO;
+import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.service.MailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class MailController {
 
     private final MailService mailService;
-
+    private final SimpMessagingTemplate messagingTemplate;
 
     // 메일 조회
     @GetMapping("/mail/{employeeNo}/{page}/{search}")
@@ -180,5 +183,12 @@ public class MailController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "1개의 메일 삭제 실패", null));
         }
+    }
+
+    // 메일 알림 (웹소켓)
+    public void sendMailArrivedNotification(Mail mail) {
+
+        boolean readMail = mailService.findByReadMail();
+
     }
 }

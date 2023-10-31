@@ -365,4 +365,13 @@ public class MailService {
         return mailList.size();
     }
 
+    public boolean findByReadMail() {
+
+        List<Mail> mailList = mailListRepository.findByMailRead();
+
+        int result = mailList.size();
+
+        // 조건이 참인 경우 true 아닐 경우 false를 반환
+        return result > 0;
+    }
 }

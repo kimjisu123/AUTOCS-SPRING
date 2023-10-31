@@ -45,6 +45,8 @@ public class Mail {
     @Column(name = "POSITION")
     private String position;
 
+    @Column(name = "READ")
+    private String read;
 
     @OneToMany(mappedBy ="mailNo")
     private List<MailList> mailList;
