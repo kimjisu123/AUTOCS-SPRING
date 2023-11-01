@@ -185,10 +185,4 @@ public class MailController {
         }
     }
 
-    // 메일 알림 (웹소켓)
-    public void sendMailArrivedNotification(Mail mail) {
-
-        boolean readMail = mailService.findByReadMail();
-
-    }
 }

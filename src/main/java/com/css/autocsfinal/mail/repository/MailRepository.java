@@ -74,5 +74,5 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
 
     void deleteByMailNo(int mailNo);
 
-
+    List<Mail> findByRead(String n);
 }
