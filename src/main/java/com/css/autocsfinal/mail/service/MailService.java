@@ -266,8 +266,6 @@ public class MailService {
 
     public Object mailSent(int employeeNo, Criteria cri) {
 
-
-
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count);
@@ -361,8 +359,18 @@ public class MailService {
         for(int i = 0; i< mailLists.size(); i++){
             mailList.add(mailLists.get(i).getMail());
         }
-
         return mailList.size();
     }
 
+    public void readMail(MailDTO mailDTO) {
+
+        try {
+
+            Mail mail = mailRepository.findById(mailDTO.getMailNo()).get();
+
+            mail.setRead("Y");
+        } catch (RuntimeException e){
+            throw new RuntimeException("메일 읽음 처리 실패");
+        }
+    }
 }

@@ -185,4 +185,20 @@ public class MailController {
         }
     }
 
+    @PostMapping("/readMail")
+    public ResponseEntity<ResponseDTO> readMail(@RequestBody MailDTO mailDTO){
+
+        try{
+            mailService.readMail(mailDTO);
+
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT).build();
+        } catch (RuntimeException e){
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "메일 읽음 처리 실패", null));
+        }
+    }
+
 }
