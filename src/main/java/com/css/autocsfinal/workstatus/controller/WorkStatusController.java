@@ -23,7 +23,6 @@ public class WorkStatusController {
 
     private final WorkStatusService workStatusService;
 
-
     @GetMapping("/workStatus/{employeeNo}")
     @Operation(summary = "근태현황 홈 화면", description = "현재 로그인된 직원의 정보를 가져와 근태 현황을 출력 합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findByAll(@PathVariable int employeeNo){

@@ -36,8 +36,6 @@ public class WorkStatusService {
     private final EmployeeAndWorkStatusRepository employeeAndWorkStatusRepository;
     private final EmployeeRepository employeeRepository;
 
-
-
     private final ModelMapper modelMapper;
 
     // 근태 현황 조회
