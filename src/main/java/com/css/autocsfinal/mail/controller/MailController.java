@@ -206,6 +206,7 @@ public class MailController {
         }
     }
 
+    // 코드 추가
     @MessageMapping("/sendNotification")
     @SendTo("/topic/mail")
     public List<MailDTO> sendNotification(@PathVariable int employeeNo){
