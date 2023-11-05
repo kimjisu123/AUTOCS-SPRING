@@ -14,8 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import javax.management.Notification;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -198,6 +203,21 @@ public class MailController {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "메일 읽음 처리 실패", null));
+        }
+    }
+
+    @MessageMapping("/sendNotification")
+    @SendTo("/topic/mail")
+    public List<MailDTO> sendNotification(@PathVariable int employeeNo){
+
+        try{
+            List<MailDTO> mailList = mailService.readMailList(employeeNo);
+
+            return mailList;
+
+        }catch (Exception e){
+
+            throw new RuntimeException(e);
         }
     }
 

@@ -373,4 +373,9 @@ public class MailService {
             throw new RuntimeException("메일 읽음 처리 실패");
         }
     }
+
+    public List<MailDTO> readMailList(int employeeNo) {
+
+        return null;
+    }
 }
