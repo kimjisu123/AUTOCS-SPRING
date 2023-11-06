@@ -56,11 +56,17 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
             "p.name = :positionName AND " +
             "e.name =:name AND " +
             "m.title Like :title ")
-    List<Mail> findByStatus(String positionName, String name, @Param("Y") String Y, String title, Pageable paging);
+    List<Mail> findByStatus(String positionName, String name, @Param("Y") String bookMark, String title, Pageable paging);
 
-
-
-
+    @Query("SELECT m, l, e, d, p FROM Mail m " +
+            "JOIN m.mailList l " +
+            "JOIN l.employee e " +
+            "JOIN e.department d " +
+            "jOIN e.position p " +
+            "WHERE m.read = :N AND " +
+            "p.name = :positionName AND " +
+            "e.name =:name")
+    List<Mail> findByRead(String positionName, String name, @Param("N") String notRead);
 
 
     List<Mail> findByPositionAndReceiverOrderByMailNoDesc(String positionName, String name);
@@ -75,5 +81,4 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
 
     void deleteByMailNo(int mailNo);
 
-    List<Mail> findByRead(String n);
 }

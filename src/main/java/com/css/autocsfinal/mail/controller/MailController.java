@@ -70,10 +70,6 @@ public class MailController {
     @Operation(summary = "보낸 쪽지함 화면", description = "로그인된 직원의 정보를 가져와 해당 직원이 보낸 쪽지를 출력합니다.", tags = {"WorkStatusController"})
     public ResponseEntity<ResponseDTO> findMailSent(@PathVariable int employeeNo, @PathVariable(name = "page", required = false ) int offset, @PathVariable(name = "search", required = false ) String title){
 
-        log.info("test===================================>{}", title);
-
-
-
         int total;
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 8);
@@ -206,7 +202,6 @@ public class MailController {
         }
     }
 
-    // 코드 추가
     @MessageMapping("/sendNotification")
     @SendTo("/topic/mail")
     public List<MailDTO> sendNotification(@PathVariable int employeeNo){

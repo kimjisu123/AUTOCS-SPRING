@@ -2,18 +2,13 @@ package com.css.autocsfinal.mail.service;
 
 import com.css.autocsfinal.common.Criteria;
 import com.css.autocsfinal.mail.dto.MailDTO;
-//import com.css.autocsfinal.mail.entity.MailList;
-//import com.css.autocsfinal.mail.repository.MailListRepository;
 import com.css.autocsfinal.mail.dto.MailSaveDTO;
 import com.css.autocsfinal.mail.entity.Mail;
 import com.css.autocsfinal.mail.entity.MailList;
 import com.css.autocsfinal.mail.repository.MailListRepository;
 import com.css.autocsfinal.mail.repository.MailRepository;
-import com.css.autocsfinal.member.dto.EmployeeDTO;
-import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.repository.EmployeeAndDepartmentAndPositionRepository;
-import com.css.autocsfinal.member.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -37,7 +32,7 @@ public class MailService {
     private final MailListRepository mailListRepository;
     private final EmployeeAndDepartmentAndPositionRepository employeeAndDepartmentAndPositionRepository;
 
-    // 메일 조회
+    // 메일 조회 "오버라이드"
     public List<MailDTO> findMail(int employeeNo, Criteria cri) {
 
         int index = cri.getPageNum() - 1;
@@ -50,8 +45,6 @@ public class MailService {
 
         String name = employeeAndDepartmentAndPosition.getName();
 
-        log.info(positionName + name);
-
         List<Mail> mailList = mailRepository.findByPositionAndReceiverOrderByMailNoDesc(positionName, name, paging);
 
         List<MailDTO> mailDTOList = mailList.stream().map(Mail -> modelMapper.map(Mail, MailDTO.class) ).collect(Collectors.toList());
@@ -60,7 +53,7 @@ public class MailService {
         return mailDTOList;
     }
 
-    // 메일조회(검색)
+    // 메일조회(검색) "오버라이드"
     public List<MailDTO> findMail(int employeeNo, Criteria cri, String title) {
 
         title = '%'+ title + '%';
@@ -279,6 +272,8 @@ public class MailService {
             mailList.add(mailLists.get(i).getMail());
         }
 
+        log.info("Test =============>{}",employeeNo);
+
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
 
 
@@ -376,6 +371,24 @@ public class MailService {
 
     public List<MailDTO> readMailList(int employeeNo) {
 
-        return null;
+        try{
+
+            EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
+
+            String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
+
+            String name = employeeAndDepartmentAndPosition.getName();
+
+            List<Mail> mailList = mailRepository.findByRead(positionName, name, "Y");
+            List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
+
+            log.info("TestMailListSize ===========> {}" , mailList.size());
+
+            return mailDTOList;
+
+        } catch (RuntimeException e){
+
+            throw new RuntimeException("안읽은 메일 조회 실패");
+        }
     }
 }
