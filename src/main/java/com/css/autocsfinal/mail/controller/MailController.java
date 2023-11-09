@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,8 @@ import java.util.List;
 public class MailController {
 
     private final MailService mailService;
-    private final SimpMessagingTemplate messagingTemplate;
+
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     // 메일 조회
     @GetMapping("/mail/{employeeNo}/{page}/{search}")
@@ -202,19 +204,14 @@ public class MailController {
         }
     }
 
-    @MessageMapping("/sendNotification")
-    @SendTo("/topic/mail")
-    public List<MailDTO> sendNotification(@PathVariable int employeeNo){
+    @MessageMapping("/mail") // app/mail  <= destination header
+    public void sendNotification(@PathVariable int employeeNo){
 
-        try{
-            List<MailDTO> mailList = mailService.readMailList(employeeNo);
+        List<MailDTO> mailList = mailService.readMailList(employeeNo);
 
-            return mailList;
+        String mailCount  = String.valueOf(mailList.size());
+        simpMessagingTemplate.convertAndSend("/topic/mail", mailCount);
 
-        }catch (Exception e){
-
-            throw new RuntimeException(e);
-        }
     }
 
 }

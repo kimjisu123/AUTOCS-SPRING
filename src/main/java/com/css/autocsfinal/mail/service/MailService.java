@@ -165,6 +165,8 @@ public class MailService {
         mailDTO.setStatus("N");
         mailDTO.setContext(mailDTO.getContext().replace("<p>", ""));
         mailDTO.setContext(mailDTO.getContext().replace("</p>", ""));
+        mailDTO.setContext(mailDTO.getContext().replace("<br>", ""));
+        mailDTO.setContext(mailDTO.getContext().replace("</br>", ""));
 
         for(int i=0; i < mailDTO.getReceiver().size(); i++){
 
