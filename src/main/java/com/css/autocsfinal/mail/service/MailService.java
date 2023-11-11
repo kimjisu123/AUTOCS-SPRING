@@ -371,11 +371,10 @@ public class MailService {
         }
     }
 
+    @Transactional
     public List<MailDTO> readMailList(int employeeNo) {
 
-        try{
-
-
+//        try{
             EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
 
             String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
@@ -385,13 +384,13 @@ public class MailService {
             List<Mail> mailList = mailRepository.findByRead(positionName, name, "Y");
             List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
 
-            log.info("TestMailListSize ===========> {}" , mailList.size());
+            log.info("mailDTOListTest ========> {}",mailDTOList.size());
 
             return mailDTOList;
 
-        } catch (RuntimeException e){
-
-            throw new RuntimeException("안읽은 메일 조회 실패");
-        }
+//        } catch (RuntimeException e){
+//
+//            throw new RuntimeException("안읽은 메일 조회 실패");
+//        }
     }
 }

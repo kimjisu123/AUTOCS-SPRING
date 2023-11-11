@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EmployeeAndDepartmentAndPosition {
+public class  EmployeeAndDepartmentAndPosition {
 
     @Id
     @Column(name = "EMPLOYEE_NO")

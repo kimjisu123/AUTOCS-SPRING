@@ -58,14 +58,10 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
             "m.title Like :title ")
     List<Mail> findByStatus(String positionName, String name, @Param("Y") String bookMark, String title, Pageable paging);
 
-    @Query("SELECT m, l, e, d, p FROM Mail m " +
-            "JOIN m.mailList l " +
-            "JOIN l.employee e " +
-            "JOIN e.department d " +
-            "jOIN e.position p " +
-            "WHERE m.read = :N AND " +
-            "p.name = :positionName AND " +
-            "e.name =:name")
+    @Query("SELECT m FROM Mail  m " +
+            "WHERE m.position = :positionName " +
+            "AND m.receiver = :name " +
+            "AND m.read = :N ")
     List<Mail> findByRead(String positionName, String name, @Param("N") String notRead);
 
 

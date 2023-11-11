@@ -213,7 +213,7 @@ public class MailController {
 
         int intEmplNo = Integer.parseInt(employeeNo);
 
-        List<MailDTO> mailList = mailService.readMailList(intEmplNo);
+        List<MailDTO> mailList = mailService.readMailList(240);
 
         String mailCount  = String.valueOf(mailList.size());
         simpMessagingTemplate.convertAndSend("/topic/mail", mailCount);
