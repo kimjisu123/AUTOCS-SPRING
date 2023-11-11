@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -204,10 +206,14 @@ public class MailController {
         }
     }
 
-    @MessageMapping("/mail") // app/mail  <= destination header
-    public void sendNotification(@PathVariable int employeeNo){
+    @MessageMapping("/mail/{employeeNo}")
+    public void sendNotification(@DestinationVariable String employeeNo, Message message){
 
-        List<MailDTO> mailList = mailService.readMailList(employeeNo);
+        log.info("Test 입니다==================>{}", employeeNo);
+
+        int intEmplNo = Integer.parseInt(employeeNo);
+
+        List<MailDTO> mailList = mailService.readMailList(intEmplNo);
 
         String mailCount  = String.valueOf(mailList.size());
         simpMessagingTemplate.convertAndSend("/topic/mail", mailCount);

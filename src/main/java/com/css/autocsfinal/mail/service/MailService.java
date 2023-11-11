@@ -375,6 +375,7 @@ public class MailService {
 
         try{
 
+
             EmployeeAndDepartmentAndPosition employeeAndDepartmentAndPosition = employeeAndDepartmentAndPositionRepository.findById(employeeNo).get();
 
             String positionName = employeeAndDepartmentAndPosition.getPosition().getName();
