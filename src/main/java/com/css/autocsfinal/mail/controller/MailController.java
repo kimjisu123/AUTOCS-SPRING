@@ -209,11 +209,9 @@ public class MailController {
     @MessageMapping("/mail/{employeeNo}")
     public void sendNotification(@DestinationVariable String employeeNo, Message message){
 
-        log.info("Test 입니다==================>{}", employeeNo);
-
         int intEmplNo = Integer.parseInt(employeeNo);
 
-        List<MailDTO> mailList = mailService.readMailList(240);
+        List<MailDTO> mailList = mailService.readMailList(intEmplNo);
 
         String mailCount  = String.valueOf(mailList.size());
         simpMessagingTemplate.convertAndSend("/topic/mail", mailCount);
