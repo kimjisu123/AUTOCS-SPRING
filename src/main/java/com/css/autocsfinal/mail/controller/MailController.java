@@ -190,7 +190,7 @@ public class MailController {
         }
     }
 
-    @PostMapping("/readMail")
+    @PutMapping("/readMail")
     public ResponseEntity<ResponseDTO> readMail(@RequestBody MailDTO mailDTO){
 
         try{

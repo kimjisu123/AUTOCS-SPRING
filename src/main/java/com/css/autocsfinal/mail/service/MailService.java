@@ -103,7 +103,6 @@ public class MailService {
 
         String name = employeeAndDepartmentAndPosition.getName();
 
-
         List<Mail> mailList = mailRepository.findByStatus(positionName, name, "Y", paging);
 
         List<MailDTO> mailDTOList = mailList.stream().map(mail -> modelMapper.map(mail, MailDTO.class)).collect(Collectors.toList());
@@ -224,6 +223,8 @@ public class MailService {
         int mailNo = mailDTO.getMailNo();
 
         Mail mail = mailRepository.findById(mailNo).get();
+
+        log.info("북마크 확인 로그");
 
         try{
 
@@ -359,12 +360,13 @@ public class MailService {
         return mailList.size();
     }
 
+    @Transactional
     public void readMail(MailDTO mailDTO) {
 
         try {
 
             Mail mail = mailRepository.findById(mailDTO.getMailNo()).get();
-
+            log.info("mail============>{}", mail.getMailNo());
             mail.setRead("Y");
         } catch (RuntimeException e){
             throw new RuntimeException("메일 읽음 처리 실패");

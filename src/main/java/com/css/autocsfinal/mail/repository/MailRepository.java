@@ -13,49 +13,33 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
 
 
     // 북마크 조회
-    @Query("SELECT m, l, e, d, p FROM Mail m " +
-            "JOIN m.mailList l " +
-            "JOIN l.employee e " +
-            "JOIN e.department d " +
-            "jOIN e.position p " +
-            "WHERE m.status = :Y AND " +
-            "p.name = :positionName AND " +
-            "e.name =:name")
+    @Query("SELECT m FROM Mail m " +
+            "WHERE m.position = :positionName " +
+            "AND m.receiver = :name " +
+            "AND m.status = :Y")
     List<Mail> findByStatus(String positionName, String name, @Param("Y") String Y, Pageable paging);
 
     // 북마크 총 갯수
-    @Query("SELECT m, l, e, d, p FROM Mail m " +
-            "JOIN m.mailList l " +
-            "JOIN l.employee e " +
-            "JOIN e.department d " +
-            "jOIN e.position p " +
-            "WHERE m.status = :Y AND " +
-            "p.name = :positionName AND " +
-            "e.name =:name")
+    @Query("SELECT m FROM Mail m " +
+            "WHERE m.position = :positionName " +
+            "AND m.receiver = :name " +
+            "AND m.status = :Y")
     List<Mail> findByStatus(String positionName, String name, @Param("Y") String Y);
 
 
     // 북마크 검색 갯수
-    @Query("SELECT m, l, e, d, p FROM Mail m " +
-            "JOIN m.mailList l " +
-            "JOIN l.employee e " +
-            "JOIN e.department d " +
-            "jOIN e.position p " +
-            "WHERE m.status = :Y AND " +
-            "p.name = :positionName AND " +
-            "e.name =:name AND " +
-            "m.title Like :title")
+    @Query("SELECT m FROM Mail m " +
+            "WHERE m.position = :positionName " +
+            "AND m.receiver = :name " +
+            "AND m.status = :Y " +
+            "AND m.title Like :title")
     List<Mail> findByStatus(String positionName, String name, @Param("Y") String Y, String title);
 
-    @Query("SELECT m, l, e, d, p FROM Mail m " +
-            "JOIN m.mailList l " +
-            "JOIN l.employee e " +
-            "JOIN e.department d " +
-            "jOIN e.position p " +
-            "WHERE m.status = :Y AND " +
-            "p.name = :positionName AND " +
-            "e.name =:name AND " +
-            "m.title Like :title ")
+    @Query("SELECT m FROM Mail m " +
+            "WHERE m.position = :positionName " +
+            "AND m.receiver = :name " +
+            "AND m.status = :Y " +
+            "AND m.title Like :title")
     List<Mail> findByStatus(String positionName, String name, @Param("Y") String bookMark, String title, Pageable paging);
 
     @Query("SELECT m FROM Mail  m " +
