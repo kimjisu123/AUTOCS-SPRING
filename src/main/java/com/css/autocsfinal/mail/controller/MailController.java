@@ -207,15 +207,19 @@ public class MailController {
     }
 
     @MessageMapping("/mail/{employeeNo}")
-    public void sendNotification(@DestinationVariable String employeeNo, Message message){
+    public void sendNotification(@DestinationVariable String employeeNo){
 
         int intEmplNo = Integer.parseInt(employeeNo);
 
         List<MailDTO> mailList = mailService.readMailList(intEmplNo);
 
         String mailCount  = String.valueOf(mailList.size());
+
+        // 구독설정한 사람들에게 응답
         simpMessagingTemplate.convertAndSend("/topic/mail", mailCount);
 
     }
+
+
 
 }

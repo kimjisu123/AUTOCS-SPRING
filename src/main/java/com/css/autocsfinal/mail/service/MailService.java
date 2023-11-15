@@ -372,7 +372,6 @@ public class MailService {
             throw new RuntimeException("메일 읽음 처리 실패");
         }
     }
-
     @Transactional
     public List<MailDTO> readMailList(int employeeNo) {
 
