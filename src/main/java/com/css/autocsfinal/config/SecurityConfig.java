@@ -22,6 +22,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // 토큰 디바이더
     private final TokenProvider tokenProvider;
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -35,7 +36,6 @@ public class SecurityConfig {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
     }
-
 
 
     /* 2. Security 설정을 무시할 정적 리소스 등록 */
