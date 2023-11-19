@@ -12,7 +12,7 @@
 
 # DourBestBySpringBoot
 <img src="https://capsule-render.vercel.app/api?type=shark&color=auto&height=300&section=header&text=DourBest&fontSize=90" />
- <div style="center"> 
+<div align="center">
   <img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white"/>
   <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens"/>
   <img src="https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white"/>
