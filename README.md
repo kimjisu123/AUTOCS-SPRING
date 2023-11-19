@@ -10,7 +10,7 @@
 
 **AUTOCS**는 **F&B기업들을 위한 그룹웨어 시스템**입니다.
 
-###
+<br><br>
 
 <img src="https://capsule-render.vercel.app/api?type=shark&color=auto&height=300&section=header&text=DourBest&fontSize=90" />
  <div> 
