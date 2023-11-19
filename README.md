@@ -1,6 +1,6 @@
 # AUTOCS PROJECT
 
-### Time CSS(권지은, 김지수, 김해든, 박지호, 여미지)
+### Team CSS(권지은, 김지수, 김해든, 박지호, 여미지)
 
 ## Introduce
 
@@ -10,9 +10,9 @@
 
 **AUTOCS**는 **F&B기업들을 위한 그룹웨어 시스템**입니다.
 
-# DourBestBySpringBoot
+# AUTOCSBySpring
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=shark&color=auto&height=300&section=header&text=DourBest&fontSize=90" />
+  <img src="https://capsule-render.vercel.app/api?type=shark&color=auto&height=300&section=header&text=AUTOCS&fontSize=90" />
   <img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white"/>
   <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens"/>
   <img src="https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white"/>
