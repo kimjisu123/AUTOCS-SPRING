@@ -21,4 +21,5 @@
   ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
   ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
   ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)
+  ![CSS badge](https://img.shields.io/badge/-CSS3-%23F7DF1E?style=flat-square&logo=CSS3&logoColor=white&color=1572B6)
 <img src="https://capsule-render.vercel.app/api?type=shark&color=auto&height=300&section=footer" />
