@@ -1,5 +1,4 @@
 # AUTOCS PROJECT
-<img src="https://capsule-render.vercel.app/api?type=모양&color=#000000&height=20px&section=header&text=텍스트&fontSize=30px" />
 
 ### Time CSS(권지은, 김지수, 김해든, 박지호, 여미지)
 
