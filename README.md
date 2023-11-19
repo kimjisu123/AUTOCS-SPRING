@@ -12,8 +12,9 @@
 
 <br><br>
 <img src="https://capsule-render.vercel.app/api?type=shark&color=auto&height=300&section=header&text=AUTOCS&fontSize=90" />
-![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
-
+<div>
+  ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+</div>
 
 
 <img src="https://capsule-render.vercel.app/api?type=shark&color=auto&height=300&section=footer" />
