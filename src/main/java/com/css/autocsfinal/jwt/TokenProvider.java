@@ -3,7 +3,6 @@ package com.css.autocsfinal.jwt;
 import com.css.autocsfinal.exception.TokenException;
 import com.css.autocsfinal.market.entity.StoreInfo;
 import com.css.autocsfinal.member.dto.TokenDTO;
-import com.css.autocsfinal.member.entity.Employee;
 import com.css.autocsfinal.member.entity.EmployeeAndDepartmentAndPosition;
 import com.css.autocsfinal.member.entity.Member;
 import io.jsonwebtoken.*;
@@ -27,39 +26,36 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class TokenProvider {
+
     private static final String AUTHORITIES_KEY = "auth";
-
-    private static final String BEARER_TYPE = "Bearer";  // Bearer 토큰 사용시 앞에 붙이는 prefix문자열
-
+    private static final String BEARER_TYPE = "Bearer";   // Bearer 토큰 사용시 앞에 붙이는 prefix문자열
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 8 * 60 * 60; // 8시간으로 설정
 
-    private final Key key;   // java.security.Key로 imort
 
-    private final UserDetailsService userDetailsService;
+    private final Key key;                                // java.security.Key로 imort 이후 JWT의 서명(Signature) 생성에 사용된다.
+    private final UserDetailsService userDetailsService;  // 사용자의 인증 및 권한 정보를 가져올수 있음
+
+
     public TokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsService userDetailsService){
+        byte[] keyBytest = Decoders.BASE64.decode(secretKey);      // Decoders.BASE64.decode() : 해당 메소드를 사용하여 secretKey를 디코딩
+        this.key = Keys.hmacShaKeyFor(keyBytest);                  // hmacShaKeyFor() : SecretKey를 생성
 
-        byte[] keyBytest = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytest);
         this.userDetailsService = userDetailsService;
     }
 
 
     /* 1. 토큰(xxxxx.yyyyy.zzzzz) 생성 메소드 */
     public TokenDTO generateTokenDTO(Member member, EmployeeAndDepartmentAndPosition employee){
-        log.info("[TokenProvider] generateTokenDTO Start =============================== ");
 
         String role = member.getRole();
 
-        log.info("[TokenProvider] 권한 정보 : {}", role);
-
         /* 1. 회원 아이디를 "sub"이라는 클레임으로 토큰으로 추가 */
-        Claims claims = Jwts.claims().setSubject(member.getId());
+        Claims claims = Jwts.claims().setSubject(member.getId());    // ex) { sub : memberId }
 
         /* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
         claims.put(AUTHORITIES_KEY, role);
 
-        log.info("state ====> {} ", member.getState());
-
+        // 클레임은 JSON 문자열로 이루어져있다. 그렇기에 key와 value로 클레임을 추가한다.
         claims.put("EmployeeNo", employee.getEmployeeNo());
         claims.put("MemberNo", member.getNo());
         claims.put("Name", employee.getName());
@@ -78,7 +74,6 @@ public class TokenProvider {
                 .setExpiration(accessTokenExpriesIn) // 토큰의 만료기간을 DATE형으로 토큰에 추가(exp라는 클레임으로 long형으로 토큰에 추가)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
-        log.info("[TokenProvider] generateTokenDTO End =============================== ");
 
         return new TokenDTO(BEARER_TYPE, member.getId()
                 , accessToken, accessTokenExpriesIn.getTime());
